@@ -4,46 +4,126 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - HalloDoc</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/HalloDoc.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">HalloDoc</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+    <header class="shadow">
+        <div class="d-flex justify-content-between bg-white rounded-0 border-bottom">
+            <div class="d-inline-flex">
+                <a class="text-decoration-none align-self-center" data-bs-toggle="offcanvas" href="#offcanvasExample">
+                    <i class="fa-solid fa-bars text-info border rounded border-info d-block d-md-none my-3 p-2"></i>
+                </a>
+                <img id="halloDocLogo" class="img-fluid img-responsive p-3" src="~/images/Fig56._Patient_site_1.png" />
+            </div>
+            <div class="d-inline-flex align-items-center p-3">
+                <label class="d-none d-sm-block">Welcome <strong>Admin</strong></label>
+                <a class="text-decoration-none"><i class="d-block d-sm-none fa-solid fa-arrow-right-from-bracket text-info border rounded border-info mx-3 mx-xs-2 my-3 p-2"></i></a>
+                <a class="d-none d-sm-block btn border border-info text-info mx-3  mx-xs-2">Logout</a>
+                <a href=""><i class="fas fa-moon text-info border rounded border-info my-3 p-2"></i></a>
+            </div>
+        </div>
+        <nav class="navbar px-5 navbar-expand-md bg-white shadow mb-2 border border-top d-none d-md-block">
+
+            <div class="collapse navbar-collapse my-2" id="navbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item me-4">
+                        <a href="" class="text-decoration-none text-secondary activesbnav">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item me-4">
+                        <a href="" class="text-decoration-none text-secondary">
+                            Provider Location
+                        </a>
+                    </li>
+                    <li class="nav-item me-4">
+                        <a href="" class="text-decoration-none text-secondary">
+                            My Profile
+                        </a>
+                    </li>
+                    <li class="nav-item me-4">
+                        <a href="" class="text-decoration-none text-secondary">
+                            Providers
+                        </a>
+                    </li>
+                    <li class="nav-item me-4">
+                        <a href="" class="text-decoration-none text-secondary">
+                            Parteners
+                        </a>
+                    </li>
+                    <li class="nav-item me-4">
+                        <a href="" class="text-decoration-none text-secondary">
+                            Access
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="text-decoration-none text-secondary">
+                            Records
+                        </a>
+                    </li>
+                </ul>
             </div>
         </nav>
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <strong class="offcanvas-title" id="offcanvasExampleLabel">Welcome, Admin</strong>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav">
+                    <li class="nav-item mt-2">
+                        <a>Dashboard</a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <a>Provider Location</a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <a>My Profile</a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <a>Providers</a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <a>Parteners</a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <a>Access</a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <a>Records</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main role="main " class=" min-vh-100 ">
+        @RenderBody()
+    </main>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - HalloDoc - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer  sticky-bottom">
+        <div class=" justify-content-end w-100 d-flex bg-dark text-light py-3">
+            <div class="text-center me-3">
+                <span class="text-center mx-2">
+                    Term Of Condition
+                </span>
+                <span>
+                    I
+                </span>
+                <span class="mx-2">
+                    Privacy Policy
+                </span>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="@Url.Content("~/plugins/mvc-jquery-ajax/jquery.unobtrusive-ajax.js")"></script>
+    <script src="@Url.Content("~/plugins/mvc-jquery-validate/jquery.validate.js")"></script>
+    <script src="@Url.Content("~/plugins/mvc-jquery-validate/jquery.validate.unobtrusive.js")"></script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

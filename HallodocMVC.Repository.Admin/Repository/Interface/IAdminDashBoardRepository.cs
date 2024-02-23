@@ -8,8 +8,10 @@ using HalloDoc.Entity.Models;
 
 namespace HallodocMVC.Repository.Admin.Repository.Interface
 {
-    public interface IRequestRepository
+    public interface IAdminDashBoardRepository
     {
         public List<AdminDashboardList> NewRequestData();
+        public CountStatusWiseRequestModel Indexdata();
+        public List<AdminDashboardList> GetRequests(short Status);
     }
 }

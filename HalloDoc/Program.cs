@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<HalloDocContext>();
-builder.Services.AddScoped<IRequestRepository, RequestRepository>();
+builder.Services.AddScoped<IAdminDashBoardRepository, AdminDashBoardRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,6 +27,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Admin}/{action=Index}/{id?}");
 
 app.Run();
