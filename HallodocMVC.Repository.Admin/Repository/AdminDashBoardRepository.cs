@@ -8,6 +8,8 @@ using HalloDoc.Entity.DataContext;
 using HallodocMVC.Repository.Admin.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Net.NetworkInformation;
+using System.Net;
 
 namespace HallodocMVC.Repository.Admin.Repository
 {
@@ -58,7 +60,10 @@ namespace HallodocMVC.Repository.Admin.Repository
                 
             };
         }
-        public List<AdminDashboardList> GetRequests(short Status) {
+        public List<AdminDashboardList> GetRequests(string Status) {
+
+            List<int> statusdata = Status.Split(',').Select(int.Parse).ToList();
+
             List<AdminDashboardList> allData = (from req in _context.Requests
                                                    join reqClient in _context.Requestclients
                                                    on req.Requestid equals reqClient.Requestid into reqClientGroup
@@ -69,11 +74,11 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                    join reg in _context.Regions
                                                   on rc.Regionid equals reg.Regionid into RegGroup
                                                    from rg in RegGroup.DefaultIfEmpty()
-                                                   where req.Status == Status
+                                                   where statusdata.Contains(req.Status)
                                                    orderby req.Createddate descending
                                                    select new AdminDashboardList
                                                    {
-                                                       ADStatus = Status,
+                                                       
                                                        RequestID = req.Requestid,
                                                        RequestTypeID = req.Requesttypeid,
                                                        Requestor = req.Firstname + " " + req.Lastname,
@@ -81,7 +86,6 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                        //Dob = new DateOnly((int)rc.Intyear, DateTime.ParseExact(rc.Strmonth, "MMMM", new CultureInfo("en-US")).Month, (int)rc.Intdate),
                                                        RequestedDate = req.Createddate,
                                                        Email = rc.Email,
-
                                                        Region = rg.Name,
                                                        ProviderName = p.Firstname + " " + p.Lastname,
                                                        PhoneNumber = rc.Phonenumber,
@@ -90,6 +94,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                        ProviderID = req.Physicianid,
                                                        RequestorPhoneNumber = req.Phonenumber
                                                    }).ToList();
+           
             return allData;
         }
 }

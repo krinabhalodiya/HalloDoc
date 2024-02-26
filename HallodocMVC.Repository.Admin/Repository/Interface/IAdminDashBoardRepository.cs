@@ -12,6 +12,6 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
     {
         public List<AdminDashboardList> NewRequestData();
         public CountStatusWiseRequestModel Indexdata();
-        public List<AdminDashboardList> GetRequests(short Status);
+        public List<AdminDashboardList> GetRequests(string Status);
     }
 }

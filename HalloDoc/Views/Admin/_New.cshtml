@@ -5,7 +5,7 @@
 <!--Important links-->
 <div class="d-flex justify-content-between mx-2">
     <div>
-        <strong class="fs-6">Patients</strong> <small>@Enum.GetName(typeof(AdminDashStatus), Model[0].ADStatus) </small>
+        <strong class="fs-6">Patients</strong> <small>New</small>
     </div>
     <div>
         <button class="btn btn-info text-white shadow-none mb-2">
@@ -42,7 +42,7 @@
 </div>
 <!--End Important links-->
 <!--Searchbar-->
-<div class="mt-2 mx-2 bg-white">
+<div class="mt-2 mx-2 rounded-top bg-white">
     <div class="searchBar px-2">
         <div class="searchPatientRegion py-2">
             <div class="search m-1">
@@ -84,7 +84,7 @@
  <!--Desktop Screen View of table-->
 <div class="table-responsive m-2 mb-5 d-none d-sm-block">
     <table class="w-100">
-        <thead class="py-2">
+        <thead>
             <tr>
                 <th scope="col">
                     <small>Name</small>
@@ -116,6 +116,8 @@
                 </th>
             </tr>
         </thead>
+ 
+        
         <tbody class="bg-white mb-5">
             @foreach (var item in Model)
             {
@@ -154,7 +156,7 @@
                         }
                     </td>
                     <td><small>@item.Address</small></td>
-                    <td><small>Admin transferred to Dr. AGOLA</small></td>
+                    <td><small>@item.Notes</small></td>
                     <td>
                         <button class="btn border border-white text-white my-2">
                             <small>Patient</small>

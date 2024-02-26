@@ -27,33 +27,37 @@ namespace HalloDoc.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> _SearchResult(short Status)
+        public async Task<IActionResult> _SearchResult(string Status)
         {
+            if(Status == null)
+            {
+                Status = "1";
+            }
             List<AdminDashboardList> contacts = _IAdminDashBoardRepository.GetRequests(Status);
             
             switch (Status)
             {
-                case 1:
+                case "1":
                     return PartialView("../Admin/_New", contacts);
 
                     break;
-                case 2:
+                case "2":
 
                     return PartialView("../Admin/_Pending", contacts);
                     break;
-                case 3:
+                case "4,5":
 
                     return PartialView("../Admin/_Active", contacts);
                     break;
-                case 4:
+                case "6":
 
                     return PartialView("../Admin/_Conclude", contacts);
                     break;
-                case 5:
+                case "3,7,8":
 
                     return PartialView("../Admin/_ToClose", contacts);
                     break;
-                case 6:
+                case "9":
 
                     return PartialView("../Admin/_UnPaid", contacts);
                     break;
