@@ -3,9 +3,10 @@
 
 <!--End Desktop Screen View of table-->
 <!--Important links-->
+
 <div class="d-flex justify-content-between mx-2">
     <div>
-        <strong class="fs-6">Patients</strong> <small>New</small>
+        <strong class="fs-6">Patients</strong> <small>(New)</small>
     </div>
     <div>
         <button class="btn btn-info text-white shadow-none mb-2">
@@ -170,9 +171,11 @@
                             <small>Actions</small>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-journal-text"></i> View Case</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-card-checklist"></i> View Uploads</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-journals"></i> View Notes</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#assigncase"><i class="bi bi-card-checklist me-1"></i>Assign Case</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-x-circle me-1"></i>Cancel Case</a></li>
+                            <li><a asp-controller="AdminActions" asp-action="ViewCase" asp-route-id="@item.RequestID"  class="dropdown-item"><i class="bi bi-journal-text me-1"></i>View Case</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-journals me-1"></i>View Notes</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-ban me-1"></i>Block Patient</a></li>
                         </ul>
 
                     </td>

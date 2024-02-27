@@ -5,7 +5,10 @@
 <!--Important links-->
 <div class="d-flex justify-content-between mx-2">
     <div>
-        <strong class="fs-6">Patients</strong> <small>UnPaid</small>
+
+        <strong class="fs-6">Patients</strong> <small>(To Close)</small>
+
+
     </div>
     <div>
         <button class="btn btn-info text-white shadow-none mb-2">
@@ -91,16 +94,22 @@
                 </th>
                 <th></th>
                 <th scope="col">
+                    <small>Date Of Birth</small>
+                </th>
+                <th scope="col">
+                    <small>Region</small>
+                </th>
+                <th scope="col">
                     <small>Physician Name</small>
                 </th>
                 <th scope="col">
                     <small>Date Of Service</small>
                 </th>
                 <th scope="col">
-                    <small>Phone</small>
+                    <small>Address</small>
                 </th>
                 <th scope="col">
-                    <small>Address</small>
+                    <small>Notes</small>
                 </th>
                 <th scope="col">
                     <small>Chat With</small>
@@ -120,31 +129,14 @@
                             <i class="fa-regular fa-envelope"></i>
                         </button>
                     </td>
+                    <td>
+                        <small>@item.Dob</small>
+                    </td>
+                    <td><small>@item.Region</small></td>
                     <td><small>@item.ProviderName</small></td>
                     <td><small>@item.RequestedDate.ToString("MMM d , yyyy")</small></td>
-                    <td>
-                        <button class="btn border border-white text-white mt-2">
-                            <i class="fa-solid fa-phone pe-2"></i>
-                            <small>@item.PhoneNumber</small>
-                        </button>
-                        <div>
-                            <small>(Patient)</small>
-                        </div>
-
-                        @if (item.RequestTypeID != 2)
-                        {
-                            <button class="btn border border-white text-white mt-2">
-                                <i class="fa-solid fa-phone pe-2"></i>
-                                <small>@item.RequestorPhoneNumber</small>
-                            </button>
-                            <div>
-                                <small>
-                                    (@Enum.GetName(typeof(RequestType), item.RequestTypeID))
-                                </small>
-                            </div>
-                        }
-                    </td>
                     <td><small>@item.Address</small></td>
+                    <td><small>@item.Notes</small></td>
                     <td>
                         <button class="btn border border-white text-white my-2">
                             <small>Patient</small>
@@ -162,7 +154,6 @@
                             <li><a class="dropdown-item" href="#"><i class="bi bi-card-checklist"></i> View Uploads</a></li>
                             <li><a class="dropdown-item" href="#"><i class="bi bi-journals"></i> View Notes</a></li>
                         </ul>
-
                     </td>
                 </tr>
             }
@@ -171,8 +162,6 @@
 </div>
 
 <div class="accordion mt-3 d-block d-sm-none" id="accordionExample">
-
-
     <div class="dBlock">
         @foreach (var item in Model)
         {
@@ -201,10 +190,12 @@
                 </h2>
                 <div id="flush-@item.RequestID" class="accordion-collapse collapse mb-3 border-top" data-bs-parent="#accordionExample">
                     <div class="accordion-body container-fluid">
+                        <p> <i class="fa fa-calendar border border-info rounded-pill p-1 me-2" aria-hidden="true"></i>Date of Birth: @item.Dob</p>
                         <p> <i class="fa fa-envelope border border-info rounded-pill p-1 me-2"></i> Email : @item.Email</p>
-                        <p> <i class="fa fa-phone border  border-info rounded-pill p-1 me-2"></i> Patient : @item.PhoneNumber</p>
+                        <p><i class="fa fa-sticky-note border border-info rounded-pill p-1 me-2"></i> Transfer Notes : @item.Notes</p>
                         <p><i class="fa fa-calendar border border-info rounded-pill p-1 me-2"></i>Date of service : @item.RequestedDate</p>
                         <p><i class="fa fa-user border border-info rounded-pill p-1 me-2"></i>Physician : @item.ProviderName</p>
+                        <p><i class="fa fa-user border border-info rounded-pill p-1 me-2"></i>Requestor : @item.Requestor</p>
 
                         <div class="row">
                             <div class="col-6 mb-3">
@@ -213,8 +204,23 @@
                                 </button>
                             </div>
                             <div class="col-6 mb-3">
+                                <button class="btn btn-success text-white rounded-pill 2px w-100">
+                                    <small>Doctors Note</small>
+                                </button>
+                            </div>
+                            <div class="col-6 mb-3">
                                 <button class="btn btn-white text-white rounded-pill 2px w-100" style="background-color: #3ecc4e;">
                                     <small>View Uploads</small>
+                                </button>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <button class="btn btn-white text-white rounded-pill 2px w-100" style="background-color: #3ecc4e;">
+                                    <small>Encounter</small>
+                                </button>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <button class="btn btn-white text-white rounded-pill 2px w-100" style="background-color: #FFD43B;">
+                                    <small>Orders</small>
                                 </button>
                             </div>
                             <div class="col-6 mb-3 ">
@@ -236,11 +242,8 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         }
     </div>
-
     <!--End Mobile Screen View of table-->
-
 </div>

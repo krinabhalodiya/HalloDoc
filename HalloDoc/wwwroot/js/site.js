@@ -7,6 +7,5 @@ $(document).ready(function () {
         console.log(132);
         $(".t-tab > .btn > .rounded").removeClass("active");
         $(this).addClass("active");
-
     });
 });

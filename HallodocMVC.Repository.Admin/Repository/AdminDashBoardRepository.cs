@@ -83,7 +83,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                        RequestTypeID = req.Requesttypeid,
                                                        Requestor = req.Firstname + " " + req.Lastname,
                                                        PatientName = rc.Firstname + " " + rc.Lastname,
-                                                       //Dob = new DateOnly((int)rc.Intyear, DateTime.ParseExact(rc.Strmonth, "MMMM", new CultureInfo("en-US")).Month, (int)rc.Intdate),
+                                                       Dob = new DateOnly((int)rc.Intyear, DateTime.ParseExact(rc.Strmonth, "MMMM", new CultureInfo("en-US")).Month, (int)rc.Intdate),
                                                        RequestedDate = req.Createddate,
                                                        Email = rc.Email,
                                                        Region = rg.Name,

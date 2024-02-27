@@ -1,7 +1,7 @@
 ﻿@using static HalloDoc.Entity.Models.Constant
 
 <form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
-      asp-action="_SearchResult" asp-controller="Admin" novalidate="novalidate">
+      asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate">
     <input type="hidden" name="Status" id="hiddenfirst"/>
     <div class="row mb-2 t-tab" style="--bs-gutter-x: 0rem;">
         <button type="submit" value="1" name="Status" class="btn col-4 col-md-2 text-start shadow-none position-relative">
@@ -31,7 +31,7 @@
         <button type="submit" value="4,5" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
             <div class="p-1 rounded active1 ps-2 pt-3 a-active1">
                 <div class="d-inline-flex">
-                    <i class="fa-solid fa-circle-check me-2 align-self-center d-none d-sm-block"></i>
+                    <i class="bi bi-check2-circle me-2 align-self-center d-none d-sm-block"></i>
                     ACTIVE
                 </div>
                 <div class="mt-2">

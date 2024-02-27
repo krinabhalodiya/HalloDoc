@@ -5,16 +5,15 @@
     Layout = "_Layout";
 }
 <div class="mx-sm-1 mx-md-2 mx-xxl-4 mt-0">
+    <partial name="../AdminActions/AssignCase.cshtml" />
     <partial name="UpperTab.cshtml" />
-    <div id="SearchResult"></div>
+    <div id="SearchResult" class="mt-4"></div>
 </div>
 
 <script>
-
     $(function () {
         var val = 1;
         $("#hiddenfirst").val(val);
         $("#filterForm").submit();
     });
-
 </script>

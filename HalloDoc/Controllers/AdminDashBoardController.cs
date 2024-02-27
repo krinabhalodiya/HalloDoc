@@ -11,61 +11,50 @@ using static HalloDoc.Entity.Models.Constant;
 
 namespace HalloDoc.Controllers
 {
-    public class AdminController : Controller
+    public class AdminDashBoardController : Controller
     {
         private readonly IAdminDashBoardRepository _IAdminDashBoardRepository;
 
-        public AdminController(IAdminDashBoardRepository IAdminDashBoardRepository)
+        public AdminDashBoardController(IAdminDashBoardRepository IAdminDashBoardRepository)
         {
             _IAdminDashBoardRepository = IAdminDashBoardRepository;
         }
+
         public IActionResult Index()
         {
             CountStatusWiseRequestModel sm = _IAdminDashBoardRepository.Indexdata();
-            
             return View(sm);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _SearchResult(string Status)
         {
-            if(Status == null)
-            {
-                Status = "1";
-            }
             List<AdminDashboardList> contacts = _IAdminDashBoardRepository.GetRequests(Status);
-            
             switch (Status)
             {
                 case "1":
-                    return PartialView("../Admin/_New", contacts);
-
+                    return PartialView("../AdminDashBoard/_New", contacts);
                     break;
                 case "2":
-
-                    return PartialView("../Admin/_Pending", contacts);
+                    return PartialView("../AdminDashBoard/_Pending", contacts);
                     break;
                 case "4,5":
-
-                    return PartialView("../Admin/_Active", contacts);
+                    return PartialView("../AdminDashBoard/_Active", contacts);
                     break;
                 case "6":
-
-                    return PartialView("../Admin/_Conclude", contacts);
+                    return PartialView("../AdminDashBoard/_Conclude", contacts);
                     break;
                 case "3,7,8":
-
-                    return PartialView("../Admin/_ToClose", contacts);
+                    return PartialView("../AdminDashBoard/_ToClose", contacts);
                     break;
                 case "9":
-
-                    return PartialView("../Admin/_UnPaid", contacts);
+                    return PartialView("../AdminDashBoard/_UnPaid", contacts);
+                    break;
+                default:
                     break;
             }
-
-
-            return PartialView("../Admin/_New", contacts);
+            return PartialView("../AdminDashBoard/_New", contacts);
         }
-
     }
 }

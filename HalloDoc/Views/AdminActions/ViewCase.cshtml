@@ -1,0 +1,146 @@
+﻿@{
+    Layout = "_Layout";
+}
+@model HalloDoc.Entity.Models.ViewCaseData
+@using static HalloDoc.Entity.Models.Constant
+
+<script>
+    window.onload = function (e) {
+        toggleFormElements('true')
+    }
+    function toggleFormElements(bDisabled) {
+        var inputs = document.getElementsByTagName("input");
+        var textareas = document.getElementsByTagName("textarea");
+        var submit = document.getElementById("save");
+        var editprofile = document.getElementById("edit");
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = !inputs[i].disabled;
+        }
+        textareas[0].disabled = !textareas[0].disabled;
+        if (inputs[0].disabled) {
+            submit.style.display = "none";
+            editprofile.style.display = "block";
+        } else {
+            submit.style.display = "block";
+            editprofile.style.display = "none";
+        }
+        document.getElementById("email").disabled = (1 == 1);
+    }
+</script>
+
+<div class="container">
+    @* heading *@
+    <div class="d-flex justify-content-between">
+        <div class="d-flex align-self-center">
+            <h4><strong>View Request</strong></h4>
+            <span class="rounded-pill @Enum.GetName(typeof(RequestType), Model.RequestTypeID) ms-3 p-2 text-white">
+                @Enum.GetName(typeof(RequestType), Model.RequestTypeID)
+            </span>
+        </div>
+        <a asp-controller="AdminDashBoard" asp-action="Index" class="btn border border-info bg-light rounded mt-3 mb-1">
+            <span class="text-info">
+                <i class="fa fa-angle-left align-middle"></i>
+                <b>&nbsp;&nbsp;Back</b>
+            </span>
+        </a>
+    </div>
+    @* Case Information *@
+    <div class="bg-white rounded shadow mt-3">
+        <div class="p-4">
+            @* heading *@
+            <h5><strong>Patient Information</strong></h5>
+            <div class="mt-3">
+                <small class="pt-3">Confirmation Number</small>
+                <h5 class="text-info">@Model.ConfirmationNumber</h5>
+            </div>
+            @* data *@
+            <form method="post" asp-controller="AdminActions" asp-action="EditCase">
+                <input type="hidden" asp-for="RequestID" value="@Model.RequestID"/>
+                <div class="col-xl-12">
+                    <div class="row pb-4 ">
+                        <div class="col-12 pb-3">
+                            <div class="form-floating">
+                                <textarea asp-for="PatientNotes" class="w-100 form-control txtarea shadow-none " id="floatingInputValue" style="height:80px;"></textarea>
+                                <label for="floatingInputValue">Patient Notes</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input asp-for="FirstName" type="text" class="form-control shadow-none" id="fname" placeholder="First Name">
+                                <label for="fname">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input asp-for="LastName" type="text" class="form-control shadow-none" id="lname" placeholder="Last Name">
+                                <label for="lname">Last Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input asp-for="Dob" type="date" class="form-control shadow-none" id="dob" placeholder="Date Of Birth">
+                                <label for="dob">Date Of Birth</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="mb-3 d-flex">
+                                <div class="form-floating h-100 w-100">
+                                    <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none" id="phone" autocomplete="off" placeholder="Phone Number">
+                                    <label for="phone">Phone Number</label>
+                                </div>
+                                <button class="btn border border-info text-info mx-2 " style="height:3.5rem;width:4rem">
+                                    <i class="bi bi-telephone-fill"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input asp-for="Email" type="text" class="form-control shadow-none" id="email" placeholder="Email">
+                                <label for="Email">Email</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1" >
+                            <span id="edit" onclick=" toggleFormElements('true')" style=" height:3.5rem;width:4rem" class="btn btn-info text-white rounded ">Edit</span>
+                            <input type="submit" value="Save" id="save" style=" height:3.5rem;width:4rem" class="btn btn-info text-white rounded">
+                        </div>
+					</div>
+
+                    @*Location information *@
+                    <div class="pb-3">
+                        <div>
+                            <h5 class="fw-bolder">Location Information</h5>
+                        </div>
+                    </div>
+                    <div class="row pb-4">
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input asp-for="Region" type="text" class="form-control shadow-none" id="Region" placeholder="Region">
+                                <label for="Region">Region</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input asp-for="Address" type="text" class="form-control shadow-none" id="Address" placeholder="Address">
+                                <label for="Address">Business Name/Address</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input asp-for="Room" type="text" class="form-control shadow-none" id="Room" placeholder="Room">
+                                <label for="Room">Room#</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* Edit *@
+                     <div class="d-flex justify-content-end">
+                        <a class="btn btn-info text-white rounded me-2">Assign</a>
+                        <a class="btn btn-info text-white rounded me-1">View Notes</a>
+                        <a class="btn btn-danger text-white rounded">Cancel</a>
+                    </div> 
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
