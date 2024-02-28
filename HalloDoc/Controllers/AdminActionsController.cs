@@ -64,5 +64,37 @@ namespace HalloDoc.Controllers
             return Json(v);
         }
         #endregion
+        #region _CancelCase
+        public IActionResult CancelCase(int RequestID, string Note, string CaseTag)
+        {
+            bool CancelCase = _IAdminDashBoardActionsRepository.CancelCase(RequestID, Note, CaseTag);
+            if (CancelCase)
+            {
+                _notyf.Success("Case Canceled Successfully");
+
+            }
+            else
+            {
+                _notyf.Error("Case Not Canceled");
+
+            }
+            return RedirectToAction("Index", "AdminDashBoard");
+        }
+        #endregion
+        #region _BlockCase
+        public IActionResult BlockCase(int RequestID, string Note)
+        {
+            bool BlockCase = _IAdminDashBoardActionsRepository.BlockCase(RequestID, Note);
+            if (BlockCase)
+            {
+                _notyf.Success("Case Blocked Successfully");
+            }
+            else
+            {
+                _notyf.Error("Case Not Blocked");
+            }
+            return RedirectToAction("Index", "AdminDashBoard");
+        }
+        #endregion
     }
 }

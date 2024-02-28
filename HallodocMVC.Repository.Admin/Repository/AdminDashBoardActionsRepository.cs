@@ -17,7 +17,6 @@ namespace HallodocMVC.Repository.Admin.Repository
     public class AdminDashBoardActionsRepository : IAdminDashBoardActionsRepository
     {
         private readonly HalloDocContext _context;
-
         public AdminDashBoardActionsRepository(HalloDocContext context)
         {
             _context = context;
@@ -64,11 +63,8 @@ namespace HallodocMVC.Repository.Admin.Repository
         public ViewCaseData GetRequestForViewCase(int id)
         {
             var n = _context.Requests.FirstOrDefault(E => E.Requestid == id);
-
             var l = _context.Requestclients.FirstOrDefault(E => E.Requestid == id);
-
             var region = _context.Regions.FirstOrDefault(E => E.Regionid == l.Regionid);
-
             ViewCaseData requestforviewcase = new ViewCaseData
             {
                 RequestID = id,
@@ -89,26 +85,83 @@ namespace HallodocMVC.Repository.Admin.Repository
 
         public async Task<bool> AssignProvider(int RequestId, int ProviderId, string notes)
         {
-
             var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == RequestId);
             request.Physicianid = ProviderId;
             request.Status = 2;
             _context.Requests.Update(request);
             _context.SaveChanges();
-
             Requeststatuslog rsl = new Requeststatuslog();
             rsl.Requestid = RequestId;
             rsl.Physicianid = ProviderId;
             rsl.Notes = notes;
-
             rsl.Createddate = DateTime.Now;
             rsl.Status = 2;
             _context.Requeststatuslogs.Update(rsl);
             _context.SaveChanges();
-
             return true;
+        }
 
-
+        public bool CancelCase(int RequestID, string Note, string CaseTag)
+        {
+            try
+            {
+                var requestData = _context.Requests.FirstOrDefault(e => e.Requestid == RequestID);
+                if (requestData != null)
+                {
+                    requestData.Casetag = CaseTag;
+                    requestData.Status = 8;
+                    _context.Requests.Update(requestData);
+                    _context.SaveChanges();
+                    Requeststatuslog rsl = new Requeststatuslog
+                    {
+                        Requestid = RequestID,
+                        Notes = Note,
+                        Status = 8,
+                        Createddate = DateTime.Now
+                    };
+                    _context.Requeststatuslogs.Add(rsl);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else { return false; }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public bool BlockCase(int RequestID, string Note)
+        {
+            try
+            {
+                var requestData = _context.Requests.FirstOrDefault(e => e.Requestid == RequestID);
+                if (requestData != null)
+                {
+                    requestData.Status = 11;
+                    _context.Requests.Update(requestData);
+                    _context.SaveChanges();
+                    Blockrequest blc = new Blockrequest
+                    {
+                        Requestid = requestData.Requestid.ToString(),
+                        Phonenumber = requestData.Phonenumber,
+                        Email = requestData.Email,
+                        Reason = Note,
+                        Createddate = DateTime.Now,
+                        Modifieddate = DateTime.Now
+                    };
+                    _context.Blockrequests.Add(blc);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }
