@@ -1,6 +1,9 @@
 using HalloDoc.Entity.DataContext;
 using HallodocMVC.Repository.Admin.Repository;
 using HallodocMVC.Repository.Admin.Repository.Interface;
+using HelloDocAdmin.Repositories;
+using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +12,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<HalloDocContext>();
 builder.Services.AddScoped<IAdminDashBoardRepository, AdminDashBoardRepository>();
 builder.Services.AddScoped<IAdminDashBoardActionsRepository, AdminDashBoardActionsRepository>();
-
+builder.Services.AddScoped< IComboboxRepository,ComboboxRepository>();
+builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,7 +28,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseNotyf();
 app.UseAuthorization();
 
 app.MapControllerRoute(

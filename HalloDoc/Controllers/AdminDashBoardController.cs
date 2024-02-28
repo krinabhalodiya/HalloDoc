@@ -14,14 +14,20 @@ namespace HalloDoc.Controllers
     public class AdminDashBoardController : Controller
     {
         private readonly IAdminDashBoardRepository _IAdminDashBoardRepository;
+        private readonly IComboboxRepository _combobox;
+        private readonly ILogger<AdminDashBoardController> _logger;
 
-        public AdminDashBoardController(IAdminDashBoardRepository IAdminDashBoardRepository)
+        public AdminDashBoardController(ILogger<AdminDashBoardController> logger,IAdminDashBoardRepository IAdminDashBoardRepository, IComboboxRepository combobox)
         {
             _IAdminDashBoardRepository = IAdminDashBoardRepository;
+            _combobox = combobox;
+            _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
+            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
+            ViewBag.CaseReasonComboBox = await _combobox.CaseReasonComboBox();
             CountStatusWiseRequestModel sm = _IAdminDashBoardRepository.Indexdata();
             return View(sm);
         }

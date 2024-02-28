@@ -101,7 +101,6 @@
     <main role="main" class="pt-2 min-vh-100 bg-light">
         @RenderBody()
     </main>
-
     <footer class="footer sticky-bottom">
         <div class=" justify-content-end w-100 d-flex bg-dark text-light py-3">
             <div class="text-center me-3">
@@ -123,7 +122,7 @@
     <script src="@Url.Content("~/plugins/mvc-jquery-ajax/jquery.unobtrusive-ajax.js")"></script>
     <script src="@Url.Content("~/plugins/mvc-jquery-validate/jquery.validate.js")"></script>
     <script src="@Url.Content("~/plugins/mvc-jquery-validate/jquery.validate.unobtrusive.js")"></script>
-    
+    @await Component.InvokeAsync("Notyf")
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

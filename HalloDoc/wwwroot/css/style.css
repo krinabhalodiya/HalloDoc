@@ -43,7 +43,7 @@ body {
     background-color: #00adef;
     color: white;
 }
-.btn.active.a-pending::after {
+.active.a-pending::after {
     position: absolute ;
     content: '' ;
     left: 42% ;
@@ -225,4 +225,11 @@ body {
 }
 .btn-i {
     background-color: #e1f4fa;
+}
+.form-floating .form-control:focus ~ label {
+    color: #0dcaf0;
+}
+
+.form-floating input:focus, .form-floating textarea:focus, .form-floating select:focus {
+    border: 2px solid #0dcaf0;
 }

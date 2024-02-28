@@ -12,5 +12,6 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
     {
         public bool EditCase(ViewCaseData model);
         public ViewCaseData GetRequestForViewCase(int id);
+        public Task<bool> AssignProvider(int RequestId, int ProviderId, string notes);
     }
 }
