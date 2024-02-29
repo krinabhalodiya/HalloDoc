@@ -9,14 +9,12 @@
         toggleFormElements('true')
     }
     function toggleFormElements(bDisabled) {
-        var inputs = document.getElementsByTagName("input");
-        var textareas = document.getElementsByTagName("textarea");
+        var inputs = document.getElementsByClassName("inputs");
         var submit = document.getElementById("save");
         var editprofile = document.getElementById("edit");
         for (var i = 0; i < inputs.length; i++) {
             inputs[i].disabled = !inputs[i].disabled;
         }
-        textareas[0].disabled = !textareas[0].disabled;
         if (inputs[0].disabled) {
             submit.style.display = "none";
             editprofile.style.display = "block";
@@ -55,37 +53,37 @@
             </div>
             @* data *@
             <form method="post" asp-controller="AdminActions" asp-action="EditCase">
-                <input type="hidden" asp-for="RequestID" value="@Model.RequestID"/>
+                <input type="hidden" asp-for="RequestID" value="@Model.RequestID" class="inputs" />
                 <div class="col-xl-12">
                     <div class="row pb-4">
                         <div class="col-12 pb-3">
                             <div class="form-floating">
-                                <textarea asp-for="PatientNotes" class="w-100 form-control txtarea shadow-none " id="floatingInputValue" style="height:80px;"></textarea>
+                                <textarea asp-for="PatientNotes" class="w-100 form-control txtarea shadow-none inputs" id="floatingInputValue" style="height:80px;"></textarea>
                                 <label for="floatingInputValue">Patient Notes</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input asp-for="FirstName" type="text" class="form-control shadow-none" id="fname" placeholder="First Name">
+                                <input asp-for="FirstName" type="text" class="form-control shadow-none inputs" id="fname" placeholder="First Name">
                                 <label for="fname">First Name</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input asp-for="LastName" type="text" class="form-control shadow-none" id="lname" placeholder="Last Name">
+                                <input asp-for="LastName" type="text" class="form-control shadow-none inputs" id="lname" placeholder="Last Name">
                                 <label for="lname">Last Name</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input asp-for="Dob" type="date" class="form-control shadow-none" id="dob" placeholder="Date Of Birth">
+                                <input asp-for="Dob" type="date" class="form-control shadow-none inputs" id="dob" placeholder="Date Of Birth">
                                 <label for="dob">Date Of Birth</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="mb-3 d-flex">
                                 <div class="form-floating h-100 w-100">
-                                    <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none" id="phone" autocomplete="off" placeholder="Phone Number">
+                                    <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none inputs" id="phone" autocomplete="off" placeholder="Phone Number">
                                     <label for="phone">Phone Number</label>
                                 </div>
                                 <button class="btn border border-info text-info mx-2 " style="height:3.5rem;width:4rem">
@@ -95,7 +93,7 @@
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input asp-for="Email" type="text" class="form-control shadow-none" id="email" placeholder="Email">
+                                <input asp-for="Email" type="text" class="form-control shadow-none inputs" id="email" placeholder="Email">
                                 <label for="Email">Email</label>
                             </div>
                         </div>
@@ -113,19 +111,19 @@
                     <div class="row pb-4">
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input asp-for="Region" type="text" class="form-control shadow-none" id="Region" placeholder="Region">
+                                <input asp-for="Region" type="text" class="form-control shadow-none inputs" id="Region" placeholder="Region">
                                 <label for="Region">Region</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input asp-for="Address" type="text" class="form-control shadow-none" id="Address" placeholder="Address">
+                                <input asp-for="Address" type="text" class="form-control shadow-none inputs" id="Address" placeholder="Address">
                                 <label for="Address">Business Name/Address</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input asp-for="Room" type="text" class="form-control shadow-none" id="Room" placeholder="Room">
+                                <input asp-for="Room" type="text" class="form-control shadow-none inputs" id="Room" placeholder="Room">
                                 <label for="Room">Room#</label>
                             </div>
                         </div>
@@ -146,14 +144,7 @@
     function model_Case(id) {
         console.log(id);
         var modeldata = @Html.Raw(Json.Serialize(Model))
-           
-        //document.getElementById('PatientName_ModelCancelCase').innerText = modeldata[id].patientName;
-        //document.getElementById('RequestID_Input_ModelCancelCase').value = modeldata[id].requestID;
-        console.log( document.getElementById('RequestID_Input_ModelAssignCase').value);
         document.getElementById('RequestID_Input_ModelAssignCase').value = id;
-        console.log( document.getElementById('RequestID_Input_ModelAssignCase').value);
-        //document.getElementById('RequestID_Input_ModelBlockCase').value = modeldata[id].requestID;
-        //document.getElementById('PatientName_ModelBlockCase').innerText = modeldata[id].patientName;
     }
 
 </script>
