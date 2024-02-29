@@ -152,7 +152,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                     _context.Blockrequests.Add(blc);
                     _context.SaveChanges();
                     return true;
-                }
+                } 
                 else
                 {
                     return false;
