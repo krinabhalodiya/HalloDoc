@@ -63,7 +63,6 @@ namespace HallodocMVC.Repository.Admin.Repository
         public List<AdminDashboardList> GetRequests(string Status) {
 
             List<int> statusdata = Status.Split(',').Select(int.Parse).ToList();
-
             List<AdminDashboardList> allData = (from req in _context.Requests
                                                    join reqClient in _context.Requestclients
                                                    on req.Requestid equals reqClient.Requestid into reqClientGroup
@@ -78,7 +77,6 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                    orderby req.Createddate descending
                                                    select new AdminDashboardList
                                                    {
-                                                       
                                                        RequestID = req.Requestid,
                                                        RequestTypeID = req.Requesttypeid,
                                                        Requestor = req.Firstname + " " + req.Lastname,
@@ -94,8 +92,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                        ProviderID = req.Physicianid,
                                                        RequestorPhoneNumber = req.Phonenumber
                                                    }).ToList();
-           
             return allData;
         }
-}
+    }
 }

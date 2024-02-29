@@ -3,16 +3,15 @@
         <div class="modal-content">
             <div class="modal-header  bg-info text-white">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Concellation</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <a class="text-white" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></a>
             </div>
             <form asp-action="CancelCase" asp-controller="AdminActions">
                 <input type="hidden" value="" id="RequestID_Input_ModelCancelCase" name="RequestId" />
 
                 <div class="modal-body">
-                    <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="PatientName_ModelCancelCase"> </span></h3>
-
+                    <p class="modal-title fs-5 text-secondary" id="exampleModalLabel">Patient Name : <span class="text-info" id="PatientName_ModelCancelCase"> </span></p>
                     <input value="" type="hidden" name="requestid" id="requestid" />
-                    <div class="col mb-3">
+                    <div class="col my-3">
                         <div class="form-floating">
                             <select class="form-select input-outline input-outline-select w-100" required name="CaseTag" data-allow-clear="true" tabindex="-1" id="Region" asp-items="@(new SelectList(ViewBag.CaseReasonComboBox,"CaseReasonId","CaseReasonName"))" data-control="select2" data-placeholder="Cancel Reason">
                                 <option>Cancel Reason</option>
@@ -21,8 +20,8 @@
                         </div>
                     </div>
                     <div class="form-floating mb-3">
-                        <textarea id="changenote" rows="4" name="Notes" class="input-outline w-100 h-100 fs-6 form-control shadow-none" type="text"></textarea>
-                        <label class="inputs-lable inputs-lable-textarea fs-6" id="notedata">Notes</label>
+                        <textarea id="changenote" rows="4" name="Note" class="input-outline w-100 h-100 fs-6 form-control shadow-none" type="text"></textarea>
+                        <label class="inputs-lable inputs-lable-textarea fs-6" id="notedata">Provide additional notes</label>
                     </div>
                 </div>
                 <div class="modal-footer">
