@@ -24,8 +24,6 @@ namespace HalloDoc.Controllers
         }
         public async Task<IActionResult> ViewCase(int id)
         {
-            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
-            ViewBag.CaseReasonComboBox = await _combobox.CaseReasonComboBox();
             ViewCaseData sm = _IAdminDashBoardActionsRepository.GetRequestForViewCase(id);
 
             return View("../AdminActions/ViewCase", sm);
@@ -96,5 +94,43 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Index", "AdminDashBoard");
         }
         #endregion
+        #region AssignProvider
+        public async Task<IActionResult> TransferProvider(int requestid, int ProviderId, string Notes)
+        {
+            if (await _IAdminDashBoardActionsRepository.TransferProvider(requestid, ProviderId, Notes))
+            {
+                _notyf.Success("Physician Transfered successfully...");
+            }
+            else
+            {
+                _notyf.Error("Physician Not Transfered...");
+            }
+
+            return RedirectToAction("Index", "AdminDashBoard", new { Status = "2" });
+        }
+        #endregion
+        #region Clear_case
+        public IActionResult ClearCase(int RequestID)
+        {
+            bool cc = _IAdminDashBoardActionsRepository.ClearCase(RequestID);
+            if (cc)
+            {
+                _notyf.Success("Case Cleared...");
+                _notyf.Warning("You can not show Cleared Case ...");
+            }
+            else
+            {
+                _notyf.Error("there is some error in deletion...");
+            }
+            return RedirectToAction("Index", "AdminDashBoard", new { Status = "2" });
+        }
+        #endregion
+        #region View_Notes
+        public async Task<IActionResult> ViewNotes(int id)
+        {
+            ViewCaseData sm = _IAdminDashBoardActionsRepository.GetRequestForViewCase(id);
+
+            return View("../AdminActions/ViewNotes", sm);
+        }
     }
 }

@@ -3,7 +3,6 @@
 }
 @model HalloDoc.Entity.Models.ViewCaseData
 @using static HalloDoc.Entity.Models.Constant
-
 <script>
     window.onload = function (e) {
         toggleFormElements('true')
@@ -26,6 +25,7 @@
     }
 </script>
 
+<partial name="../AdminActions/_partial/AssignCase.cshtml" />
 <div class="container">
     @* heading *@
     <div class="d-flex justify-content-between">
@@ -139,7 +139,6 @@
         </div>
     </div>
 </div>
-<partial name="../AdminActions/AssignCase.cshtml" />
 <script>
     function model_Case(id) {
         console.log(id);

@@ -36,6 +36,10 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _SearchResult(string Status)
         {
+            if (Status == null)
+            {
+                Status = "1";
+            }
             List<AdminDashboardList> contacts = _IAdminDashBoardRepository.GetRequests(Status);
             switch (Status)
             {

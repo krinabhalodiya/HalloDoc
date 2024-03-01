@@ -109,7 +109,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                 if (requestData != null)
                 {
                     requestData.Casetag = CaseTag;
-                    requestData.Status = 8;
+                    requestData.Status = 3;
                     _context.Requests.Update(requestData);
                     _context.SaveChanges();
                     Requeststatuslog rsl = new Requeststatuslog
@@ -130,6 +130,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                 return false;
             }
         }
+
         public bool BlockCase(int RequestID, string Note)
         {
             try
@@ -157,6 +158,51 @@ namespace HallodocMVC.Repository.Admin.Repository
                 {
                     return false;
                 }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> TransferProvider(int RequestId, int ProviderId, string notes)
+        {
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == RequestId);
+            request.Physicianid = ProviderId;
+            request.Status = 2;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+            Requeststatuslog rsl = new Requeststatuslog();
+            rsl.Requestid = RequestId;
+            rsl.Physicianid = ProviderId;
+            rsl.Notes = notes;
+            rsl.Createddate = DateTime.Now;
+            rsl.Transtophysicianid = ProviderId;
+            rsl.Status = 2;
+            _context.Requeststatuslogs.Update(rsl);
+            _context.SaveChanges();
+            return true;
+        }
+        public bool ClearCase(int RequestID)
+        {
+            try
+            {
+                var requestData = _context.Requests.FirstOrDefault(e => e.Requestid == RequestID);
+                if (requestData != null)
+                {
+                    requestData.Status = 10;
+                    _context.Requests.Update(requestData);
+                    _context.SaveChanges();
+                    Requeststatuslog rsl = new Requeststatuslog
+                    {
+                        Requestid = RequestID,
+                        Status = 10,
+                        Createddate = DateTime.Now
+                    };
+                    _context.Requeststatuslogs.Add(rsl);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else { return false; }
             }
             catch (Exception ex)
             {

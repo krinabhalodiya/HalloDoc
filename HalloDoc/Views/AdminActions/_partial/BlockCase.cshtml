@@ -2,14 +2,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header  bg-info text-white">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Concellation</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Block</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form asp-action="BlockCase" asp-controller="AdminActions">
                 <input type="hidden" value="" id="RequestID_Input_ModelBlockCase" name="RequestId" />
                 <div class="modal-body">
-                    <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="PatientName_ModelBlockCase"> </span></h3>
-                    <input value="" type="hidden" name="requestid" id="requestid" />
+                    <p class="modal-title fs-5 text-secondary" id="exampleModalLabel">Patient Name : <span class="text-info" id="PatientName_ModelBlockCase"> </span></p>
                     <div class="form-floating mb-3">
                         <textarea id="changenote" rows="4" name="Note" class="input-outline w-100 h-100 fs-6 form-control shadow-none" type="text"></textarea>
                         <label class="inputs-lable inputs-lable fs-6" for="changenote">Reason For Block Request</label>

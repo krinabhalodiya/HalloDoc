@@ -10,7 +10,7 @@
 
                 <div class="modal-body">
                     <p class="modal-title fs-5 text-secondary" id="exampleModalLabel">Patient Name : <span class="text-info" id="PatientName_ModelCancelCase"> </span></p>
-                    <input value="" type="hidden" name="requestid" id="requestid" />
+                    
                     <div class="col my-3">
                         <div class="form-floating">
                             <select class="form-select input-outline input-outline-select w-100" required name="CaseTag" data-allow-clear="true" tabindex="-1" id="Region" asp-items="@(new SelectList(ViewBag.CaseReasonComboBox,"CaseReasonId","CaseReasonName"))" data-control="select2" data-placeholder="Cancel Reason">
