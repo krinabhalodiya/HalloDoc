@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +11,8 @@ using System.Globalization;
 using System.Net.NetworkInformation;
 using System.Net;
 using HalloDoc.Entity.DataModels;
+using Microsoft.AspNetCore.Http;
+using static HalloDoc.Entity.Models.ViewDocuments;
 
 namespace HallodocMVC.Repository.Admin.Repository
 {
@@ -372,5 +374,64 @@ namespace HallodocMVC.Repository.Admin.Repository
                 return false;
             }
         }
+        #region GetDocumentByRequest
+        public async Task<ViewDocuments> GetDocumentByRequest(int? id)
+        {
+            ViewDocuments doc = await (from req in _context.Requests
+                                       join reqClient in _context.Requestclients
+                                       on req.Requestid equals reqClient.Requestid into reqClientGroup
+                                       from rc in reqClientGroup.DefaultIfEmpty()
+                                       where req.Requestid == id
+                                       select new ViewDocuments
+                                       {
+                                           ConfirmationNumber = req.Confirmationnumber,
+                                           Email = rc.Email,
+                                           PhoneNumber = rc.Phonenumber,
+                                           //DOB = new DateTime((int)rc.Intyear, (int)Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
+                                           Firstanme = rc.Firstname,
+                                           Lastanme = rc.Lastname,
+                                           RequestID = req.Requestid,
+                                           RequesClientid = rc.Requestclientid
+
+                                       }).FirstAsync();
+
+            List<Documents> doclist = _context.Requestwisefiles
+                        .Where(r => r.Requestid == id)
+                        .ToList()
+                        .Where(r => r.Isdeleted.Get(0) == false)
+                        .OrderByDescending(x => x.Createddate)
+                        .Select(r => new Documents
+                        {
+                            isDeleted = r.Isdeleted.ToString(),
+                            RequestwisefilesId = r.Requestwisefileid,
+                            Status = r.Doctype,
+                            Createddate = r.Createddate,
+                            Filename = r.Filename
+
+                        }).ToList();
+            doc.documentslist = doclist;
+            return doc;
+
+        }
+        #endregion
+        #region Save_Document
+        public Boolean SaveDoc(int Requestid, IFormFile file)
+        {
+            BitArray ba = new BitArray(8);
+            ba[0] = false;
+            string UploadDoc = FileSave.UploadDoc(file, Requestid);
+            var requestwisefile = new Requestwisefile
+            {
+                Requestid = Requestid,
+                Filename = UploadDoc,
+                Createddate = DateTime.Now,
+                Isdeleted = ba 
+            };
+            _context.Requestwisefiles.Add(requestwisefile);
+            _context.SaveChanges();
+
+            return true;
+        }
+        #endregion
     }
 }

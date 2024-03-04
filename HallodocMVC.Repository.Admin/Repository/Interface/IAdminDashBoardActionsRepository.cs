@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using HalloDoc.Entity.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace HallodocMVC.Repository.Admin.Repository.Interface
 {
@@ -19,5 +20,7 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public bool ClearCase(int RequestID);
         public ViewNotesData getNotesByID(int id);
         public bool EditViewNotes(string? adminnotes, string? physiciannotes, int RequestID);
+        public Task<ViewDocuments> GetDocumentByRequest(int? id);
+        public Boolean SaveDoc(int Requestid, IFormFile file);
     }
 }

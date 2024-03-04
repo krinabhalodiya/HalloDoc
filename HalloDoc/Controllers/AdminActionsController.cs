@@ -146,8 +146,8 @@ namespace HalloDoc.Controllers
                 }
                 else
                 {
-                    _notyf.Error("Notes Note Updated");
-                    return View("../AdminSite/Action/ViewNotes");
+                    _notyf.Error("Notes Not Updated");
+                    return View("../AdminActions/ViewNotes");
                 }
             }
             else
@@ -156,6 +156,23 @@ namespace HalloDoc.Controllers
                 TempData["Errormassage"] = "Please Select one of the note!!";
                 return RedirectToAction("ViewNotes", new { id = RequestID });
             }
+        }
+        #endregion
+        #region View_Upload
+        public async Task<IActionResult> ViewUpload(int? id)
+        {
+            ViewDocuments v = await _IAdminDashBoardActionsRepository.GetDocumentByRequest(id);
+            return View("../AdminActions/ViewUpload",v);
+        }
+        #endregion
+        #region UploadDoc_Files
+        public IActionResult UploadDoc(int Requestid, IFormFile file)
+        {
+            if (_IAdminDashBoardActionsRepository.SaveDoc(Requestid, file))
+            {
+                TempData["Status"] = "Upload File Successfully..!";
+            }
+            return RedirectToAction("ViewUpload", "AdminActions", new { id = Requestid });
         }
         #endregion
     }

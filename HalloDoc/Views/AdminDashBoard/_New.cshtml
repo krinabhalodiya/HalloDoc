@@ -172,11 +172,11 @@
                         </button>
                         <ul class="dropdown-menu" id="inline-popups">
 
-                            <li><a class="dropdown-item" onclick="model_Case(@index)" data-effect="mfp-move-horizontal" data-bs-toggle="modal" data-bs-target="#assigncase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName"><i class="bi bi-card-checklist me-1"></i>Assign Case</a></li>
-                            <li><a class="dropdown-item " onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#Cancelcase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName"><i class="bi bi-x-circle me-1"></i>Cancel Case</a></li>
+                            <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#assigncase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName"><i class="bi bi-card-checklist me-1"></i>Assign Case</a></li>
+                            <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#Cancelcase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName"><i class="bi bi-x-circle me-1"></i>Cancel Case</a></li>
                             <li><a asp-controller="AdminActions" asp-action="ViewCase" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>View Case</a></li>
                             <li><a asp-controller="AdminActions" asp-action="ViewNotes" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journals me-1"></i>View Notes</a></li>
-                            <li><a class="dropdown-item " asp-action="" onclick="model_Case(@index)" id="CancelCase_@item.RequestID" data-bs-toggle="modal" data-bs-target="#Blockcase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName"><i class="bi bi-ban me-1"></i>Block Patient</a></li>
+                            <li><a class="dropdown-item" onclick="model_Case(@index)" id="CancelCase_@item.RequestID" data-bs-toggle="modal" data-bs-target="#Blockcase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName"><i class="bi bi-ban me-1"></i>Block Patient</a></li>
                         </ul>
 
                     </td>
@@ -187,10 +187,8 @@
 </div>
 
 <div class="accordion mt-3 d-block d-sm-none" id="accordionExample">
-
-    
     <div class="dBlock">
-        @foreach (var item in Model)
+        @foreach (var (item, index) in Model.Select((item, index) => (item, index)))
         {
             <div class="accordion-item btn-i text-secondary">
                 <h2 class="accordion-header" id="flush-heading-@item.RequestID">
@@ -224,35 +222,30 @@
 
                     <div class="row">
                         <div class="col-6 mb-3">
-                            <button class="btn btn-white text-white rounded-pill 2px w-100" style="background-color: #3ecc4e;">
-                                <small>View Notes</small>
-                            </button>
+                            <a class="btn btn-white text-white rounded-pill 2px w-100" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#assigncase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName" style="background-color:#A64DFF;">
+                                <small>Assign Case</small>
+                            </a>
                         </div>
                         <div class="col-6 mb-3">
-                            <button class="btn btn-success text-white rounded-pill 2px w-100">
-                                <small>Doctors Note</small>
-                            </button>
+                            <a class="btn btn-danger text-white rounded-pill 2px w-100" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#Cancelcase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName">
+                                <small>Cancel Case</small>
+                            </a>
                         </div>
 
                         <div class="col-6 mb-3">
-                            <button class="btn btn-white text-white rounded-pill 2px w-100" style="background-color: #3ecc4e;">
-                                <small>View Uploads</small>
-                            </button>
+                                <a class="btn btn-success text-white rounded-pill 2px w-100" asp-controller="AdminActions" asp-action="ViewNotes" asp-route-id="@item.RequestID">
+                                <small>View Notes</small>
+                            </a>
                         </div>
                         <div class="col-6 mb-3">
-                            <button class="btn btn-white text-white rounded-pill 2px w-100" style="background-color: #3ecc4e;">
-                                <small>Encounter</small>
-                            </button>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <button class="btn btn-white text-white rounded-pill 2px w-100" style="background-color: #FFD43B;">
-                                <small>Orders</small>
-                            </button>
+                                <a class="btn btn-danger text-white rounded-pill 2px w-100" onclick="model_Case(@index)" id="CancelCase_@item.RequestID" data-bs-toggle="modal" data-bs-target="#Blockcase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName">
+                                <small>Block Patient</small>
+                            </a>
                         </div>
                         <div class="col-6 mb-3 ">
-                            <button class="btn btn-white text-white rounded-pill 2px w-100" style="background-color: #3ecc4e;">
+                            <a class="btn btn-success text-white rounded-pill 2px w-100">
                                 <small>Email</small>
-                            </button>
+                            </a>
                         </div>
                     </div>
                     <div class="text-end d-md-flex justify-content-md-end">

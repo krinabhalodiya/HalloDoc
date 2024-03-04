@@ -25,4 +25,8 @@
     <ProjectReference Include="..\HallodocMVC.Repository.Patient\HallodocMVC.Repository.Patient.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Views\AdminActions\ViewUpload.cshtml" />
+  </ItemGroup>
+
 </Project>
