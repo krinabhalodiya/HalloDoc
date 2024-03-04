@@ -167,18 +167,19 @@ namespace HallodocMVC.Repository.Admin.Repository
         public async Task<bool> TransferProvider(int RequestId, int ProviderId, string notes)
         {
             var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == RequestId);
-            request.Physicianid = ProviderId;
-            request.Status = 2;
-            _context.Requests.Update(request);
-            _context.SaveChanges();
             Requeststatuslog rsl = new Requeststatuslog();
             rsl.Requestid = RequestId;
-            rsl.Physicianid = ProviderId;
+            rsl.Physicianid = request.Physicianid;
             rsl.Notes = notes;
             rsl.Createddate = DateTime.Now;
             rsl.Transtophysicianid = ProviderId;
             rsl.Status = 2;
             _context.Requeststatuslogs.Update(rsl);
+            _context.SaveChanges();
+
+            request.Physicianid = ProviderId;
+            request.Status = 2;
+            _context.Requests.Update(request);
             _context.SaveChanges();
             return true;
         }

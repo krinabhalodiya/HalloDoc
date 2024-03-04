@@ -21,7 +21,7 @@ namespace HalloDoc.Entity.Models
         public string?  TransPhysician {get; set;}
         public string? Admin {get; set;}
         public string? Physician { get; set; }
-        public string TransferNotes => $"{Admin} transferred  <b> {Physician}  </b> to <b> {TransPhysician} </b> on {Createddate}: <b>{Notes}</b>";
+        public string TransferNotes => $"{Admin} transferred <b> {Physician}  </b> to <b> {TransPhysician} </b> on {Createddate}: <b>{Notes}</b>";
 
     }
 }
