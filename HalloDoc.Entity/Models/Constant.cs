@@ -15,6 +15,13 @@ namespace HalloDoc.Entity.Models
             Family,
             Concierge
         }
+        public enum Status
+        {
+            Unassigne = 1, 
+            Accepted, Cancelled, MDEnRoute, MDONSite, Conclude, CancelledByPatients, Closed, Unpaid, Clear,
+            Block
+
+        }
         public enum AdminDashStatus
         {
             New = 1,

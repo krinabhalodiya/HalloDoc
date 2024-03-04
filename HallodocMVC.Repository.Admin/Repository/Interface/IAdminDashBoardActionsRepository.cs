@@ -17,5 +17,7 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public bool BlockCase(int RequestID, string Note);
         public Task<bool> TransferProvider(int RequestId, int ProviderId, string notes);
         public bool ClearCase(int RequestID);
+        public ViewNotesData getNotesByID(int id);
+        public bool EditViewNotes(string? adminnotes, string? physiciannotes, int RequestID);
     }
 }

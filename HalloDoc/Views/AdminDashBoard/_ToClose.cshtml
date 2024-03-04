@@ -152,7 +152,7 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#"><i class="bi bi-journal-text"></i> View Case</a></li>
                             <li><a class="dropdown-item" href="#"><i class="bi bi-card-checklist"></i> View Uploads</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-journals"></i> View Notes</a></li>
+                            <li><a asp-controller="AdminActions" asp-action="ViewNotes" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journals me-1"></i>View Notes</a></li>
                         </ul>
                     </td>
                 </tr>

@@ -1,7 +1,11 @@
 ﻿@{
     Layout = "_Layout";
 }
-﻿<div class="container mb-5">
+
+@using HalloDoc.Entity.Models
+@using static HalloDoc.Entity.Models.Constant
+@model HalloDoc.Entity.Models.ViewNotesData
+ <div class="container mb-5">
     <div class="card bg-light border-0">
         <div class="card-header  border-0  bg-light text-end">
             <div class="text-start d-flex justify-content-between">
@@ -9,7 +13,7 @@
                     <h4 class="form-title fw-bold mt-2 mx-2">Notes</h4>
                 </div>
                 <div>
-                    <a asp-controller="Dashboard" asp-action="Index" class="btn border border-info shadow-none">
+                    <a asp-controller="AdminDashBoard" asp-action="Index" class="btn border border-info shadow-none">
                         <strong class="text-info">
                             <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
                         </strong>
@@ -20,52 +24,126 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-sm-6 col-xs-12 mb-3">
-                    <div class="d-flex p-2 bg-white shadow">
-                        <div class="p-2">
-                            <i class="fa-solid fa-right-left"></i>
-                        </div>
-                        <div class="ms-2 d-flex flex-column p-2">
-                            <strong class="fs-6">Transfer Notes</strong>
-                            <p>-</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-12 mb-3">
-                    <div class="d-flex p-2 bg-white shadow">
-                        <div class="p-2">
-                            <i class="fa-solid fa-user-doctor"></i>
-                        </div>
-                        <div class="ms-2 d-flex flex-column p-2">
-                            <strong class="fs-6">Physician Notes</strong>
-                            <p>-</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-12 mb-3">
+                @* Admin Notes *@
+                <div class="col-sm-6 col-xs-12 mb-3" id="adminnotes">
                     <div class="d-flex p-2 bg-white shadow">
                         <div class="p-2">
                             <i class="fa-solid fa-user-tie"></i>
                         </div>
                         <div class="ms-2 d-flex flex-column p-2">
                             <strong class="fs-6">Admin Notes</strong>
-                            <p>-</p>
+                            <p id="adminnotestext">
+                                @Model.Adminnotes
+                            </p>
                         </div>
                     </div>
                 </div>
+                @* Physician Notes *@
+                <div class="col-sm-6 col-xs-12 mb-3" id="phynotes">
+                    <div class="d-flex p-2 bg-white shadow">
+                        <div class="p-2">
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
+                        <div class="ms-2 d-flex flex-column p-2">
+                            <strong class="fs-6">Physician Notes</strong>
+                            <p id="phynotetext">
+                                @Model.Physiciannotes
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                @* Patient Notes
+                <div class="col-sm-6 col-xs-12 mb-3">
+                    <div class="d-flex p-2 bg-white shadow">
+                        <div class="p-2">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <div class="ms-2 d-flex flex-column p-2">
+                            <strong class="fs-6">Patient Notes</strong>
+                            <p>
+                                @Model.Patientnotes
+                            </p>
+                        </div>
+                    </div>
+                </div> *@
+                @*Cancel Note*@
+                @foreach (var item in @Model.cancel)
+                {
+                    <div class="col-sm-6 col-xs-12 mb-3">
+                        <div class="d-flex p-2 bg-white shadow">
+                            <div class="p-2">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <div class="ms-2 d-flex flex-column p-2">
+                                <strong class="fs-6">@Enum.GetName(typeof(Status), item.Status)</strong>
+                                <p>
+                                    @item.Notes
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @*Cancel By Physician Note*@
+                @foreach (var item in Model.cancelbyphysician)
+                {
+                    <div class="col-sm-6 col-xs-12 mb-3">
+                        <div class="d-flex p-2 bg-white shadow">
+                            <div class="p-2">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <div class="ms-2 d-flex flex-column p-2">
+                                <strong class="fs-6">Cancel By Physician Notes</strong>
+                                <p>@item.Notes</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @* Transfer Notes *@
+                @if (Model.transfernotes.Count > 0)
+                {
+                    <div class="col-sm-6 col-xs-12 mb-3">
+                        <div class="d-flex p-2 bg-white shadow">
+                            <div class="p-2">
+                                <i class="fa-solid fa-right-left"></i>
+                            </div>
+                            <div class="ms-2 d-flex flex-column p-2">
+                                <strong class="fs-6">Transfer Notes</strong>
+                                @{
+                                    int i = 1;
+                                }
+                                @foreach (var item in Model.transfernotes)
+                                {
+                                    <p>
+                                        <b>( @i ) </b>@Html.Raw(System.Web.HttpUtility.HtmlDecode(item.TransferNotes))
+                                    </p>
+                                    i = i + 1;
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
+            
             <div class="row">
                 <div class="col">
                     <div class="bg-white shadow p-2">
-                        <form>
+                        <form method ="post" asp-action="ChangeNotes" asp-controller="AdminActions">
+                            <input type="hidden" name="RequestID" value="@Model.Requestid"/>
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    <textarea class="form-control shadow-none" placeholder="Leave a comment here" id="AdminNotes" style="height: 100px"></textarea>
-                                    <label for="AdminNotes">Admin Notes</label>
+                                    <textarea class="form-control shadow-none" placeholder="Leave a comment here" id="changenote" style="height: 100px"></textarea>
+                                    <label id="notedata" for="changenote">Edit Notes</label>
                                 </div>
+                                @if (TempData["Errormassage"] != null)
+                                {
+                                    <div class="alert text-start alert-info alert-dismissible fade show" role="alert">
+                                        <strong>Heyy</strong> @TempData["Errormassage"]
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                }
                             </div>
                             <div class="d-flex justify-content-end">
-                                <a class="btn btn-info text-white">Save Changes</a>
+                                <button type="submit" class="btn btn-info text-white">Save Changes</button>
                             </div>
                         </form>
                     </div>
@@ -73,4 +151,144 @@
             </div>
         </div>
     </div>
-</div>
+</div> 
+@* 
+    <style>
+        .notes {
+            font-size: .9rem;
+        }
+    </style>
+    <div class="container">
+        <div class="card bg-transparent border-0">
+            <div class="card-header  border-0  bg-transparent text-end mt-2">
+                <div class=" d-flex align-items-center justify-content-between">
+                    <div class="text-start">
+                        <h4 class="form-title mt-3 mx-2">Notes</h4>
+
+                    </div>
+                    <div class="text-end">
+                        <a asp-controller="AdminDashBoard" asp-action="Index" class="btn border border-info bg-light rounded mt-3 mb-1">
+                            <span class="text-info">
+                                <i class="fa fa-angle-left align-middle"></i>
+                                <b>&nbsp;&nbsp;Back</b>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="row container-fluid align-items-center justify-content-between mb-2" style="cursor:pointer">
+                @foreach (var item in Model.transfernotes)
+                {
+                    <div class="col-md-5 crd-notes m-2 d-flex align-items-center border-1 shadow rounded p-2 " style="min-height:100px">
+                        <img src="/icons/transfer-alt-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" />
+                        <div>
+                            <b>Transfer Notes</b>
+                            <p class="mt-2 notes ">
+                                @item.Notes
+
+                            </p>
+                        </div>
+                    </div>
+                }
+                @foreach (var item2 in Model.cancelnotes)
+                {
+                    if (item2.Status == 3)
+                    {
+                        <div class="col-md-5 crd-notes m-2 d-flex align-items-center border-1 shadow rounded p-2 " style="min-height:100px">
+                            <img src="/icons/transfer-alt-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" />
+                            <div>
+                                <b>Cancel Notes</b>
+                                <p class="mt-2 notes ">
+                                    @item2.Notes
+
+                                </p>
+                            </div>
+                        </div>
+                    }
+                    if (item2.Status == 7)
+                    {
+                        <div class="col-md-5 crd-notes m-2 d-flex align-items-center border-1 shadow rounded p-2 " style="min-height:100px">
+                            <img src="/icons/transfer-alt-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" />
+                            <div>
+                                <b>Patient Cancel Notes</b>
+                                <p class="mt-2 notes ">
+                                    @item2.Notes
+                                </p>
+                            </div>
+                        </div>
+                    }
+                }
+                <div class="col-md-5 crd-notes d-flex m-2  align-items-center shadow rounded p-2 " id="phynotes" style="min-height:100px;cursor:pointer">
+                    <img src="/icons/doctor-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" />
+                    <div>
+                        <b> Physician Notes</b>
+                        <div class="mt-2  ">
+                            <p id="phynotetext" class="mt-2 notes">
+                                @Model.Physiciannotes
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 crd-notes m-2 d-flex align-items-center border-1 shadow rounded p-2 " id="adminnotes" style="min-height:100px;cursor:pointer">
+                    <img src="/icons/admin.svg" style="height:50px;width:50px" class="mx-3 icn-img" />
+                    <div>
+                        <b>
+                            Admin Notes
+                        </b>
+                        <p id="adminnotestext" class="mt-2 notes">
+                            @Model.Adminnotes
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <form method="post" asp-action="ChangeNotes" asp-controller="AdminActions">
+                <div class="row  align-items-center d-flex justify-content-around mb-2 mt-3 px-3" style="cursor:pointer">
+                    <div class="col-md-12 shadow rounded ">
+                        <div class="card-body ">
+                            <div class="inputs-control w-100 mt-2">
+                                <textarea id="changenote" placeholder=" " rows="5" name="" class="input-outline w-100 fs-6 " type="text"></textarea>
+                            </div>
+                            <input type="hidden" name="RequestID" value="@Model.Requestid" />
+                            @if (TempData["Errormassage"] != null)
+                            {
+                                <div class="alert text-start alert-info alert-dismissible fade show" role="alert">
+                                    <strong>Heyy</strong> @TempData["Errormassage"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            }
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-info text-white mt-2">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div> *@
+<script>
+    $(document).ready(function () {
+        $("#phynotes").click(function () {
+            var text = $('#phynotetext').html().trim();
+            $("#changenote").val(text);
+            $("#changenote").attr("name", "physiciannotes");
+            $("#notedata").html("Physician Note");
+        })
+        $("#adminnotes").click(function () {
+            var text = $('#adminnotestext').html().trim();
+            console.log(text);
+            $("#changenote").val(text);
+            $("#changenote").attr("name", "adminnotes");
+            $("#notedata").html("Admin Note");
+        })
+    });
+
+    function enable_disable() {
+        $(".edit-frm").prop("readonly", false);
+        $("#save").prop("readonly", false);
+        $("#cancel").prop("readonly", false);
+        $("#save").css("display", "block");
+        $("#cancel").css("display", "block");
+        $("#edit").css("display", "none");
+        $(".edit-frm").css("background-color", "transparent");
+    }
+</script>

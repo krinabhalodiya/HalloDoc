@@ -126,11 +126,37 @@ namespace HalloDoc.Controllers
         }
         #endregion
         #region View_Notes
-        public async Task<IActionResult> ViewNotes(int id)
+        public IActionResult ViewNotes(int id)
         {
-            ViewCaseData sm = _IAdminDashBoardActionsRepository.GetRequestForViewCase(id);
 
+            ViewNotesData sm = _IAdminDashBoardActionsRepository.getNotesByID(id);
             return View("../AdminActions/ViewNotes", sm);
         }
+        #endregion
+        #region Edit_Notes
+        public IActionResult ChangeNotes(int RequestID, string? adminnotes, string? physiciannotes)
+        {
+            if (adminnotes != null || physiciannotes != null)
+            {
+                bool result = _IAdminDashBoardActionsRepository.EditViewNotes(adminnotes, physiciannotes, RequestID);
+                if (result)
+                {
+                    _notyf.Success("Notes Updated successfully...");
+                    return RedirectToAction("ViewNotes", new { id = RequestID });
+                }
+                else
+                {
+                    _notyf.Error("Notes Note Updated");
+                    return View("../AdminSite/Action/ViewNotes");
+                }
+            }
+            else
+            {
+                _notyf.Information("Please Select one of the note!!");
+                TempData["Errormassage"] = "Please Select one of the note!!";
+                return RedirectToAction("ViewNotes", new { id = RequestID });
+            }
+        }
+        #endregion
     }
 }
