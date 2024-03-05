@@ -15,70 +15,72 @@
 }
 <div class="container">
     <div class="card bg-transparent border-0 p-2" style="border-radius: 15px;">
-        <div class="card-header d-flex justify-content-between  border-0  bg-transparent p-1  mt-3 mb-2">
-            <div class="text-start">
-                <h5 class="mt-2"> Document</h5>
+        <div class="col-xl-12 d-flex justify-content-between">
+            <div class="card-header  border-0 bg-transparent p-1 my-1">
+                <div class="text-start">
+                    
+                    <h4 class="mt-2 font-weight-bold"><strong>Documents</strong></h4>
+                </div>
             </div>
-            <div class="text-end">
-                <a asp-action="Index" asp-controller="Dashboard" class="btn btn-outline-info btn-back text-end">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                         class="bi bi-arrow-left-short" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                              d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
-                    </svg></i>Back
-                </a>
-            </div>
+            <a asp-controller="AdminDashBoard" asp-action="Index" class="btn border border-info bg-light rounded mt-3 mb-1">
+                <i class="fa fa-angle-left text-info align-middle"></i>
+                <span class="text-info">
+                    <b class="align-text-top">&nbsp;&nbsp;Back</b>
+                </span>
+            </a>
         </div>
         <div class="card-body bg-white m-1 shadow" style="border-radius: 15px;">
-            <h2 class="my-3">@Model.ConfirmationNumber</h2>
-            <div class="doc-text-card">@Model.Firstanme  @Model.Lastanme</div>
-            <div class="doc-text-card mt-2">
+            <p class="doc-text-card text-secondary">Patient name</p>
+            <div class="d-flex align-items-center">
+                <h5 class="text-info"><b>@Model.Firstname @Model.Lastname </b></h5>
+                <h6 class="doc-text-card mx-2 text-secondary">@Model.ConfirmationNumber</h6>
+            </div>
+
+            <div class="doc-text-card mt-2 text-secondary">
                 check here for any files that you or the
                 doctor of yours subsequents requestors have attached for yo to
                 review
             </div>
             <div class="col-md-12 mt-3">
-
                 <form method="post" id="myForm" asp-action="UploadDoc" asp-controller="AdminActions" enctype="multipart/form-data">
-                    <div class="col-md-12 form-floating d-flex ">
-                        <div class="file-upload-wrapper1 border border-1" data-text="Select your file!">
-                            <input type="hidden" name="Requestid" value="@Model.RequestID" />
-                            <input name="file" type="file" class="file-upload-field" id="file" value="">
-
+                    <div class="d-flex justify-content-between bg-light border border-secondary rounded">
+                        <button type="button" id="choosenfile" class="col btn text-start text-secondary" onclick="document.getElementById('file').click()">
+                            Select File
+                        </button>
+                        <input id="file" type="file" class="d-none form-control doc_uploder" name="file" >
+                        <input type="hidden" name="Requestid" value="@Model.RequestID"/>
+                        <div class="btn btn-info text-white py-2" value="Upload" id="fileupload">
+                            <i class="fa fa-cloud-upload"></i>
+                            <span class="d-none d-sm-inline">Upload</span>
                         </div>
-                        <input type="submit" class="btn text-light btn-info rounded-right " id="fileupload" value="upload" />
-                        <!-- <input class="form-control rounded" name="suche" type="file" placeholder=Suchtext autocomplete=off> -->
                     </div>
                 </form>
-
-
-
-                <div class="card-header-2 mt-3 d-flex justify-content-between  border-0  bg-transparent ">
+                <div class="card-header-2 mt-3 d-flex justify-content-between border-0 bg-transparent ">
                     <div class="mt-2">
                         <h6> Document</h6>
                     </div>
                     <div class="text-end d-flex ">
-                        <div id="downloadAll" class="btn btn-outline-info btn-back text-end mx-1">
-                            <i class="fa-solid fa-download"></i>  Downlode all
+                        <div id="downloadAll" class="btn btn-outline-info btn-back text-end d-flex mx-1">
+                            <i class="fa-solid fa-download me-1"></i><span class="d-none d-sm-block">Downlode all</span>
                         </div>
-                        <form method="post" id="deleted" asp-action="AllFilesDelete" asp-controller="ViewAction">
+                        <form method="post" id="deleted" asp-action="AllFilesDelete" asp-controller="AdminActions">
                             <input type="hidden" id="deleteids" name="deleteids" />
                             <input type="hidden" value="@Model.RequestID" name="Requestid" />
-                            <a id="delete" class="btn btn-outline-info btn-back text-end mx-1">
-                                <i class="fa fa-trash" aria-hidden="true"></i>  Delete
-                            </a>
+                            <div id="delete" class="btn btn-outline-info d-flex btn-back text-end mx-1">
+                                <i class="fa fa-trash me-1" aria-hidden="true"></i><span class="d-none d-sm-inline">Delete all</span>
+                            </div>
                         </form>
                         <form method="post" id="sendmails" asp-action="SendFilEmail" asp-controller="ViewAction">
                             <input type="hidden" value="@Model.RequestID" name="Requestid" />
-                            <input type="hidden" id="mailids" name="mailids" />
-
-                            <div id="sendmail" class="btn btn-outline-info btn-back text-end mx-1">
-                                <i class="fa-solid fa-mail"></i>  Send Mail
+                            <input type="hidden" id="mailids" name="mailids"/>
+                            <div id="sendmail" class="btn btn-outline-info btn-back d-flex text-end mx-1">
+                                <i class="fa fa-envelope me-1"></i><span class="d-none d-sm-block">Send Mail</span>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="table-responsive mt-3 ">
+                @* dashboard view *@
+                <div class="table-responsive mt-3 d-none d-sm-block">
                     <table class="table">
                         <thead class="border-0">
                             <tr class="table-secondary">
@@ -88,8 +90,7 @@
                                     </div>
                                 </th>
                                 <th scope="col" class="table-text-header px-3">File Name</th>
-
-                                <th scope="col" class="table-text-header  px-3">Uploder</th>
+                                <th scope="col" class="table-text-header px-3">Uploder</th>
                                 <th scope="col" class="table-text-header ">uplode date</th>
                                 <th scope="col" class="table-text-header ">Action</th>
                             </tr>
@@ -104,19 +105,14 @@
                                             <input class="form-check-input RequestwisefilesId" type="hidden" value="@item2.RequestwisefilesId">
                                         </div>
                                     </td>
-                                    <td class="table-text  px-3 flnamae"> <span> @item2.Filename </span></td>
-                                    <td class="table-text  px-3">@item2.Status </td>
+                                    <td class="table-text  px-3 filename"> <span> @item2.Filename </span></td>
+                                    <td class="table-text  px-3">@item2.Uploader </td>
                                     <td class="table-text  px-3">@item2.Createddate</td>
-
                                     <td class="table-text text-center ">
-                                        <a class="btn btn-sm  btn-outline-info document-button" download href="@item2.Filename.Replace("~","")">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                                                 class="bi bi-arrow-down-circle mx-1" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd"
-                                                      d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z" />
-                                            </svg>
+                                        <a class="btn btn-sm btn-outline-info document-button" download href="@item2.Filename.Replace("~","")">
+                                            <i class="fa fa-cloud-download"></i>
                                         </a>
-                                        <a class="btn btn-sm  btn-outline-info " asp-action="DeleteFile" asp-controller="ViewAction" asp-route-id="@item2.RequestwisefilesId" asp-route-Requestid="@Model.RequestID">
+                                        <a class="btn btn-sm btn-outline-info " asp-action="DeleteFile" asp-controller="AdminActions" asp-route-id="@item2.RequestwisefilesId" asp-route-Requestid="@Model.RequestID">
                                             <i class="fa fa-trash" aria-hidden="true">  </i>
                                         </a>
 
@@ -127,26 +123,55 @@
                     </table>
                 </div>
 
+                <!--Mobile screen View-->
+                <div class="d-block d-sm-none border-top my-2 t-tab">
+                    @foreach (var item in Model.documentslist)
+                    {
+                        <div class="border-bottom">
+                            <div class="d-inline-flex my-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
+                                    <input class="form-check-input RequestwisefilesId" type="hidden" value="@item.RequestwisefilesId">
+                                </div>
+                                <div>
+                                    <small>@item.Filename</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <label class="text-break"><small>@item.Uploader</small></label>
+                                <label><small>@item.Createddate.ToString("MMM d , yyyy")</small></label>
+                            </div>
+                            <div class="mb-3">
+                                <a class="btn btn-sm download-link btn-outline-info document-button" download href="@item.Filename.Replace("~","")">
+                                    <i class="fa fa-cloud-download"></i>
+                                </a>
+                                <a class="btn btn-sm download-link btn-outline-info" asp-action="DeleteFile" asp-controller="AdminActions" asp-route-id="@item.RequestwisefilesId" asp-route-Requestid="@Model.RequestID">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!--End Mobile screen View-->
             </div>
         </div>
 
     </div>
 </div>
+
 @section Scripts
 {
-
     <script type="text/javascript">
-
-        window.onload = function () {
-            console.log("@status  d");
-            if ("@status" != "null") {
-                savealt("@status")
-            }
-        };
+        
+            $("#file").change(function () {
+                filename = this.files[0].name;
+                console.log(filename);
+                $("#choosenfile").text(filename);
+            });
 
         $(function () {
 
-            $('.flnamae').each(function () {
+            $('.filename').each(function () {
                 var fileName = $(this).text().trim();
                 if (fileName.endsWith('.pdf')) {
                     $(this).prepend('<i class="fa-solid fa-file-pdf" style="color: #be2323;font-size:1rem"></i> ');
@@ -160,12 +185,22 @@
 
             });
 
-
             $('#downloadAll').click(function () {
                 $('tbody tr').each(function () {
                     if ($(this).find('.form-check-input').prop('checked')) {
                         var downloadLink = $(this).find('.document-button').attr('href');
-
+                        var hiddenLink = document.createElement('a');
+                        hiddenLink.href = downloadLink;
+                        hiddenLink.target = '_blank';
+                        hiddenLink.download = '';
+                        document.body.appendChild(hiddenLink);
+                        hiddenLink.click();
+                        document.body.removeChild(hiddenLink);
+                    }
+                });
+                $('.t-tab > .border-bottom').each(function () {
+                    if ($(this).find('.form-check-input').prop('checked')) {
+                        var downloadLink = $(this).find('.document-button').attr('href');
                         var hiddenLink = document.createElement('a');
                         hiddenLink.href = downloadLink;
                         hiddenLink.target = '_blank';
@@ -203,7 +238,7 @@
                     denyButtonText: `Don't save`
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $('#sendmails').submit();
+                        $('#').submit();
                     }
                     console.log(result);
                     /* Read more about isConfirmed, isDenied below */
@@ -215,43 +250,60 @@
                 });
             });
 
-
             $('#delete').click(function () {
+                anyCheckboxSelected = false;
                 $('tbody tr').each(function () {
                     if ($(this).find('.form-check-input').prop('checked')) {
+                        anyCheckboxSelected = true;
                         var downloadLink = $(this).find('.RequestwisefilesId').val();
                         var deleteids = $('#deleteids').val();
                         console.log(deleteids);
                         if (deleteids == '') {
-
                             $('#deleteids').val(downloadLink);
                         } else {
                             $('#deleteids').val(deleteids + ',' + downloadLink);
-
                         }
                         console.log($('#deleteids').val());
-
                     }
                 });
-
-                Swal.fire({
-                    title: "Do you want to Delete That file ?",
-                    showDenyButton: false,
-                    showCancelButton: true,
-                    confirmButtonText: "Save",
-                    denyButtonText: `Don't save`
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#deleted').submit();
-                    }
-                    console.log(result);
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        Swal.fire("Delete!", "", "success");
-                    } else if (result.isDenied) {
-                        Swal.fire("Changes are not saved", "", "info");
+                $('.t-tab > .border-bottom').each(function () {
+                    if ($(this).find('.form-check-input').prop('checked')) {
+                        anyCheckboxSelected = true;
+                        var downloadLink = $(this).find('.RequestwisefilesId').val();
+                        var deleteids = $('#deleteids').val();
+                        console.log(deleteids);
+                        if (deleteids == '') {
+                            $('#deleteids').val(downloadLink);
+                        } else {
+                            $('#deleteids').val(deleteids + ',' + downloadLink);
+                        }
+                        console.log($('#deleteids').val());
                     }
                 });
+                if (anyCheckboxSelected) {
+                    Swal.fire({
+                        text: "Do you want to Delete That file ?",
+                        showDenyButton: false,
+                        showCancelButton: true,
+                        confirmButtonText: "Yes",
+                        denyButtonText: "Cancel"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#deleted').submit();
+                        }
+                    });
+                }
+                else{
+                    swal.fire({
+                        title: "Oops..",
+                        text: "Oops! Please Select One File ",
+                        icon: "error",
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        cancelButtonText: "Okay",
+                        cancelButtonColor: "#01BBE7",
+                    })
+                }
             });
 
             $("form").on("change", ".file-upload-field", function () {
@@ -269,12 +321,12 @@
                 }
             });
 
-            $("#fileupload").submit(function (e) {
+            $("#fileupload").click(function (e) {
                 e.preventDefault();
                 if ($('#file')[0].files[0] == undefined) {
                     swal.fire({
                         title: "Oops..",
-                        text: "Oops!☹️ Please Select One File ",
+                        text: "Oops! Please Select One File ",
                         icon: "error",
                         showCancelButton: true,
                         showConfirmButton: false,
@@ -282,6 +334,8 @@
                         cancelButtonColor: "#01BBE7",
                     })
                     return;
+                } else {
+                    $('#myForm').submit();
                 }
             })
         });

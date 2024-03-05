@@ -13,6 +13,8 @@ using System.Net;
 using HalloDoc.Entity.DataModels;
 using Microsoft.AspNetCore.Http;
 using static HalloDoc.Entity.Models.ViewDocuments;
+using System.Runtime.Intrinsics.Arm;
+using static HalloDoc.Entity.Models.Constant;
 
 namespace HallodocMVC.Repository.Admin.Repository
 {
@@ -118,7 +120,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                     {
                         Requestid = RequestID,
                         Notes = Note,
-                        Status = 8,
+                        Status = 3,
                         Createddate = DateTime.Now
                     };
                     _context.Requeststatuslogs.Add(rsl);
@@ -377,59 +379,86 @@ namespace HallodocMVC.Repository.Admin.Repository
         #region GetDocumentByRequest
         public async Task<ViewDocuments> GetDocumentByRequest(int? id)
         {
-            ViewDocuments doc = await (from req in _context.Requests
-                                       join reqClient in _context.Requestclients
-                                       on req.Requestid equals reqClient.Requestid into reqClientGroup
-                                       from rc in reqClientGroup.DefaultIfEmpty()
-                                       where req.Requestid == id
-                                       select new ViewDocuments
-                                       {
-                                           ConfirmationNumber = req.Confirmationnumber,
-                                           Email = rc.Email,
-                                           PhoneNumber = rc.Phonenumber,
-                                           //DOB = new DateTime((int)rc.Intyear, (int)Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
-                                           Firstanme = rc.Firstname,
-                                           Lastanme = rc.Lastname,
-                                           RequestID = req.Requestid,
-                                           RequesClientid = rc.Requestclientid
+            var req = _context.Requests.FirstOrDefault(r => r.Requestid == id);
+            ViewDocuments doc = new ViewDocuments();
+            doc.ConfirmationNumber = req.Confirmationnumber;
+            doc.Firstname = req.Firstname;
+            doc.Lastname = req.Lastname;
+            doc.RequestID = req.Requestid;
 
-                                       }).FirstAsync();
-
-            List<Documents> doclist = _context.Requestwisefiles
-                        .Where(r => r.Requestid == id)
-                        .ToList()
-                        .Where(r => r.Isdeleted.Get(0) == false)
-                        .OrderByDescending(x => x.Createddate)
-                        .Select(r => new Documents
-                        {
-                            isDeleted = r.Isdeleted.ToString(),
-                            RequestwisefilesId = r.Requestwisefileid,
-                            Status = r.Doctype,
-                            Createddate = r.Createddate,
-                            Filename = r.Filename
-
-                        }).ToList();
+            var result = from requestWiseFile in _context.Requestwisefiles
+                         join request in _context.Requests on requestWiseFile.Requestid equals request.Requestid
+                         join physician in _context.Physicians on request.Physicianid equals physician.Physicianid into physicianGroup
+                         from phys in physicianGroup.DefaultIfEmpty()
+                         join admin in _context.Admins on requestWiseFile.Adminid equals admin.Adminid into adminGroup
+                         from adm in adminGroup.DefaultIfEmpty()
+                         where request.Requestid == id && requestWiseFile.Isdeleted == new BitArray(1)
+                         select new
+                         {
+                             Uploader = requestWiseFile.Physicianid != null ? phys.Firstname : (requestWiseFile.Adminid != null ? adm.Firstname : request.Firstname),
+                             isDeleted = requestWiseFile.Isdeleted.ToString(),
+                             RequestwisefilesId = requestWiseFile.Requestwisefileid,
+                             Status = requestWiseFile.Doctype,
+                             Createddate = requestWiseFile.Createddate,
+                             Filename = requestWiseFile.Filename
+                         };
+            List<Documents> doclist = new List<Documents>();
+            foreach (var item in result)
+            {
+                doclist.Add(new Documents
+                {
+                    Uploader = item.Uploader,
+                    isDeleted = item.isDeleted,
+                    RequestwisefilesId = item.RequestwisefilesId,
+                    Status = item.Status,
+                    Createddate = item.Createddate,
+                    Filename = item.Filename
+                });
+            }
             doc.documentslist = doclist;
             return doc;
-
         }
         #endregion
+
         #region Save_Document
         public Boolean SaveDoc(int Requestid, IFormFile file)
         {
-            BitArray ba = new BitArray(8);
-            ba[0] = false;
             string UploadDoc = FileSave.UploadDoc(file, Requestid);
             var requestwisefile = new Requestwisefile
             {
                 Requestid = Requestid,
                 Filename = UploadDoc,
                 Createddate = DateTime.Now,
-                Isdeleted = ba 
+                Isdeleted = new BitArray(1),
+                Adminid = 1
             };
             _context.Requestwisefiles.Add(requestwisefile);
             _context.SaveChanges();
+            return true;
+        }
+        #endregion
 
+        #region DeleteDocumentByRequest
+        public async Task<bool> DeleteDocumentByRequest(string ids)
+        {
+            List<int> deletelist = ids.Split(',').Select(int.Parse).ToList();
+            foreach (int item in deletelist)
+            {
+                if (item > 0)
+                {
+                    var data = await _context.Requestwisefiles.Where(e => e.Requestwisefileid == item).FirstOrDefaultAsync();
+                    if (data != null)
+                    {
+                        data.Isdeleted[0] = true;
+                        _context.Requestwisefiles.Update(data);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
             return true;
         }
         #endregion

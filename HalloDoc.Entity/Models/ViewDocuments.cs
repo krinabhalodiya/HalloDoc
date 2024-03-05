@@ -8,15 +8,10 @@ namespace HalloDoc.Entity.Models
 {
     public class ViewDocuments
     {
-        public List<Documents>? documentslist { get; set; } = null;
-        public string Firstanme { get; set; }
-        public string Lastanme { get; set; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
         public string? ConfirmationNumber { get; set; }
         public int RequestID { get; set; }
-        public int RequesClientid { get; set; }
-        public string? Email { get; set; }
-        public string? PhoneNumber { get; set; }
-        public DateTime? DOB { get; set; }
         public class Documents
         {
             public string? Uploader { get; set; }
@@ -26,5 +21,6 @@ namespace HalloDoc.Entity.Models
             public int? RequestwisefilesId { get; set; }
             public string isDeleted { get; set; }
         }
+        public List<Documents>? documentslist { get; set; } = null;
     }
 }

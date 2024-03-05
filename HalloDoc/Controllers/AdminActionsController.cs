@@ -24,10 +24,12 @@ namespace HalloDoc.Controllers
         }
         public async Task<IActionResult> ViewCase(int id)
         {
+            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             ViewCaseData sm = _IAdminDashBoardActionsRepository.GetRequestForViewCase(id);
 
             return View("../AdminActions/ViewCase", sm);
         }
+        #region EditCase
         public IActionResult EditCase(ViewCaseData vcd)
         {
             bool result = _IAdminDashBoardActionsRepository.EditCase(vcd);
@@ -40,6 +42,8 @@ namespace HalloDoc.Controllers
                 return View("../AdminActions/ViewCase", vcd);
             }
         }
+        #endregion
+
         #region AssignProvider
         public async Task<IActionResult> AssignProvider(int requestid, int ProviderId, string Notes)
         {
@@ -55,6 +59,7 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Index", "AdminDashBoard");
         }
         #endregion
+
         #region providerbyregion
         public IActionResult ProviderbyRegion(int? Regionid)
         {
@@ -62,6 +67,7 @@ namespace HalloDoc.Controllers
             return Json(v);
         }
         #endregion
+
         #region _CancelCase
         public IActionResult CancelCase(int RequestID, string Note, string CaseTag)
         {
@@ -79,6 +85,7 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Index", "AdminDashBoard");
         }
         #endregion
+
         #region _BlockCase
         public IActionResult BlockCase(int RequestID, string Note)
         {
@@ -94,6 +101,7 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Index", "AdminDashBoard");
         }
         #endregion
+
         #region AssignProvider
         public async Task<IActionResult> TransferProvider(int requestid, int ProviderId, string Notes)
         {
@@ -109,6 +117,7 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Index", "AdminDashBoard", new { Status = "2" });
         }
         #endregion
+
         #region Clear_case
         public IActionResult ClearCase(int RequestID)
         {
@@ -125,6 +134,7 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Index", "AdminDashBoard", new { Status = "2" });
         }
         #endregion
+
         #region View_Notes
         public IActionResult ViewNotes(int id)
         {
@@ -133,6 +143,7 @@ namespace HalloDoc.Controllers
             return View("../AdminActions/ViewNotes", sm);
         }
         #endregion
+
         #region Edit_Notes
         public IActionResult ChangeNotes(int RequestID, string? adminnotes, string? physiciannotes)
         {
@@ -158,6 +169,7 @@ namespace HalloDoc.Controllers
             }
         }
         #endregion
+
         #region View_Upload
         public async Task<IActionResult> ViewUpload(int? id)
         {
@@ -165,12 +177,47 @@ namespace HalloDoc.Controllers
             return View("../AdminActions/ViewUpload",v);
         }
         #endregion
+
         #region UploadDoc_Files
         public IActionResult UploadDoc(int Requestid, IFormFile file)
         {
             if (_IAdminDashBoardActionsRepository.SaveDoc(Requestid, file))
             {
-                TempData["Status"] = "Upload File Successfully..!";
+                _notyf.Success("File Uploaded Successfully");
+            }
+            else
+            {
+                _notyf.Error("File Not Uploaded");
+            }
+            return RedirectToAction("ViewUpload", "AdminActions", new { id = Requestid });
+        }
+        #endregion
+
+        #region DeleteOnesFile
+        public async Task<IActionResult> DeleteFile(int? id, int Requestid)
+        {
+            if (await _IAdminDashBoardActionsRepository.DeleteDocumentByRequest(id.ToString()))
+            {
+                _notyf.Success("File Deleted Successfully");
+            }
+            else
+            {
+                _notyf.Error("File Not Deleted");
+            }
+            return RedirectToAction("ViewUpload", "AdminActions", new { id = Requestid });
+        }
+        #endregion
+
+        #region AllFilesDelete
+        public async Task<IActionResult> AllFilesDelete(string deleteids, int Requestid)
+        {
+            if (await _IAdminDashBoardActionsRepository.DeleteDocumentByRequest(deleteids))
+            {
+                _notyf.Success("All Selected File Deleted Successfully");
+            }
+            else
+            {
+                _notyf.Error("All Selected File Not Deleted");
             }
             return RedirectToAction("ViewUpload", "AdminActions", new { id = Requestid });
         }
