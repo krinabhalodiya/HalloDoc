@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using HalloDoc.Controllers.Admin;
 using HalloDoc.Entity;
 using HalloDoc.Entity.DataContext;
 using HalloDoc.Entity.DataModels;
@@ -23,7 +24,7 @@ namespace HalloDoc.Controllers
             _combobox = combobox;
             _logger = logger;
         }
-
+        [CheckAdminAccess]
         public async Task<IActionResult> IndexAsync()
         {
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();

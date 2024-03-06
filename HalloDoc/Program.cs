@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<HalloDocContext>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession();
 builder.Services.AddScoped<IAdminDashBoardRepository, AdminDashBoardRepository>();
 builder.Services.AddScoped<IAdminDashBoardActionsRepository, AdminDashBoardActionsRepository>();
 builder.Services.AddScoped< IComboboxRepository,ComboboxRepository>();
@@ -26,13 +28,13 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 app.UseNotyf();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=AdminDashBoard}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
