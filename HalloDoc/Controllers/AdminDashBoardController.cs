@@ -24,7 +24,8 @@ namespace HalloDoc.Controllers
             _combobox = combobox;
             _logger = logger;
         }
-        [CheckAdminAccess]
+        [CheckProviderAccess("Admin")]
+        
         public async Task<IActionResult> IndexAsync()
         {
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();

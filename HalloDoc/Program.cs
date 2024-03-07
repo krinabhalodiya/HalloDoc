@@ -15,6 +15,8 @@ builder.Services.AddSession();
 builder.Services.AddScoped<IAdminDashBoardRepository, AdminDashBoardRepository>();
 builder.Services.AddScoped<IAdminDashBoardActionsRepository, AdminDashBoardActionsRepository>();
 builder.Services.AddScoped< IComboboxRepository,ComboboxRepository>();
+builder.Services.AddScoped< ILoginRepository, LoginRepository>();
+builder.Services.AddScoped< IJwtService, JwtService>();
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 var app = builder.Build();
 

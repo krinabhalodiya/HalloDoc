@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
 
 namespace HallodocMVC.Repository.Admin.Repository.Interface
 {
-    public interface IJwtService
+    public interface ILoginRepository
     {
-        string GenerateJWTAuthetication(UserInfo userinfo);
-        bool ValidateToken(string token, out JwtSecurityToken jwtSecurityTokenHandler);
+        Task<UserInfo> CheckAccessLogin(Aspnetuser aspNetUser);
     }
 }

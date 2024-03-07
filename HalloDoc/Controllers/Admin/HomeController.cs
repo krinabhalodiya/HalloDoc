@@ -1,4 +1,9 @@
 ﻿using System.Data;
+using AspNetCoreHero.ToastNotification.Abstractions;
+using HalloDoc.Entity.DataModels;
+using HalloDoc.Entity.Models;
+using HallodocMVC.Repository.Admin.Repository;
+using HallodocMVC.Repository.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 
@@ -6,32 +11,41 @@ namespace HalloDoc.Controllers.Admin
 {
     public class HomeController : Controller
     {
+        private readonly IAdminDashBoardActionsRepository _IAdminDashBoardActionsRepository;
+        private readonly IComboboxRepository _combobox;
+        private readonly INotyfService _notyf;
+        private readonly ILogger<AdminActionsController> _logger;
+        private readonly ILoginRepository _loginRepository;
+        private readonly IJwtService _jwtService;
+
+        public HomeController(ILogger<AdminActionsController> logger,
+                                      IComboboxRepository combobox,
+                                      IAdminDashBoardActionsRepository actionrepo,
+                                      INotyfService notyf,
+                                      ILoginRepository loginRepository,
+                                      IJwtService jwtService)
+        {
+            _combobox = combobox;
+            _IAdminDashBoardActionsRepository = actionrepo;
+            _notyf = notyf;
+            _logger = logger;
+            _loginRepository = loginRepository;
+            _jwtService = jwtService;
+        }
         public IActionResult Index()
         {
             return View("../Admin/Home/Index");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Validate(string Email, string Passwordhash)
+        public async Task<IActionResult> Validate(Aspnetuser aspNetUser)
         {
-            NpgsqlConnection connection = new NpgsqlConnection("Server=localhost;Database=HalloDoc;User Id=postgres;Password=Krina@2483;Include Error Detail=True");
-            string Query = "select * from aspnetusers au inner join aspnetuserroles aur on au.id = aur.userid inner join aspnetroles roles on aur.roleid = roles.id where email=@Email and passwordhash=@Passwordhash";
-            connection.Open();
-            NpgsqlCommand command = new NpgsqlCommand(Query, connection);
-            command.Parameters.AddWithValue("@Email", Email);
-            command.Parameters.AddWithValue("@Passwordhash", Passwordhash);
-            NpgsqlDataReader reader = command.ExecuteReader();
-            DataTable dataTable = new DataTable();
-            dataTable.Load(reader);
-            int numRows = dataTable.Rows.Count;
-            if (numRows > 0)
+            UserInfo u = await _loginRepository.CheckAccessLogin(aspNetUser);
+
+            if (u != null)
             {
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    HttpContext.Session.SetString("UserName", row["username"].ToString());
-                    HttpContext.Session.SetString("UserID", row["Id"].ToString());
-                    HttpContext.Session.SetString("RoleId", row["roleid"].ToString());
-                }
+                var jwttoken = _jwtService.GenerateJWTAuthetication(u);
+                Response.Cookies.Append("jwt", jwttoken);
                 return RedirectToAction("Index", "AdminDashBoard");
             }
             else
@@ -40,11 +54,13 @@ namespace HalloDoc.Controllers.Admin
                 return View("../Admin/Home/Index");
             }
         }
-        public IActionResult Logout()
+        #region end_session
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Clear();
+            Response.Cookies.Delete("jwt");
             return RedirectToAction("Index", "Home");
         }
+        #endregion
         public IActionResult AuthError()
         {
             return View("../Admin/Home/AuthError");

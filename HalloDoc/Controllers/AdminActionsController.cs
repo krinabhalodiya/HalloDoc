@@ -7,6 +7,7 @@ namespace HalloDoc.Controllers
 {
     public class AdminActionsController : Controller
     {
+        #region Constructor
         private readonly IAdminDashBoardActionsRepository _IAdminDashBoardActionsRepository;
         private readonly IComboboxRepository _combobox;
         private readonly INotyfService _notyf;
@@ -22,6 +23,9 @@ namespace HalloDoc.Controllers
             _notyf = notyf;
             _logger = logger;
         }
+        #endregion
+
+        #region ViewCase
         public async Task<IActionResult> ViewCase(int id)
         {
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
@@ -29,6 +33,8 @@ namespace HalloDoc.Controllers
 
             return View("../AdminActions/ViewCase", sm);
         }
+        #endregion
+
         #region EditCase
         public IActionResult EditCase(ViewCaseData vcd)
         {
@@ -102,7 +108,7 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
-        #region AssignProvider
+        #region TransferProvider
         public async Task<IActionResult> TransferProvider(int requestid, int ProviderId, string Notes)
         {
             if (await _IAdminDashBoardActionsRepository.TransferProvider(requestid, ProviderId, Notes))

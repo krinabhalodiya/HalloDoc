@@ -1,6 +1,7 @@
 ﻿@{
     Layout = "_LoginLayout";
 }
+@model HalloDoc.Entity.DataModels.Aspnetuser;
 <div class="align-self-center w-sm-50">
     @* <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
         <strong class="text-info">
@@ -11,7 +12,7 @@
     <strong class="text-danger">@ViewData["error"]</strong>
     <form asp-action="Validate" asp-controller="Home" method="post">
         <div class="form-floating mb-4 email">
-            <input type="email" class="form-control shadow-none" name="Email" id="floatingInput" placeholder="name@example.com">
+            <input type="email" class="form-control shadow-none" asp-for="Email" id="floatingInput" placeholder="name@example.com">
             <label class="bg-transparent" for="floatingInput">Email</label>
             <div class="btn btn-light">
                 <i class='fa fa-user-circle field-icon position-relative'></i>
@@ -19,7 +20,7 @@
             <span class="text-danger"></span>
         </div>
         <div class="form-floating mb-4 password">
-            <input type="password" class="form-control shadow-none eyehide" name="Passwordhash" id="floatingPassword" placeholder="Password">
+            <input type="password" class="form-control shadow-none eyehide" asp-for="Passwordhash" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">Password</label>
             <button type="button" class="btn btn-light" onclick="passtoggle()">
                 <i class="showImg fa fa-eye"></i>
