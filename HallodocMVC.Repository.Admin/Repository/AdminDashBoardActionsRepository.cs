@@ -462,5 +462,39 @@ namespace HallodocMVC.Repository.Admin.Repository
             return true;
         }
         #endregion
+
+        #region sendorderd
+        public Healthprofessional SelectProfessionlByID(int VendorID)
+        {
+            return _context.Healthprofessionals.FirstOrDefault(e => e.Vendorid == VendorID);
+        }
+        public bool SendOrder(ViewSendOrderData data)
+        {
+            try
+            {
+                Orderdetail od = new Orderdetail
+                {
+                    Requestid = data.RequestID,
+                    Vendorid = data.VendorID,
+                    Faxnumber = data.FaxNumber,
+                    Email = data.Email,
+                    Businesscontact = data.BusinessContact,
+                    Prescription = data.Prescription,
+                    Noofrefill = data.NoOFRefill,
+                    Createddate = DateTime.Now,
+                    Createdby = "001e35a5 - cd12 - 4ec8 - a077 - 95db9d54da0f"
+                };
+                _context.Orderdetails.Add(od);
+                _context.SaveChanges(true);
+                var req = _context.Requests.FirstOrDefault(e => e.Requestid == data.RequestID);
+                //_email.SendMail(data.Email, "New Order arrived", data.Prescription + "Request name" + req.Firstname);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
     }
 }

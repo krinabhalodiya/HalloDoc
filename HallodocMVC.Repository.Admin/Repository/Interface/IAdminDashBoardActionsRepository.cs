@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
 using Microsoft.AspNetCore.Http;
 
@@ -23,5 +23,7 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public Task<ViewDocuments> GetDocumentByRequest(int? id);
         public Boolean SaveDoc(int Requestid, IFormFile file);
         public Task<bool> DeleteDocumentByRequest(string ids);
+        public Healthprofessional SelectProfessionlByID(int VendorID);
+        public bool SendOrder(ViewSendOrderData data);
     }
 }

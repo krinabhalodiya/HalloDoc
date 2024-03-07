@@ -13,21 +13,37 @@
         <div class="form-floating mb-4 email">
             <input type="email" class="form-control shadow-none" name="Email" id="floatingInput" placeholder="name@example.com">
             <label class="bg-transparent" for="floatingInput">Email</label>
-            @* <button type="button" class="btn btn-light">
-                <i class="icon fa-solid fa-user field-icon position-relative"></i>
-            </button> *@
+            <div class="btn btn-light">
+                <i class='fa fa-user-circle field-icon position-relative'></i>
+            </div>
             <span class="text-danger"></span>
         </div>
         <div class="form-floating mb-4 password">
             <input type="password" class="form-control shadow-none eyehide" name="Passwordhash" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">Password</label>
-            @* <button type="button" class="btn btn-light" onclick="passtoggle()">
-                <i class="showImg fa fa-eye-slash"></i>
-                <i class="fa fa-eye"></i>
-            </button> *@
+            <button type="button" class="btn btn-light" onclick="passtoggle()">
+                <i class="showImg fa fa-eye"></i>
+                <i class="fa fa-eye-slash"></i>
+            </button>
             <span  class="text-danger"></span>
         </div>
         <button type="submit" class="btn btn-info text-white w-100 mb-4" role="button">Login</button>
     </form>
     <a asp-controller="Home" asp-action="ResetPassword" class="text-decoration-none d-flex justify-content-center"><strong class="text-info">Forgot Password?</strong></a>
 </div>
+
+<script>
+    function passtoggle() {
+        var x = document.getElementById("floatingPassword");
+        if (x.type === "password") {
+            x.type = "text";
+            document.querySelectorAll(".fa-eye").forEach(i => i.style.display = "none");
+            document.querySelectorAll(".fa-eye-slash").forEach(i => i.style.display = "block");
+        }
+        else {
+            x.type = "password";
+            document.querySelectorAll(".fa-eye-slash").forEach(i => i.style.display = "none");
+            document.querySelectorAll(".fa-eye").forEach(i => i.style.display = "block");
+        }
+    }
+</script>

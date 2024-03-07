@@ -222,5 +222,51 @@ namespace HalloDoc.Controllers
             return RedirectToAction("ViewUpload", "AdminActions", new { id = Requestid });
         }
         #endregion
+
+        #region order_action
+        public async Task<IActionResult> Order(int id)
+        {
+            List<HealthProfessionalTypeComboBox> cs = await _combobox.healthprofessionaltype();
+            ViewBag.ProfessionType = cs;
+            ViewSendOrderData data = new ViewSendOrderData
+            {
+                RequestID = id
+            };
+            return View("../AdminActions/SendOrders", data);
+        }
+        public Task<IActionResult> ProfessionalByType(int HealthprofessionalID)
+        {
+            var v = _combobox.ProfessionalByType(HealthprofessionalID);
+            return Task.FromResult<IActionResult>(Json(v));
+        }
+
+        public Task<IActionResult> SelectProfessionalByID(int VendorID)
+        {
+            var v = _IAdminDashBoardActionsRepository.SelectProfessionlByID(VendorID);
+            return Task.FromResult<IActionResult>(Json(v));
+        }
+        public IActionResult SendOrder(ViewSendOrderData sm)
+        {
+            if (ModelState.IsValid)
+            {
+                bool data = _IAdminDashBoardActionsRepository.SendOrder(sm);
+                if (data)
+                {
+                    _notyf.Success("Order Created  successfully...");
+                    _notyf.Information("Mail is sended to Vendor successfully...");
+                    return RedirectToAction("Index", "AdminDashBoard");
+                }
+                else
+                {
+                    _notyf.Error("Order Not Created...");
+                    return View("../AdminActions/SendOrders", sm);
+                }
+            }
+            else
+            {
+                return View("../AdminActions/SendOrders", sm);
+            }
+        }
+        #endregion
     }
 }

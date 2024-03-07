@@ -19,9 +19,9 @@
                 <img id="halloDocLogo" class="img-fluid img-responsive p-3" src="~/images/Fig56._Patient_site_1.png" />
             </div>
             <div class="d-inline-flex align-items-center p-3">
-                <label class="d-none d-sm-block">Welcome <strong>@CV.UserID()</strong></label>
+                <label class="d-none d-sm-block">Welcome <strong>@CV.UserName()</strong></label>
                 <a class="text-decoration-none"><i class="d-block d-sm-none fa-solid fa-arrow-right-from-bracket text-info border rounded border-info mx-3 mx-xs-2 my-3 p-2"></i></a>
-                <a class="d-none d-sm-block btn border border-info text-info mx-3  mx-xs-2">Logout</a>
+                <a asp-action="Logout" asp-controller="Home" class="d-none d-sm-block btn border border-info text-info mx-3  mx-xs-2">Logout</a>
                 <a href=""><i class="fas fa-moon text-info border rounded border-info my-3 p-2"></i></a>
             </div>
         </div>

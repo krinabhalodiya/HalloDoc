@@ -49,6 +49,34 @@ namespace HelloDocAdmin.Repositories
             return result;
         }
         #endregion
-
+        public async Task<List<HealthProfessionalTypeComboBox>> healthprofessionaltype()
+        {
+            return await _context.Healthprofessionaltypes.Select(req => new HealthProfessionalTypeComboBox()
+            {
+                HealthprofessionalID = req.Healthprofessionalid,
+                ProfessionName = req.Professionname
+            })
+            .ToListAsync();
+        }
+        public async Task<List<HealthProfessionalComboBox>> healthprofessionals()
+        {
+            return await _context.Healthprofessionals.Select(req => new HealthProfessionalComboBox()
+            {
+                VendorID = req.Vendorid,
+                VendorName = req.Vendorname
+            })
+            .ToListAsync();
+        }
+        public List<HealthProfessionalComboBox> ProfessionalByType(int? HealthprofessionalID)
+        {
+            var result = _context.Healthprofessionals
+                        .Where(r => r.Profession == HealthprofessionalID)
+                        .Select(req => new HealthProfessionalComboBox()
+                        {
+                            VendorID = req.Vendorid,
+                            VendorName = req.Vendorname
+                        }).ToList();
+            return result;
+        }
     }
 }

@@ -37,7 +37,7 @@ namespace HalloDoc.Controllers.Admin
             else
             {
                 ViewData["error"] = "Invalid Id Pass";
-                return View("../Admin//Home/Index");
+                return View("../Admin/Home/Index");
             }
         }
         public IActionResult Logout()

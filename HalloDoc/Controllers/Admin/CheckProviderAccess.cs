@@ -16,7 +16,7 @@ namespace HalloDoc.Controllers.Admin
 
             if (filterContext.HttpContext.Session.GetString("RoleId") == "2")
             {
-                filterContext.Result = new RedirectResult("../Admin/Home/AuthError");
+                filterContext.Result = new RedirectResult("../Home/AuthError");
             }
         }
 
