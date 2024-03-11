@@ -25,6 +25,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         {
             _context = context;
         }
+        #region Editcase
         public bool EditCase(ViewCaseData model)
         {
             try{
@@ -63,7 +64,9 @@ namespace HallodocMVC.Repository.Admin.Repository
                 return false;
             }
         }
+        #endregion
 
+        #region GetRequestForViewCase
         public ViewCaseData GetRequestForViewCase(int id)
         {
             var n = _context.Requests.FirstOrDefault(E => E.Requestid == id);
@@ -86,7 +89,9 @@ namespace HallodocMVC.Repository.Admin.Repository
             };
             return requestforviewcase;
         }
+        #endregion
 
+        #region AssignProvider
         public async Task<bool> AssignProvider(int RequestId, int ProviderId, string notes)
         {
             var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == RequestId);
@@ -104,7 +109,9 @@ namespace HallodocMVC.Repository.Admin.Repository
             _context.SaveChanges();
             return true;
         }
+        #endregion
 
+        #region Cancelcase
         public bool CancelCase(int RequestID, string Note, string CaseTag)
         {
             try
@@ -134,7 +141,9 @@ namespace HallodocMVC.Repository.Admin.Repository
                 return false;
             }
         }
+        #endregion
 
+        #region BlockCase
         public bool BlockCase(int RequestID, string Note)
         {
             try
@@ -168,6 +177,9 @@ namespace HallodocMVC.Repository.Admin.Repository
                 return false;
             }
         }
+        #endregion
+
+        #region TransferProvider
         public async Task<bool> TransferProvider(int RequestId, int ProviderId, string notes)
         {
             var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == RequestId);
@@ -187,6 +199,9 @@ namespace HallodocMVC.Repository.Admin.Repository
             _context.SaveChanges();
             return true;
         }
+        #endregion
+
+        #region Clearcase
         public bool ClearCase(int RequestID)
         {
             try
@@ -214,6 +229,9 @@ namespace HallodocMVC.Repository.Admin.Repository
                 return false;
             }
         }
+        #endregion
+
+        #region getNotesByID
         public ViewNotesData getNotesByID(int id)
         {
             var req = _context.Requests.FirstOrDefault(W => W.Requestid == id);
@@ -314,6 +332,9 @@ namespace HallodocMVC.Repository.Admin.Repository
 
             return allData;
         }
+        #endregion
+
+        #region EditViewNotes
         public bool EditViewNotes(string? adminnotes, string? physiciannotes, int RequestID)
         {
             try
@@ -376,6 +397,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                 return false;
             }
         }
+        #endregion
+
         #region GetDocumentByRequest
         public async Task<ViewDocuments> GetDocumentByRequest(int? id)
         {
