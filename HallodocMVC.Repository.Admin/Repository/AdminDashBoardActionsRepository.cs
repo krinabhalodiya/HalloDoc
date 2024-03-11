@@ -20,10 +20,14 @@ namespace HallodocMVC.Repository.Admin.Repository
 {
     public class AdminDashBoardActionsRepository : IAdminDashBoardActionsRepository
     {
+        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly EmailConfiguration _emailConfig;
         private readonly HalloDocContext _context;
-        public AdminDashBoardActionsRepository(HalloDocContext context)
+        public AdminDashBoardActionsRepository(HalloDocContext context, IHttpContextAccessor httpContextAccessor, EmailConfiguration emailConfig)
         {
             _context = context;
+            this.httpContextAccessor = httpContextAccessor;
+            _emailConfig = emailConfig;
         }
         #region Editcase
         public bool EditCase(ViewCaseData model)
@@ -517,6 +521,67 @@ namespace HallodocMVC.Repository.Admin.Repository
             {
                 return false;
             }
+        }
+        #endregion
+
+        #region SendAgreement
+        public Boolean SendAgreement(int requestid)
+        {
+            var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == requestid);
+            var agreementUrl = "https://localhost:44306/SendAgreement?RequestID=" + requestid;
+            _emailConfig.SendMail(res.Email, "Agreement for your request", $"<a href='{agreementUrl}'>Agree/Disagree</a>");
+            return true;
+        }
+        #endregion
+
+        #region SendAgreement_accept
+        public Boolean SendAgreement_accept(int RequestID)
+        {
+            var request = _context.Requests.Find(RequestID);
+            if (request != null)
+            {
+                request.Status = 4;
+                _context.Requests.Update(request);
+                _context.SaveChanges();
+
+                Requeststatuslog rsl = new Requeststatuslog();
+                rsl.Requestid = RequestID;
+
+                rsl.Status = 4;
+
+                rsl.Createddate = DateTime.Now;
+
+                _context.Requeststatuslogs.Add(rsl);
+                _context.SaveChanges();
+
+            }
+            return true;
+        }
+        #endregion
+
+        #region SendAgreement_Reject
+        public Boolean SendAgreement_Reject(int RequestID, string Notes)
+        {
+            var request = _context.Requests.Find(RequestID);
+            if (request != null)
+            {
+                request.Status = 7;
+                _context.Requests.Update(request);
+                _context.SaveChanges();
+
+                Requeststatuslog rsl = new Requeststatuslog();
+                rsl.Requestid = RequestID;
+
+                rsl.Status = 7;
+                rsl.Notes = Notes;
+
+                rsl.Createddate = DateTime.Now;
+
+                _context.Requeststatuslogs.Add(rsl);
+                _context.SaveChanges();
+
+            }
+            return true;
         }
         #endregion
     }

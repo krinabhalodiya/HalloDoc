@@ -25,5 +25,8 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public Task<bool> DeleteDocumentByRequest(string ids);
         public Healthprofessional SelectProfessionlByID(int VendorID);
         public bool SendOrder(ViewSendOrderData data);
+        public Boolean SendAgreement(int requestid);
+        public Boolean SendAgreement_accept(int RequestID);
+        public Boolean SendAgreement_Reject(int RequestID, string Notes);
     }
 }

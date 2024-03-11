@@ -14,7 +14,7 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         Task<List<CaseReasonComboBox>> CaseReasonComboBox();
         public List<Physician> ProviderbyRegion(int? regionid);
         public Task<List<HealthProfessionalTypeComboBox>> healthprofessionaltype();
-        public Task<List<HealthProfessionalComboBox>> healthprofessionals();
+        
         public List<HealthProfessionalComboBox> ProfessionalByType(int? HealthprofessionalID);
     }
 }

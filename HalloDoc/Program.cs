@@ -4,9 +4,13 @@ using HallodocMVC.Repository.Admin.Repository.Interface;
 using HelloDocAdmin.Repositories;
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
+using HalloDoc.Entity.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var emailConfig = builder.Configuration
+        .GetSection("EmailConfiguration")
+        .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<HalloDocContext>();

@@ -57,7 +57,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             }
             else
             {
-                return admin;
+                return null;
             }
         }
         #endregion

@@ -58,7 +58,7 @@ namespace HelloDocAdmin.Repositories
             })
             .ToListAsync();
         }
-        public async Task<List<HealthProfessionalComboBox>> healthprofessionals()
+        /*public async Task<List<HealthProfessionalComboBox>> healthprofessionals()
         {
             return await _context.Healthprofessionals.Select(req => new HealthProfessionalComboBox()
             {
@@ -66,7 +66,7 @@ namespace HelloDocAdmin.Repositories
                 VendorName = req.Vendorname
             })
             .ToListAsync();
-        }
+        }*/
         public List<HealthProfessionalComboBox> ProfessionalByType(int? HealthprofessionalID)
         {
             var result = _context.Healthprofessionals

@@ -81,12 +81,10 @@ namespace HalloDoc.Controllers
             if (CancelCase)
             {
                 _notyf.Success("Case Canceled Successfully");
-
             }
             else
             {
                 _notyf.Error("Case Not Canceled");
-
             }
             return RedirectToAction("Index", "AdminDashBoard");
         }
@@ -245,7 +243,6 @@ namespace HalloDoc.Controllers
             var v = _combobox.ProfessionalByType(HealthprofessionalID);
             return Task.FromResult<IActionResult>(Json(v));
         }
-
         public Task<IActionResult> SelectProfessionalByID(int VendorID)
         {
             var v = _IAdminDashBoardActionsRepository.SelectProfessionlByID(VendorID);
@@ -274,5 +271,26 @@ namespace HalloDoc.Controllers
             }
         }
         #endregion
+
+        #region SendAgreement
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendAgreementmail(int requestid)
+        {
+            if (_IAdminDashBoardActionsRepository.SendAgreement(requestid))
+            {
+                _notyf.Success("Mail Send  Successfully..!");
+            }
+            return RedirectToAction("Index", "AdminDashboard");
+        }
+        #endregion
+
+        /*public IActionResult SendAgreement(int RequestID)
+        {
+            //var request = _context.Requests.Find(RequestID);
+            TempData["RequestID"] = " "+RequestID;
+            TempData["PatientName"] = "krina bhalodiya";
+            return View("~/Views/SendAgreement/Index");
+        }*/
     }
 }
