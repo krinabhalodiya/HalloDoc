@@ -284,13 +284,5 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Index", "AdminDashboard");
         }
         #endregion
-
-        /*public IActionResult SendAgreement(int RequestID)
-        {
-            //var request = _context.Requests.Find(RequestID);
-            TempData["RequestID"] = " "+RequestID;
-            TempData["PatientName"] = "krina bhalodiya";
-            return View("~/Views/SendAgreement/Index");
-        }*/
     }
 }
