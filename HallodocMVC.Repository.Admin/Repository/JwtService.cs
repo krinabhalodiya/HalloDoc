@@ -78,7 +78,6 @@ namespace HallodocMVC.Repository.Admin.Repository
 
                 }, out SecurityToken validatedToken);
 
-
                 jwtSecurityTokenHandler = (JwtSecurityToken)validatedToken;
 
                 if (jwtSecurityTokenHandler != null)
