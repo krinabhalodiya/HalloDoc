@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using DocumentFormat.OpenXml.Spreadsheet;
 using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
 using HallodocMVC.Repository.Admin.Repository;
@@ -40,12 +41,13 @@ namespace HalloDoc.Controllers.Admin
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Validate(Aspnetuser aspNetUser)
         {
-            UserInfo u = await _loginRepository.CheckAccessLogin(aspNetUser);
+            Entity.Models.UserInfo u = await _loginRepository.CheckAccessLogin(aspNetUser);
 
             if (u != null)
             {
                 var jwttoken = _jwtService.GenerateJWTAuthetication(u);
                 Response.Cookies.Append("jwt", jwttoken);
+                Response.Cookies.Append("Status", "1");
                 return RedirectToAction("Index", "AdminDashBoard");
             }
             else

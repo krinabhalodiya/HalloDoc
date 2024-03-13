@@ -39,8 +39,11 @@ namespace HalloDoc.Controllers
         {
             if (Status == null)
             {
-                Status = "1";
+                Status = CV.CurrentStatus();
             }
+            Response.Cookies.Delete("Status");
+            Response.Cookies.Append("Status", Status);
+            
             List<AdminDashboardList> contacts = _IAdminDashBoardRepository.GetRequests(Status);
             switch (Status)
             {
