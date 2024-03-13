@@ -284,5 +284,45 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Index", "AdminDashboard");
         }
         #endregion
+
+        #region CloseCase
+        public async Task<IActionResult> CloseCase(int id)
+        {
+            ViewCloseCaseModel vc = _IAdminDashBoardActionsRepository.CloseCaseData(id);
+            return View("../AdminActions/CloseCase", vc);
+        }
+        public IActionResult CloseCaseUnpaid(int RequestID)
+        {
+            bool sm = _IAdminDashBoardActionsRepository.CloseCase(RequestID);
+            if (sm)
+            {
+                _notyf.Success("Case Closed...");
+                _notyf.Information("You can see Closed case in unpaid State...");
+
+            }
+            else
+            {
+                _notyf.Error("there is some error in CloseCase...");
+            }
+            return RedirectToAction("Index", "AdminDashboard");
+        }
+        #endregion
+
+        public IActionResult EditForCloseCase(ViewCloseCaseModel sm)
+        {
+            bool result = _IAdminDashBoardActionsRepository.EditForCloseCase(sm);
+
+            if (result)
+            {
+                _notyf.Success("Case Edited Successfully..");
+                return RedirectToAction("CloseCase", new { sm.RequestID });
+            }
+            else
+            {
+                _notyf.Error("Case Not Edited...");
+                return RedirectToAction("CloseCase", new { sm.RequestID });
+            }
+
+        }
     }
 }

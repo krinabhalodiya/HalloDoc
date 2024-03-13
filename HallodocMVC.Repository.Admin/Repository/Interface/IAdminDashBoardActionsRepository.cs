@@ -28,5 +28,8 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public Boolean SendAgreement(int requestid);
         public Boolean SendAgreement_accept(int RequestID);
         public Boolean SendAgreement_Reject(int RequestID, string Notes);
+        public ViewCloseCaseModel CloseCaseData(int RequestID);
+        public bool EditForCloseCase(ViewCloseCaseModel model);
+        public bool CloseCase(int RequestID);
     }
 }

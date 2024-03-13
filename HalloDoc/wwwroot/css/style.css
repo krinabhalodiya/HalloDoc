@@ -108,16 +108,20 @@ body {
     align-items: center;
 }
 .Patient {
-    background-color: #5fbc61;
+    background-color: #5fbc61 !important;
+    border-bottom : 1.2px solid white !important;
 }
 .Business {
-    background-color: #cd697b;
+    background-color: #cd697b !important;
+    border-bottom: 1.2px solid white !important;
 }
 .Family {
-    background-color: #ed9124;
+    background-color: #ed9124 !important;
+    border-bottom: 1.2px solid white !important;
 }
 .Concierge {
-    background-color: #0a7cb9;
+    background-color: #0a7cb9 !important;
+    border-bottom: 1.2px solid white !important;
 }
 @media (max-width : 925px) {
     .searchBar {
@@ -271,4 +275,10 @@ body {
         transform: rotate(179deg);
         transition: 1s;
     }
+}
+.dt-search {
+    display: none;
+}
+.dataTables_wrapper {
+    margin-bottom: 2.5rem !important;
 }

@@ -47,7 +47,7 @@
         <div class="searchPatientRegion py-2">
             <div class="search m-1">
                 <i class="fa fa-search"></i>
-                <input type="text" class="form-control" placeholder="Search Patients">
+                <input type="text" id="myInputTextField" class="form-control" placeholder="Search Patients">
             </div>
             <div class="search m-1">
                 <i class="fa fa-search"></i>
@@ -83,7 +83,7 @@
 <!--Mobile Screen View of table-->
 <!--Desktop Screen View of table-->
 <div class="table-responsive m-2 mb-5 d-none d-sm-block">
-    <table class="w-100">
+    <table class ="w-100 display" id="tableID">
         <thead class="py-2">
             <tr>
                 <th scope="col">
@@ -122,7 +122,7 @@
         <tbody class="bg-white mb-5">
             @foreach (var (item, index) in Model.Select((item, index) => (item, index)))
             {
-                <tr class="@Enum.GetName(typeof(RequestType), item.RequestTypeID) text-white border-bottom border-white">
+                <tr class="@Enum.GetName(typeof(RequestType), item.RequestTypeID) text-white">
                     <td><small>@item.PatientName</small></td>
                     <td>
                         <button class="btn border-white text-white">
@@ -287,4 +287,12 @@
         document.getElementById("Phonenumber_sendAgreement").value = modeldata[id].phoneNumber;
         document.getElementById("Email_sendAgreement").value = modeldata[id].email;
     }
+</script>
+<script>
+    dtTable = $('#tableID').DataTable({
+        searching: true
+    });
+    $('#myInputTextField').keyup(function () {
+        dtTable.search($(this).val()).draw();
+    })
 </script>

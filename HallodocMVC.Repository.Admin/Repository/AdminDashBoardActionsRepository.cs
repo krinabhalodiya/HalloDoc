@@ -584,5 +584,120 @@ namespace HallodocMVC.Repository.Admin.Repository
             return true;
         }
         #endregion
+
+        public ViewCloseCaseModel CloseCaseData(int RequestID)
+        {
+            ViewCloseCaseModel alldata = new ViewCloseCaseModel();
+
+            var result = from requestWiseFile in _context.Requestwisefiles
+                         join request in _context.Requests on requestWiseFile.Requestid equals request.Requestid
+                         join physician in _context.Physicians on request.Physicianid equals physician.Physicianid into physicianGroup
+                         from phys in physicianGroup.DefaultIfEmpty()
+                         join admin in _context.Admins on requestWiseFile.Adminid equals admin.Adminid into adminGroup
+                         from adm in adminGroup.DefaultIfEmpty()
+                         where request.Requestid == RequestID
+                         select new
+                         {
+
+                             Uploader = requestWiseFile.Physicianid != null ? phys.Firstname :
+                             (requestWiseFile.Adminid != null ? adm.Firstname : request.Firstname),
+                             requestWiseFile.Filename,
+                             requestWiseFile.Createddate,
+                             requestWiseFile.Requestwisefileid
+
+                         };
+            List<Documents> doc = new List<Documents>();
+            foreach (var item in result)
+            {
+                doc.Add(new Documents
+                {
+                    Createddate = item.Createddate,
+                    Filename = item.Filename,
+                    Uploader = item.Uploader,
+                    RequestwisefilesId = item.Requestwisefileid
+
+                });
+
+            }
+            alldata.documentslist = doc;
+            Request req = _context.Requests.FirstOrDefault(r => r.Requestid == RequestID);
+
+            alldata.Firstname = req.Firstname;
+            alldata.RequestID = req.Requestid;
+            alldata.ConfirmationNumber = req.Confirmationnumber;
+            alldata.Lastname = req.Lastname;
+
+            var reqcl = _context.Requestclients.FirstOrDefault(e => e.Requestid == RequestID);
+
+            alldata.RC_Email = reqcl.Email;
+            alldata.RC_Dob = new DateTime((int)reqcl.Intyear, DateTime.ParseExact(reqcl.Strmonth, "MMMM", new CultureInfo("en-US")).Month, (int)reqcl.Intdate);
+            alldata.RC_FirstName = reqcl.Firstname;
+            alldata.RC_LastName = reqcl.Lastname;
+            alldata.RC_PhoneNumber = reqcl.Phonenumber;
+            return alldata;
+        }
+        public bool EditForCloseCase(ViewCloseCaseModel model)
+        {
+            try
+
+            {
+
+                Requestclient client = _context.Requestclients.FirstOrDefault(E => E.Requestid == model.RequestID);
+
+                if (client != null)
+                {
+                    client.Phonenumber = model.RC_PhoneNumber;
+                    client.Email = model.RC_Email;
+                    _context.Requestclients.Update(client);
+                    _context.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+        public bool CloseCase(int RequestID)
+        {
+            try
+            {
+                var requestData = _context.Requests.FirstOrDefault(e => e.Requestid == RequestID);
+                if (requestData != null)
+                {
+
+                    requestData.Status = 9;
+                    requestData.Modifieddate = DateTime.Now;
+
+                    _context.Requests.Update(requestData);
+                    _context.SaveChanges();
+
+                    Requeststatuslog rsl = new Requeststatuslog
+                    {
+                        Requestid = RequestID,
+
+
+                        Status = 9,
+                        Createddate = DateTime.Now
+
+                    };
+                    _context.Requeststatuslogs.Add(rsl);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else { return false; }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
     }
 }

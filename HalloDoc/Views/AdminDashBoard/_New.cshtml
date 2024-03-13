@@ -1,9 +1,6 @@
 ﻿@model List<HalloDoc.Entity.Models.AdminDashboardList>
 @using static HalloDoc.Entity.Models.Constant
 
-<!--End Desktop Screen View of table-->
-<!--Important links-->
-
 <div class="d-flex justify-content-between mx-2">
     <div>
         <strong class="fs-6">Patients</strong> <small>(New)</small>
@@ -48,7 +45,7 @@
         <div class="searchPatientRegion py-2">
             <div class="search m-1">
                 <i class="fa fa-search"></i>
-                <input type="text" class="form-control" placeholder="Search Patients">
+                <input type="text" id="myInputTextField" class="form-control" placeholder="Search Patients">
             </div>
             <div class="search m-1">
                 <i class="fa fa-search"></i>
@@ -84,7 +81,7 @@
 <!--Mobile Screen View of table-->
  <!--Desktop Screen View of table-->
 <div class="table-responsive m-2 mb-5 d-none d-sm-block">
-    <table class="w-100">
+    <table class="w-100 display" id="tableID">
         <thead>
             <tr>
                 <th scope="col">
@@ -119,10 +116,10 @@
         </thead>
  
         
-        <tbody class="bg-white mb-5">
+        <tbody class="bg-white">
             @foreach (var (item, index) in Model.Select((item, index) => (item, index)))
             {
-                <tr class="@Enum.GetName(typeof(RequestType), item.RequestTypeID) text-white border-bottom border-white">
+                <tr class="@Enum.GetName(typeof(RequestType), item.RequestTypeID) text-white">
                     <td><small>@item.PatientName</small></td>
                     <td>
                         <button class="btn border-white text-white">
@@ -204,15 +201,16 @@
                             </div>
                             <div class="col-6 h6">
                                 @item.Address
-                        </div>
-                        <div class="col-6  text-end">
-                            <button class="btn btn-sm btn-white border-info text-info rounded-pill 2px">
-                                <small>Map Location</small>
-                            </button>
+                            </div>
+                            <div class="col-6  text-end">
+                                <button class="btn btn-sm btn-white border-info text-info rounded-pill 2px">
+                                    <small>Map Location</small>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </h2>
+				</h2>
+            </div>
             <div id="flush-@item.RequestID" class="accordion-collapse collapse mb-3 border-top" data-bs-parent="#accordionExample">
                 <div class="accordion-body container-fluid">
                     <p> <i class="fa fa-calendar border border-info rounded-pill p-1 me-2" aria-hidden="true"></i>Date of Birth: @item.Dob</p>
@@ -262,7 +260,7 @@
                 </div>
             </div>
 
-        </div>
+        
         }
     </div>
 
@@ -280,4 +278,17 @@
         document.getElementById('RequestID_Input_ModelBlockCase').value = modeldata[id].requestID;
         document.getElementById('PatientName_ModelBlockCase').innerText = modeldata[id].patientName;
     }
+</script>
+
+<script>
+    dtTable = $('#tableID').DataTable({
+        searching: true,
+        lengthMenu: [
+            [5, 10, 25, 50, -1],
+            [5, 10, 25, 50, 'All']
+        ]
+    });
+    $('#myInputTextField').keyup(function () {
+        dtTable.search($(this).val()).draw();
+    })
 </script>
