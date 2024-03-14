@@ -9,11 +9,11 @@
                 <a class="nav-link text-dark @(path.StartsWith("/AdminDashBoard") ? "activesbnav" : "")" aria-current="page" asp-controller="AdminDashBoard" asp-action="Index">Dashboard</a>
             </li>
             <li class="nav-item me-3">
-                <a class="nav-link text-dark @(path.StartsWith("/Profile") ? "activesbnav" : "")" asp-action="Index" asp-controller="Profile">My Profile</a>
-            </li>
-            <li class="nav-item me-3">
                 <a class="nav-link text-dark @(path.StartsWith("/ProviderLocation") ? "activesbnav" : "")" asp-action="Index" asp-controller="ProviderLocation">Provider Location</a>
-            </li>
+			</li>
+			<li class="nav-item me-3">
+				<a class="nav-link text-dark @(path.StartsWith("/Profile") ? "activesbnav" : "")" asp-action="Index" asp-controller="Profile">My Profile</a>
+			</li>
             <li class="nav-item me-3">
                 <a class="nav-link text-dark @(path.StartsWith("/Providers") ? "activesbnav" : "")" asp-action="Index" asp-controller="Providers">Providers</a>
             </li>

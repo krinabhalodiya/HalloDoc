@@ -8,12 +8,11 @@
             <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
         </strong>
     </a> *@
-    <p>admin@gmail.com</p>
     <h3 class="py-3">Login To Your Account</h3>
     <strong class="text-danger">@ViewData["error"]</strong>
     <form asp-action="Validate" asp-controller="Home" method="post">
         <div class="form-floating mb-4 email">
-            <input type="email" class="form-control shadow-none" asp-for="Email" id="floatingInput" placeholder="name@example.com">
+            <input value="admin@gmail.com" type="email" class="form-control shadow-none" asp-for="Email" id="floatingInput" placeholder="name@example.com">
             <label class="bg-transparent" for="floatingInput">Email</label>
             <div class="btn btn-light">
                 <i class='fa fa-user-circle field-icon position-relative'></i>
@@ -21,7 +20,7 @@
             <span class="text-danger"></span>
         </div>
         <div class="form-floating mb-4 password">
-            <input type="password" class="form-control shadow-none eyehide" asp-for="Passwordhash" id="floatingPassword" placeholder="Password">
+            <input value="admin" type="password" class="form-control shadow-none eyehide" asp-for="Passwordhash" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">Password</label>
             <button type="button" class="btn btn-light" onclick="passtoggle()">
                 <i class="showImg fa fa-eye"></i>

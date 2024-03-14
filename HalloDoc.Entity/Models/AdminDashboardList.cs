@@ -21,4 +21,5 @@
         public string? Region { get; set; }
         public short ADStatus { get; set; }
     }
+
 }
