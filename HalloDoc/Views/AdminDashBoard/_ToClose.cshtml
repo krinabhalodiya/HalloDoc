@@ -155,7 +155,7 @@
                             <li><a asp-action="ViewNotes" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-card-text me-1"></i>View Notes</a></li>
                             <li><a asp-action="Order" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-check me-1"></i>Orders</a></li>
                             <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#clearcase"><i class="bi bi-x-circle me-1"></i>Clear Case</a></li>
-                            <li><a class="dropdown-item" asp-action="CloseCase" asp-controller="AdminActions" asp-route-id="@item.RequestID"><i class="bi bi-x-circle me-1"></i>Close Case</a></li>
+                            <li><a class="dropdown-item" asp-action="CloseCase" asp-controller="AdminActions" asp-route-RequestID="@item.RequestID"><i class="bi bi-x-circle me-1"></i>Close Case</a></li>
                             <li><a asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
                         </ul>
                     </td>

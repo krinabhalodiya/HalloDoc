@@ -286,14 +286,14 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region CloseCase
-        public async Task<IActionResult> CloseCase(int id)
+        public async Task<IActionResult> CloseCase(int RequestID)
         {
-            ViewCloseCaseModel vc = _IAdminDashBoardActionsRepository.CloseCaseData(id);
+            ViewCloseCaseModel vc = _IAdminDashBoardActionsRepository.CloseCaseData(RequestID);
             return View("../AdminActions/CloseCase", vc);
         }
-        public IActionResult CloseCaseUnpaid(int RequestID)
+        public IActionResult CloseCaseUnpaid(int id)
         {
-            bool sm = _IAdminDashBoardActionsRepository.CloseCase(RequestID);
+            bool sm = _IAdminDashBoardActionsRepository.CloseCase(id);
             if (sm)
             {
                 _notyf.Success("Case Closed...");

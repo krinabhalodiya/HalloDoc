@@ -639,11 +639,8 @@ namespace HallodocMVC.Repository.Admin.Repository
         public bool EditForCloseCase(ViewCloseCaseModel model)
         {
             try
-
             {
-
                 Requestclient client = _context.Requestclients.FirstOrDefault(E => E.Requestid == model.RequestID);
-
                 if (client != null)
                 {
                     client.Phonenumber = model.RC_PhoneNumber;
@@ -662,8 +659,6 @@ namespace HallodocMVC.Repository.Admin.Repository
                 return false;
             }
         }
-
-
         public bool CloseCase(int RequestID)
         {
             try
