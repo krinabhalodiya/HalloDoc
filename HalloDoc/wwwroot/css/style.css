@@ -282,3 +282,14 @@ body {
 .dataTables_wrapper {
     margin-bottom: 2.5rem !important;
 }
+.filterborder {
+    border: 1px solid #0dcaf0;
+}
+.pagination li button{
+    text-decoration: none;
+}
+.pagination button:hover,
+.activepagebtn {
+    background-color: #0dcaf0;
+    color: #ffffff;
+}

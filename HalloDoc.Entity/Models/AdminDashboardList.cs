@@ -24,11 +24,11 @@
         public List< AdminDashboardList>? adl { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
+        public int PageSize { get; set; } = 5;
         public string? SearchInput { get; set; }
         public int? RegionId { get; set; }
         public int? RequestType { get; set; }
-
+        public string? Status { get; set; }
         public int NewRequest { get; set; }
         public int PendingRequest { get; set; }
         public int ActiveRequest { get; set; }

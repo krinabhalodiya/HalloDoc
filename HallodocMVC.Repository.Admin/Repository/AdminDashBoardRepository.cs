@@ -36,6 +36,10 @@ namespace HallodocMVC.Repository.Admin.Repository
             };
         }
         public PaginatedViewModel GetRequests(string Status, PaginatedViewModel data) {
+            if(data.SearchInput != null)
+            {
+                data.SearchInput = data.SearchInput.Trim();
+            }
             List<int> statusdata = Status.Split(',').Select(int.Parse).ToList();
             List<AdminDashboardList> allData = (from req in _context.Requests
                                                 join reqClient in _context.Requestclients
@@ -53,9 +57,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                          rc.Email.Contains(data.SearchInput) || rc.Phonenumber.Contains(data.SearchInput) ||
                                                          rc.Address.Contains(data.SearchInput) || rc.Notes.Contains(data.SearchInput) ||
                                                          p.Firstname.Contains(data.SearchInput) || p.Lastname.Contains(data.SearchInput) ||
-                                                         rg.Name.Contains(data.SearchInput)) && (data.RegionId == null || rc.Regionid ==data.RegionId)
-
-
+                                                         rg.Name.Contains(data.SearchInput)) && (data.RegionId == null || rc.Regionid == data.RegionId) 
+                                                         && (data.RequestType == null || req.Requesttypeid == data.RequestType)
                                                    orderby req.Createddate descending
                                                    select new AdminDashboardList
                                                    {
@@ -69,7 +72,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                        Region = rg.Name,
                                                        ProviderName = p.Firstname + " " + p.Lastname,
                                                        PhoneNumber = rc.Phonenumber,
-                                                       Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.Zipcode,
+                                                       Address = rc.Address,
                                                        Notes = rc.Notes,
                                                        ProviderID = req.Physicianid,
                                                        RequestorPhoneNumber = req.Phonenumber
@@ -77,14 +80,12 @@ namespace HallodocMVC.Repository.Admin.Repository
             int totalItemCount = allData.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
             List<AdminDashboardList> list1 = allData.Skip((data.CurrentPage - 1) * data.PageSize).Take(data.PageSize).ToList();
-
-
             PaginatedViewModel paginatedViewModel = new PaginatedViewModel
             {
                 adl = list1,
                 CurrentPage = data.CurrentPage,
                 TotalPages = totalPages,
-                PageSize = 10,
+                PageSize = data.PageSize,
                 SearchInput = data.SearchInput
             };
             return paginatedViewModel;
