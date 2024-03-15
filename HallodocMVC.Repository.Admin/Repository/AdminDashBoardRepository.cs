@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Net.NetworkInformation;
 using System.Net;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections;
 
 namespace HallodocMVC.Repository.Admin.Repository
 {
@@ -21,9 +23,9 @@ namespace HallodocMVC.Repository.Admin.Repository
         {
             _context = context;
         }
-        public CountStatusWiseRequestModel Indexdata()
+        public PaginatedViewModel Indexdata()
         {
-            return new CountStatusWiseRequestModel
+            return new PaginatedViewModel
             {
                 NewRequest = _context.Requests.Where(r => r.Status == 1).Count(),
                 PendingRequest = _context.Requests.Where(r => r.Status == 2).Count(),
@@ -33,19 +35,27 @@ namespace HallodocMVC.Repository.Admin.Repository
                 UnpaidRequest = _context.Requests.Where(r => r.Status == 9).Count()
             };
         }
-        public List<AdminDashboardList> GetRequests(string Status) {
+        public PaginatedViewModel GetRequests(string Status, PaginatedViewModel data) {
             List<int> statusdata = Status.Split(',').Select(int.Parse).ToList();
             List<AdminDashboardList> allData = (from req in _context.Requests
-                                                   join reqClient in _context.Requestclients
-                                                   on req.Requestid equals reqClient.Requestid into reqClientGroup
-                                                   from rc in reqClientGroup.DefaultIfEmpty()
-                                                   join phys in _context.Physicians
-                                                   on req.Physicianid equals phys.Physicianid into physGroup
-                                                   from p in physGroup.DefaultIfEmpty()
-                                                   join reg in _context.Regions
-                                                  on rc.Regionid equals reg.Regionid into RegGroup
-                                                   from rg in RegGroup.DefaultIfEmpty()
-                                                   where statusdata.Contains(req.Status)
+                                                join reqClient in _context.Requestclients
+                                                on req.Requestid equals reqClient.Requestid into reqClientGroup
+                                                from rc in reqClientGroup.DefaultIfEmpty()
+                                                join phys in _context.Physicians
+                                                on req.Physicianid equals phys.Physicianid into physGroup
+                                                from p in physGroup.DefaultIfEmpty()
+                                                join reg in _context.Regions
+                                                on rc.Regionid equals reg.Regionid into RegGroup
+                                                from rg in RegGroup.DefaultIfEmpty()
+                                                where statusdata.Contains(req.Status) && (data.SearchInput == null ||
+                                                         rc.Firstname.Contains(data.SearchInput) || rc.Lastname.Contains(data.SearchInput) ||
+                                                         req.Firstname.Contains(data.SearchInput) || req.Lastname.Contains(data.SearchInput) ||
+                                                         rc.Email.Contains(data.SearchInput) || rc.Phonenumber.Contains(data.SearchInput) ||
+                                                         rc.Address.Contains(data.SearchInput) || rc.Notes.Contains(data.SearchInput) ||
+                                                         p.Firstname.Contains(data.SearchInput) || p.Lastname.Contains(data.SearchInput) ||
+                                                         rg.Name.Contains(data.SearchInput)) && (data.RegionId == null || rc.Regionid ==data.RegionId)
+
+
                                                    orderby req.Createddate descending
                                                    select new AdminDashboardList
                                                    {
@@ -64,7 +74,20 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                        ProviderID = req.Physicianid,
                                                        RequestorPhoneNumber = req.Phonenumber
                                                    }).ToList();
-            return allData;
+            int totalItemCount = allData.Count();
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
+            List<AdminDashboardList> list1 = allData.Skip((data.CurrentPage - 1) * data.PageSize).Take(data.PageSize).ToList();
+
+
+            PaginatedViewModel paginatedViewModel = new PaginatedViewModel
+            {
+                adl = list1,
+                CurrentPage = data.CurrentPage,
+                TotalPages = totalPages,
+                PageSize = 10,
+                SearchInput = data.SearchInput
+            };
+            return paginatedViewModel;
         }
     }
 }

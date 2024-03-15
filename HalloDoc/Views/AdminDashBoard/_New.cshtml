@@ -1,5 +1,5 @@
-﻿@model List<HalloDoc.Entity.Models.AdminDashboardList>
-@using static HalloDoc.Entity.Models.Constant
+﻿@using static HalloDoc.Entity.Models.Constant
+@model HalloDoc.Entity.Models.PaginatedViewModel
 
 
 <!--Mobile Screen View of table-->
@@ -41,7 +41,7 @@
  
         
         <tbody class="bg-white">
-            @foreach (var (item, index) in Model.Select((item, index) => (item, index)))
+            @foreach (var (item, index) in Model.adl.Select((item, index) => (item, index)))
             {
                 <tr class="@Enum.GetName(typeof(RequestType), item.RequestTypeID) text-white">
                     <td><small>@item.PatientName</small></td>
@@ -109,7 +109,7 @@
 
 <div class="accordion mt-3 d-block d-sm-none" id="accordionExample">
     <div class="dBlock">
-        @foreach (var (item, index) in Model.Select((item, index) => (item, index)))
+        @foreach (var (item, index) in Model.adl.Select((item, index) => (item, index)))
         {
             <div class="accordion-item btn-i text-secondary">
                 <h2 class="accordion-header" id="flush-heading-@item.RequestID">
@@ -183,36 +183,59 @@
                     </div>
                 </div>
             </div>
-
-        
         }
     </div>
-
     <!--End Mobile Screen View of table-->
-
 </div>
-<script>
-    function model_Case(id) {
-        console.log(id);
-        var modeldata = @Html.Raw(Json.Serialize(Model))
-            console.log(modeldata[id])
-        document.getElementById('PatientName_ModelCancelCase').innerText = modeldata[id].patientName;
-        document.getElementById('RequestID_Input_ModelCancelCase').value = modeldata[id].requestID;
-        document.getElementById('RequestID_Input_ModelAssignCase').value = modeldata[id].requestID;
-        document.getElementById('RequestID_Input_ModelBlockCase').value = modeldata[id].requestID;
-        document.getElementById('PatientName_ModelBlockCase').innerText = modeldata[id].patientName;
-    }
-</script>
+ <nav aria-label="Page navigation example">
+    <ul class="pagination pagination-container d-flex justify-content-center">
+        @{
+            int i;
+            //<li class="page-item"><a class="page-link">&lt;</a></li>
+            @for (i = 1; i <= @Model.TotalPages; i++)
+            {
+                <form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                      asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate">
+                    <input type="hidden" asp-for="RegionId" />
+                    <input type="hidden" asp-for="RequestType" />
+                    <input type="hidden" asp-for="SearchInput" />
+                    <input type="hidden" asp-for="CurrentPage" value="@i" />
+                <li class="page-item"><button type="submit"   class="@(i == @Model.CurrentPage ? "active" : "") page-link" onclick="pagination(@i)">@i</button></li>
+                </form>
+                   
+            }
+            //<li class="page-item"><a class="page-link">&gt;</a></li>
+        }
+    </ul>
+</nav> 
+    <script>
+        function model_Case(id) {
+            console.log(id);
+            var modeldata = @Html.Raw(Json.Serialize(Model))
+                console.log(modeldata[id])
+            document.getElementById('PatientName_ModelCancelCase').innerText = modeldata[id].patientName;
+            document.getElementById('RequestID_Input_ModelCancelCase').value = modeldata[id].requestID;
+            document.getElementById('RequestID_Input_ModelAssignCase').value = modeldata[id].requestID;
+            document.getElementById('RequestID_Input_ModelBlockCase').value = modeldata[id].requestID;
+            document.getElementById('PatientName_ModelBlockCase').innerText = modeldata[id].patientName;
+        }
 
-<script>
-    dtTable = $('#tableID').DataTable({
-        searching: true,
-        lengthMenu: [
-            [1, 5, 10, 25, 50, -1],
-            [1, 5, 10, 25, 50, 'All']
-        ]
-    });
-    $('#myInputTextField').keyup(function () {
-        dtTable.search($(this).val()).draw();
-    })
-</script>
+    </script>
+    <script>
+    function pagination(i) {
+        //e.preventDefault();
+        console.log("etfh");
+    
+        $.ajax({
+            url: "@Url.Action("_SearchResult", "AdminDashBoard")",
+            type: "GET",
+            success: function (data) {
+                $("#SearchResult").html(data);
+            },
+            error: function (error) {
+                console.error("Error:", error);
+            }
+        });
+    }
+    </script>
+

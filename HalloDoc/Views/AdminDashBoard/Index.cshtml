@@ -1,9 +1,9 @@
-﻿
-@model HalloDoc.Entity.Models.CountStatusWiseRequestModel
-@using static HalloDoc.Entity.Models.Constant
-@{
-    Layout = "_Layout";
+﻿@{
+	Layout = "_Layout";
 }
+@* using static HalloDoc.Entity.Models.CountStatusWiseRequestModel *@
+@using static HalloDoc.Entity.Models.Constant
+
 <div class="mx-sm-1 mx-md-2 mx-xxl-4 mt-0">
     <partial name="../AdminActions/_partial/AssignCase.cshtml"/>
     <partial name="../AdminActions/_partial/CancelCase.cshtml"/>
@@ -11,6 +11,7 @@
     <partial name="../AdminActions/_partial/TransferCase.cshtml"/>
     <partial name="../AdminActions/_partial/ClearCase.cshtml" />
     <partial name="../AdminActions/_partial/SendAgreement.cshtml" />
+   
     <partial name="UpperTab.cshtml" />
     <div id="SearchResult" class="mt-4"></div>
 </div>

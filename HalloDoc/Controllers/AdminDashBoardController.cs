@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Net.NetworkInformation;
 using HalloDoc.Controllers.Admin;
 using HalloDoc.Entity;
 using HalloDoc.Entity.DataContext;
@@ -29,22 +30,25 @@ namespace HalloDoc.Controllers
         {
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             ViewBag.CaseReasonComboBox = await _combobox.CaseReasonComboBox();
-            CountStatusWiseRequestModel sm = _IAdminDashBoardRepository.Indexdata();
+            PaginatedViewModel sm = _IAdminDashBoardRepository.Indexdata();
             return View(sm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> _SearchResult(string Status)
+        public async Task<IActionResult> _SearchResult(PaginatedViewModel data, String Status)
         {
             if (Status == null)
             {
-                Status = CV.CurrentStatus();
+            Status = CV.CurrentStatus();
+                
             }
+           
             Response.Cookies.Delete("Status");
             Response.Cookies.Append("Status", Status);
+
             
-            List<AdminDashboardList> contacts = _IAdminDashBoardRepository.GetRequests(Status);
+            PaginatedViewModel contacts = _IAdminDashBoardRepository.GetRequests(Status, data);
             switch (Status)
             {
                 case "1":

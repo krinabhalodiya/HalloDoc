@@ -1,23 +1,30 @@
-﻿@using static HalloDoc.Entity.Models.Constant
-
+﻿@model HalloDoc.Entity.Models.PaginatedViewModel;
 <form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
       asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate">
-    
+
     <div class="row mb-2 t-tab" style="--bs-gutter-x: 0rem;">
         <button type="submit" value="1" name="Status" class="btn col-4 col-md-2 text-start shadow-none position-relative">
-            <div class="p-1 rounded new ps-2 pt-3 a-new @{if(CV.CurrentStatus()=="1"){@Html.Raw("active")}}">
+            <div class="p-1 rounded new ps-2 pt-3 a-new @{
+                    if(CV.CurrentStatus()=="1"){
+                            @Html.Raw("active")
+}
+}">
                 <div class="d-inline-flex">
                     <i class="fa-solid fa-circle-plus me-2 align-self-center d-none d-sm-block"></i>
                     NEW
                 </div>
                 <div class="mt-2">
-                    <span class="h4 fw-bold">@Model.NewRequest</span>
+                    <span class="h4 fw-bold">@Model.NewRequest </span>
                 </div>
             </div>
         </button>
 
         <button type="submit" value="2" name="Status" class="btn col-4 col-md-2 text-start shadow-none position-relative ">
-            <div class="p-1 rounded pending ps-2 pt-3 a-pending @{if(CV.CurrentStatus()=="2"){@Html.Raw("active")}}">
+            <div class="p-1 rounded pending ps-2 pt-3 a-pending @{
+                    if(CV.CurrentStatus()=="2"){
+                            @Html.Raw("active")
+}
+}">
                 <div class="d-inline-flex">
                     <i class="fa-solid fa-user-clock me-2 align-self-center d-none d-sm-block"></i>
                     PENDING
@@ -29,7 +36,11 @@
         </button>
 
         <button type="submit" value="4,5" name="Status" class="btn col-4 col-md-2 text-start shadow-none position-relative">
-            <div class="p-1 rounded active1 ps-2 pt-3 a-active1  @{ if(CV.CurrentStatus()=="4,5"){@Html.Raw("active")}}">
+            <div class="p-1 rounded active1 ps-2 pt-3 a-active1  @{
+                    if(CV.CurrentStatus()=="4,5"){
+                            @Html.Raw("active")
+}
+}">
                 <div class="d-inline-flex">
                     <i class="bi bi-check2-circle me-2 align-self-center d-none d-sm-block"></i>
                     ACTIVE
@@ -41,7 +52,11 @@
         </button>
 
         <button type="submit" value="6" name="Status" class="btn col-4 col-md-2 text-start shadow-none position-relative">
-            <div class="p-1 rounded conclude ps-2 pt-3 a-conclude  @{ if(CV.CurrentStatus()=="6"){@Html.Raw("active")}}">
+            <div class="p-1 rounded conclude ps-2 pt-3 a-conclude  @{
+                    if(CV.CurrentStatus()=="6"){
+                            @Html.Raw("active")
+}
+}">
                 <div class="d-inline-flex">
                     <i class="fa-solid fa-clock-rotate-left me-2 align-self-center d-none d-sm-block"></i>
                     CONCLUDE
@@ -53,7 +68,11 @@
         </button>
 
         <button type="submit" value="3,7,8" name="Status" class="btn col-4 col-md-2 text-start shadow-none position-relative">
-            <div class="p-1 rounded toClose ps-2 pt-3 a-toClose  @{ if(CV.CurrentStatus()=="3,7,8"){@Html.Raw("active")}}">
+            <div class="p-1 rounded toClose ps-2 pt-3 a-toClose  @{
+                    if(CV.CurrentStatus()=="3,7,8"){
+                            @Html.Raw("active")
+}
+}">
                 <div class="d-inline-flex">
                     <i class="fa-solid fa-user-xmark me-2 align-self-center d-none d-sm-block"></i>
                     TO CLOSE
@@ -65,7 +84,11 @@
         </button>
 
         <button type="submit" value="9" name="Status" class="btn col-4 col-md-2 text-start shadow-none position-relative">
-            <div class="p-1 rounded unpaid ps-2 pt-3 a-unpaid  @{ if(CV.CurrentStatus()=="9"){@Html.Raw("active")}}">
+            <div class="p-1 rounded unpaid ps-2 pt-3 a-unpaid  @{
+                    if(CV.CurrentStatus()=="9"){
+                            @Html.Raw("active")
+}
+}">
                 <div class="d-inline-flex">
                     <i class="fa-solid fa-circle-dollar-to-slot me-2 align-self-center d-none d-sm-block"></i>
                     UNPAID
@@ -115,21 +138,23 @@
     </div>
 </div>
 <!--End Important links-->
+<form id="subform" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+      asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate">
 <!--Searchbar-->
 <div class="mt-2 mx-2 rounded-top bg-white">
     <div class="searchBar px-2">
         <div class="searchPatientRegion py-2">
             <div class="search m-1">
-                <i class="fa fa-search"></i>
-                <input type="text" id="myInputTextField" class="form-control" placeholder="Search Patients">
+                    <div onclick="subsubmit()">
+
+                <i class="fa fa-search" ></i>
+                </div>
+                <input type="text" id="searchInput" asp-for="SearchInput" class="form-control" placeholder="Search Patients">
             </div>
             <div class="search m-1">
                 <i class="fa fa-search"></i>
-                <select class="form-select shadow-none" id="floatingSelectGrid">
-                    <option selected class="text-secondary">All Regions</option>
-                    <option value="1">Maryland</option>
-                    <option value="2">New York</option>
-                    <option value="3">Virginia</option>
+                <select class="form-select" required aria-label="Phone" asp-for="RegionId" data-allow-clear="true" tabindex="-1" onchange="subsubmit()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                    <option>Select Region</option>
                 </select>
             </div>
         </div>
@@ -154,3 +179,35 @@
     </div>
 </div>
 <!--End Searchbar-->
+</form>
+<script>
+    function subsubmit() {
+        
+        $('#subform').submit();
+    }
+    document.getElementById('searchButton').addEventListener('click', handleSearchClick);
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('searchInput').addEventListener('keyup', function (evt) {
+            if (evt.key === 'Enter') {
+                evt.preventDefault();
+                handleSearchClick();
+            }
+        });
+    });
+    // function handleSearchClick() {
+    //     // Get the value from the search input
+    //     Model.SearchInput = document.getElementById('searchInput').value;
+    //     console.log(Model.SearchInput);
+    //     $.ajax({
+    //         type: "GET",
+    //         url: 'Url.Action("_SearchResult", "AdminDashBoard")',
+    //         success: function (data) {
+    //             console.log("AJAX success");
+    //             $("#SearchResult").html(data);
+    //         },
+    //         error: function (error) {
+    //             console.log("Error:", error);
+    //         }
+    //     });
+    // }
+</script>

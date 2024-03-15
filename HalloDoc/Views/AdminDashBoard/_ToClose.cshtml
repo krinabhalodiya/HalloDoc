@@ -1,6 +1,5 @@
-﻿@model List<HalloDoc.Entity.Models.AdminDashboardList>
+﻿@model HalloDoc.Entity.Models.PaginatedViewModel
 @using static HalloDoc.Entity.Models.Constant
-
 
 <!--Mobile Screen View of table-->
 <!--Desktop Screen View of table-->
@@ -39,7 +38,7 @@
             </tr>
         </thead>
         <tbody class="bg-white mb-5">
-            @foreach (var (item, index) in Model.Select((item, index) => (item, index)))
+            @foreach (var (item, index) in Model.adl.Select((item, index) => (item, index)))
             {
                 <tr class="@Enum.GetName(typeof(RequestType), item.RequestTypeID) text-white">
                     <td><small>@item.PatientName</small></td>
@@ -86,7 +85,7 @@
 
 <div class="accordion mt-3 d-block d-sm-none" id="accordionExample">
     <div class="dBlock">
-        @foreach (var item in Model)
+        @foreach (var item in Model.adl)
         {
             <div class="accordion-item btn-i text-secondary">
                 <h2 class="accordion-header" id="flush-heading-@item.RequestID">

@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 using HalloDoc.Entity.Models;
+using static HalloDoc.Entity.Models.PaginatedViewModel;
 
 namespace HallodocMVC.Repository.Admin.Repository.Interface
 {
     public interface IAdminDashBoardRepository
     {
-        public CountStatusWiseRequestModel Indexdata();
-        public List<AdminDashboardList> GetRequests(string Status);
+        PaginatedViewModel Indexdata();
+        PaginatedViewModel GetRequests(string Status, PaginatedViewModel data);
     }
 }
