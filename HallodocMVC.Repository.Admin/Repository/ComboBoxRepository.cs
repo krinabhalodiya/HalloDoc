@@ -58,15 +58,6 @@ namespace HelloDocAdmin.Repositories
             })
             .ToListAsync();
         }
-        /*public async Task<List<HealthProfessionalComboBox>> healthprofessionals()
-        {
-            return await _context.Healthprofessionals.Select(req => new HealthProfessionalComboBox()
-            {
-                VendorID = req.Vendorid,
-                VendorName = req.Vendorname
-            })
-            .ToListAsync();
-        }*/
         public List<HealthProfessionalComboBox> ProfessionalByType(int? HealthprofessionalID)
         {
             var result = _context.Healthprofessionals
@@ -77,6 +68,14 @@ namespace HelloDocAdmin.Repositories
                             VendorName = req.Vendorname
                         }).ToList();
             return result;
+        }
+        public async Task<List<UserRoleCombobox>> UserRoleComboBox()
+        {
+            return await _context.Aspnetroles.Select(req => new UserRoleCombobox()
+            {
+                RoleId = req.Id,
+                RoleName = req.Name
+            }).ToListAsync();
         }
     }
 }

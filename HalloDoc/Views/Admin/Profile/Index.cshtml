@@ -1,4 +1,178 @@
 ﻿@{
     Layout = "_Layout";
 }
-<h1>Profile</h1>
+@model HalloDoc.Entity.Models.ViewAdminProfile;
+
+<script>
+    window.onload = function (e) {
+        toggleFormElements('true')
+    }
+    function toggleFormElements(bDisabled) {
+        var inputs = document.getElementsByClassName("inputs");
+        var submit = document.getElementById("save");
+        var editprofile = document.getElementById("edit");
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = !inputs[i].disabled;
+        }
+        if (inputs[0].disabled) {
+            submit.style.display = "none";
+            editprofile.style.display = "block";
+        } else {
+            submit.style.display = "block";
+            editprofile.style.display = "none";
+        }
+        document.getElementById("email").disabled = (1 == 1);
+    }
+</script>
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <div class="d-flex align-self-center">
+            <h4><strong>Profile</strong></h4>
+        </div>
+        <a asp-controller="AdminDashBoard" asp-action="Index" class="btn border border-info bg-light rounded mt-3 mb-1">
+            <span class="text-info">
+                <i class="fa fa-angle-left align-middle"></i>
+                <b>&nbsp;&nbsp;Back</b>
+            </span>
+		</a>
+	</div>
+        @* Profile Information *@
+    <div class="bg-white rounded shadow mt-3">
+        <div class="p-4">
+            @* Account Information *@
+			<form method="post" asp-controller="AdminActions" asp-action="EditCase">
+			<h5><strong>Account Information</strong></h5>
+                <input type="hidden"  value="" class="inputs" />
+                <div class="col-xl-12">
+                    <div class="row pb-4">
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="UserName" class="form-control shadow-none inputs" id="uname" placeholder="First Name">
+                                <label for="uname">User Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input  type="text" asp-for="Password" class="form-control shadow-none inputs" id="pass" placeholder="Last Name">
+                                <label for="pass">PassWord</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Status" class="form-control shadow-none inputs" id="Status" placeholder="Date Of Birth">
+                                <label for="Status">Status</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <select class="form-select" required  id="role">
+                                    <option>Options</option>
+                                    <option>1</option>
+                                </select>
+							<label for="role">Role</label>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <input type="button" value="Reset Password" class="btn border border-info text-info"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            @* Administrator Information *@
+            <form method="post" asp-controller="AdminActions" asp-action="EditCase">
+                <h5><strong>Administrator Information</strong></h5>
+                <input type="hidden" value="" class="inputs" />
+                <div class="col-xl-12">
+                    <div class="row pb-4">
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Firstname" class="form-control shadow-none inputs" id="fname" placeholder="First Name">
+                                <label for="fname">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Lastname" class="form-control shadow-none inputs" id="lname" placeholder="Last Name">
+                                <label for="lname">Last Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Email" class="form-control shadow-none inputs" id="dob" placeholder="Date Of Birth">
+                                <label for="dob">Email</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Email" class="form-control shadow-none inputs" id="dob" placeholder="Date Of Birth">
+                                <label for="dob">Confirm Email</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating h-100 w-100">
+                                <input type="tel" asp-for="Mobile" class="form-control shadow-none inputs" id="phone" autocomplete="off" placeholder="Phone Number">
+                                <label for="phone">Phone Number</label>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <input type="button" value="Edit" class="btn btn-info text-white" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            @* Mailing/Billing Information *@
+            <form method="post" asp-controller="AdminActions" asp-action="EditCase">
+                <h5><strong>Mailing/Billing Information</strong></h5>
+                <input type="hidden" value="" class="inputs" />
+                <div class="col-xl-12">
+                    <div class="row pb-4">
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Address1" class="form-control shadow-none inputs" id="Address1">
+                                <label for="Address1">Address 1</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Address2" class="form-control shadow-none inputs" id="Address2">
+                                <label for="Address2">Address 2</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="City" class="form-control shadow-none inputs" id="City">
+                                <label for="City">City</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <select class="form-select" required id="state">
+                                    <option>Options</option>
+                                    <option>1</option>
+                                </select>
+                                <label for="state">State</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Zipcode" class="form-control shadow-none inputs" id="Zip">
+                                <label for="Zip">Zip</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating h-100 w-100">
+                                <input type="tel" asp-for="AltMobile" class="form-control shadow-none inputs" id="phone" autocomplete="off">
+                                <label for="phone">Phone Number</label>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <input type="button" value="Edit" class="btn btn-info text-white" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

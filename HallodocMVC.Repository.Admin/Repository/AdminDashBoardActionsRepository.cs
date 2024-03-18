@@ -585,6 +585,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         }
         #endregion
 
+        #region Data_For_CloseCase
         public ViewCloseCaseModel CloseCaseData(int RequestID)
         {
             ViewCloseCaseModel alldata = new ViewCloseCaseModel();
@@ -636,6 +637,9 @@ namespace HallodocMVC.Repository.Admin.Repository
             alldata.RC_PhoneNumber = reqcl.Phonenumber;
             return alldata;
         }
+        #endregion
+
+        #region Edit_CloseCase
         public bool EditForCloseCase(ViewCloseCaseModel model)
         {
             try
@@ -659,6 +663,9 @@ namespace HallodocMVC.Repository.Admin.Repository
                 return false;
             }
         }
+        #endregion
+
+        #region CloseCase
         public bool CloseCase(int RequestID)
         {
             try
@@ -692,7 +699,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             {
                 return false;
             }
-
         }
+        #endregion
     }
 }

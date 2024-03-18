@@ -21,6 +21,8 @@ builder.Services.AddScoped<IAdminDashBoardActionsRepository, AdminDashBoardActio
 builder.Services.AddScoped< IComboboxRepository,ComboboxRepository>();
 builder.Services.AddScoped< ILoginRepository, LoginRepository>();
 builder.Services.AddScoped< IJwtService, JwtService>();
+builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
+builder.Services.AddScoped<IMyProfileRepository, MyProfileRepository>();
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 var app = builder.Build();
 

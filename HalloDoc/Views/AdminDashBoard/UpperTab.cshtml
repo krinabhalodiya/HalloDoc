@@ -230,6 +230,13 @@
         });
     });
 
+    $(window).keydown(function (event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+
     $(function () {
         $('#regiondropdown').on('change', function () {
             console.log("abc");

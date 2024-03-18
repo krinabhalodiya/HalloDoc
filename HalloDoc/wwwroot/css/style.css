@@ -130,7 +130,7 @@ body {
     background-color: #0a7cb9 !important;
     border-bottom: 1.2px solid white !important;
 }
-@media (max-width : 925px) {
+@media (max-width : 1040px) {
     .searchBar {
         display: flex;
         flex-direction: column;
