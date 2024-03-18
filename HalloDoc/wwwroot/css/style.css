@@ -85,17 +85,24 @@ body {
         min-width: 230px;
     }
 
-        .search input:focus, .search select:focus {
-            box-shadow: none;
-            border: 2px solid #0dcaf0;
-        }
-
-    .search .fa-search {
-        position: absolute;
-        top: 20px;
-        left: 16px;
-    }
-
+.search input:focus, .search select:focus {
+    box-shadow: none;
+    border: 2px solid #0dcaf0;
+}
+.search .fa-search {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+}
+.search .pagesize{
+    position: absolute;
+    top: 13px;
+    left: 16px;
+}
+.search .pagesizeselect {
+    text-indent: 95px;
+    min-width: 170px;
+}
 .searchBar {
     display: flex;
     justify-content: space-between;

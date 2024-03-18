@@ -189,24 +189,7 @@
 </div>
 
 @* pagination *@
-<div class="m-2 d-flex justify-content-between">
-    <div>
-        <form id="pagesizeform" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
-                  asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate" class="d-flex">
-                <input type="hidden" asp-for="RegionId" />
-                <input type="hidden" asp-for="RequestType" />
-                <input type="hidden" asp-for="SearchInput" />
-                <input type="hidden" asp-for="CurrentPage" />
-            <select class="form-select" asp-for="PageSize" onchange="subsubmit()">
-                <option value="5" selected>5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-            </select>
-        </form>
-        
-        <p>Select Page Size</p>
-    </div>
+<div class="m-2 d-flex justify-content-center">
     <nav aria-label="Page navigation example">
         <ul class="pagination pagination-container">
             @{
@@ -216,9 +199,8 @@
                     <input type="hidden" asp-for="RegionId" />
                     <input type="hidden" asp-for="RequestType" />
                     <input type="hidden" asp-for="SearchInput" />
-                    <input type="hidden" asp-for="PageSize" />
                     <input type="hidden" asp-for="CurrentPage" id="currentpagevalue" />
-
+					
                     @if (@Model.CurrentPage > 1)
                     {
                     <li class="page-item me-2"><button class="btn shadow-none" onclick="setpagenumber('previous')">&lt;</button></li>
@@ -261,10 +243,11 @@
         $("#paginationform").submit();
     }
 </script>
+
  <script>
         function model_Case(id) {
             console.log(id);
-            var modeldata = @Html.Raw(Json.Serialize(Model))
+            var modeldata = @Html.Raw(Json.Serialize(Model.adl))
                 console.log(modeldata[id])
             document.getElementById('PatientName_ModelCancelCase').innerText = modeldata[id].patientName;
             document.getElementById('RequestID_Input_ModelCancelCase').value = modeldata[id].requestID;
@@ -272,8 +255,5 @@
             document.getElementById('RequestID_Input_ModelBlockCase').value = modeldata[id].requestID;
             document.getElementById('PatientName_ModelBlockCase').innerText = modeldata[id].patientName;
         }
-    function subsubmit() {
-        $('#pagesizeform').submit();
-    }
 </script>
 
