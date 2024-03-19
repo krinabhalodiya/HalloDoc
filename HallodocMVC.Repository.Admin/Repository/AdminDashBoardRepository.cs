@@ -12,6 +12,8 @@ using System.Net.NetworkInformation;
 using System.Net;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections;
+using Org.BouncyCastle.Ocsp;
+using System.Linq.Expressions;
 
 namespace HallodocMVC.Repository.Admin.Repository
 {
@@ -59,7 +61,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                          p.Firstname.Contains(data.SearchInput) || p.Lastname.Contains(data.SearchInput) ||
                                                          rg.Name.Contains(data.SearchInput)) && (data.RegionId == null || rc.Regionid == data.RegionId) 
                                                          && (data.RequestType == null || req.Requesttypeid == data.RequestType)
-                                                   orderby req.Createddate descending
+                                                   
                                                    select new AdminDashboardList
                                                    {
                                                        RequestID = req.Requestid,
@@ -77,6 +79,17 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                        ProviderID = req.Physicianid,
                                                        RequestorPhoneNumber = req.Phonenumber
                                                    }).ToList();
+
+
+            allData = data.SortedColumn switch
+            {
+                "PatientName" => allData.OrderBy(x => x.PatientName).ToList(),
+                "Requestor" => allData.OrderBy(x => x.Requestor).ToList(),
+                "Dob" => allData.OrderBy(x => x.Dob).ToList(),
+                "Address" => allData.OrderBy(x => x.Address).ToList(),
+                "RequestedDate" => allData.OrderBy(x => x.RequestedDate).ToList(),
+                _ => allData.OrderBy(x => x.RequestedDate).ToList()
+            };
             int totalItemCount = allData.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
             List<AdminDashboardList> list1 = allData.Skip((data.CurrentPage - 1) * data.PageSize).Take(data.PageSize).ToList();
@@ -86,7 +99,9 @@ namespace HallodocMVC.Repository.Admin.Repository
                 CurrentPage = data.CurrentPage,
                 TotalPages = totalPages,
                 PageSize = data.PageSize,
-                SearchInput = data.SearchInput
+                SearchInput = data.SearchInput,
+                SortedColumn = data.SortedColumn,
+                IsAscending = data.IsAscending
             };
             return paginatedViewModel;
         }

@@ -9,7 +9,11 @@ $(document).ready(function () {
     });
 
     $(".t-filter > .btn ").click(function () {
-        console.log(123)
+        $(".t-filter> .btn").removeClass("filterborder");
+        $(this).addClass("filterborder");
+    });
+
+    $(".t-filter > .btn ").click(function () {
         $(".t-filter> .btn").removeClass("filterborder");
         $(this).addClass("filterborder");
     });
