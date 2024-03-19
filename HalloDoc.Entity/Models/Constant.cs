@@ -31,5 +31,10 @@ namespace HalloDoc.Entity.Models
             ToClose,
             UnPaid
         }
+        public enum AdminStatus
+        {
+             Active= 1,Pending , NotActive
+
+        }
     }
 }

@@ -14,9 +14,9 @@ namespace HalloDoc.Entity.Models
         public string? Password { get; set; }
         public short? Status { get; set; }
         public int? Roleid { get; set; }
-        public string? Firstname { get; set; } = null!;
+        public string? Firstname { get; set; } 
         public string? Lastname { get; set; }
-        public string? Email { get; set; } = null!;
+        public string? Email { get; set; } 
         public string? Mobile { get; set; }
         public string? AltMobile { get; set; }
         public string? Address1 { get; set; }

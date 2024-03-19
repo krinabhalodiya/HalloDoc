@@ -1,29 +1,18 @@
 ﻿@{
     Layout = "_Layout";
 }
+@using static HalloDoc.Entity.Models.Constant;
 @model HalloDoc.Entity.Models.ViewAdminProfile;
 
-<script>
-    window.onload = function (e) {
-        toggleFormElements('true')
-    }
-    function toggleFormElements(bDisabled) {
-        var inputs = document.getElementsByClassName("inputs");
-        var submit = document.getElementById("save");
-        var editprofile = document.getElementById("edit");
-        for (var i = 0; i < inputs.length; i++) {
-            inputs[i].disabled = !inputs[i].disabled;
-        }
-        if (inputs[0].disabled) {
-            submit.style.display = "none";
-            editprofile.style.display = "block";
-        } else {
-            submit.style.display = "block";
-            editprofile.style.display = "none";
-        }
-        document.getElementById("email").disabled = (1 == 1);
-    }
-</script>
+@{
+    var enumData = from AdminStatus e in Enum.GetValues(typeof(AdminStatus))
+                   select new
+                   {
+                       ID = (int)e,
+                       Name = e.ToString()
+                   };
+ }
+
 <div class="container">
     <div class="d-flex justify-content-between">
         <div class="d-flex align-self-center">
@@ -40,135 +29,156 @@
     <div class="bg-white rounded shadow mt-3">
         <div class="p-4">
             @* Account Information *@
-			<form method="post" asp-controller="AdminActions" asp-action="EditCase">
+            <form method="post" asp-controller="Profile" asp-action="EditPassword" id="resetpassform">
 			<h5><strong>Account Information</strong></h5>
-                <input type="hidden"  value="" class="inputs" />
                 <div class="col-xl-12">
                     <div class="row pb-4">
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="UserName" class="form-control shadow-none inputs" id="uname" placeholder="First Name">
+                                <input type="text" asp-for="UserName" class="form-control shadow-none" id="uname" placeholder="First Name" disabled />
                                 <label for="uname">User Name</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input  type="text" asp-for="Password" class="form-control shadow-none inputs" id="pass" placeholder="Last Name">
+                                <input type="text" asp-for="Password" class="form-control shadow-none" id="pass" placeholder="Last Name" />
                                 <label for="pass">PassWord</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="Status" class="form-control shadow-none inputs" id="Status" placeholder="Date Of Birth">
+                                <select class="form-select" required asp-for="Status" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level" disabled>
+                                </select>
                                 <label for="Status">Status</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <select class="form-select" required  id="role">
-                                    <option>Options</option>
-                                    <option>1</option>
+                                <select class="form-select" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.userrolecombobox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level" disabled>
                                 </select>
-							<label for="role">Role</label>
+							    <label for="role">Role</label>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
-                            <input type="button" value="Reset Password" class="btn border border-info text-info"/>
+                            <input type="button" value="Reset Password" id="resetpassbtn"class="btn border border-info text-info"/>
                         </div>
                     </div>
                 </div>
             </form>
 
             @* Administrator Information *@
-            <form method="post" asp-controller="AdminActions" asp-action="EditCase">
+            <form method="post" asp-controller="Profile" asp-action="EditAdministratorInfo" id="AdministratorInfoForm">
                 <h5><strong>Administrator Information</strong></h5>
-                <input type="hidden" value="" class="inputs" />
+                <input type="hidden" asp-for="AdminId" />
                 <div class="col-xl-12">
                     <div class="row pb-4">
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="Firstname" class="form-control shadow-none inputs" id="fname" placeholder="First Name">
-                                <label for="fname">First Name</label>
+                                <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="fname1" placeholder="First Name">
+                                <label for="fname1">First Name</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="Lastname" class="form-control shadow-none inputs" id="lname" placeholder="Last Name">
-                                <label for="lname">Last Name</label>
+                                <input type="text" asp-for="Lastname" class="form-control shadow-none input1" id="lname1" placeholder="Last Name">
+                                <label for="lname1">Last Name</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="Email" class="form-control shadow-none inputs" id="dob" placeholder="Date Of Birth">
-                                <label for="dob">Email</label>
+                                <input type="text" asp-for="Email" class="form-control shadow-none input1" id="dob1" placeholder="Date Of Birth">
+                                <label for="dob1">Email</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="Email" class="form-control shadow-none inputs" id="dob" placeholder="Date Of Birth">
-                                <label for="dob">Confirm Email</label>
+                                <input type="text" asp-for="Email" class="form-control shadow-none input1" id="email1" placeholder="Date Of Birth">
+                                <label for="email1">Confirm Email</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
-                                <input type="tel" asp-for="Mobile" class="form-control shadow-none inputs" id="phone" autocomplete="off" placeholder="Phone Number">
-                                <label for="phone">Phone Number</label>
+                                <input type="tel" asp-for="Mobile" class="form-control shadow-none input1" id="phone1" autocomplete="off" placeholder="Phone Number">
+                                <label for="phone1">Phone Number</label>
                             </div>
                         </div>
+                        <input asp-for="Regionsid" type="hidden" id="regionids" />
+                        <div class="col-md-6 d-flex pb-3">
+                            @foreach (var cb in ViewBag.RegionComboBox)
+                            {
+                                @if (Model != null && Model.Regionids.Count > 0 && Model.Regionids.Exists(id => id.regionid == cb.RegionId))
+                                {
+                                    <div class="form-check mx-2">
+                                        <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region" id="flexCheckDefault" checked>
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            @cb.RegionName
+                                        </label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-check mx-2">
+                                        <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            @cb.RegionName
+                                        </label>
+                                    </div>
+                                }
+                            }
+                        </div>
                         <div class="d-flex justify-content-end">
-                            <input type="button" value="Edit" class="btn btn-info text-white" />
+                            <input type="button" value="Edit" id="edit1" class="btn btn-info text-white" onclick="toggleFormElements1()" />
+                            <input type="button" value="Save" id="save1" class="btn btn-info text-white"  />
                         </div>
                     </div>
                 </div>
             </form>
 
             @* Mailing/Billing Information *@
-            <form method="post" asp-controller="AdminActions" asp-action="EditCase">
+            <form method="post" asp-controller="Profile" asp-action="BillingInfoEdit" id="BillingInfoForm">
                 <h5><strong>Mailing/Billing Information</strong></h5>
-                <input type="hidden" value="" class="inputs" />
+                <input type="hidden" asp-for="AdminId" />
                 <div class="col-xl-12">
                     <div class="row pb-4">
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="Address1" class="form-control shadow-none inputs" id="Address1">
+                                <input type="text" asp-for="Address1" class="form-control shadow-none input2" id="Address1">
                                 <label for="Address1">Address 1</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="Address2" class="form-control shadow-none inputs" id="Address2">
+                                <input type="text" asp-for="Address2" class="form-control shadow-none input2" id="Address2">
                                 <label for="Address2">Address 2</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="City" class="form-control shadow-none inputs" id="City">
+                                <input type="text" asp-for="City" class="form-control shadow-none input2" id="City">
                                 <label for="City">City</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <select class="form-select" required id="state">
-                                    <option>Options</option>
-                                    <option>1</option>
-                                </select>
-                                <label for="state">State</label>
+                                <input type="text" asp-for="State" class="form-control shadow-none input2" id="State" placeholder=Suchtext autocomplete=off>
+                                <label for="State">State</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="Zipcode" class="form-control shadow-none inputs" id="Zip">
+                                <input type="text" asp-for="Zipcode" class="form-control shadow-none input2" id="Zip">
                                 <label for="Zip">Zip</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
-                                <input type="tel" asp-for="AltMobile" class="form-control shadow-none inputs" id="phone" autocomplete="off">
+                                <input type="tel" asp-for="AltMobile" class="form-control shadow-none input2" id="phone" autocomplete="off">
                                 <label for="phone">Phone Number</label>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
-                            <input type="button" value="Edit" class="btn btn-info text-white" />
+                            <input type="button" value="Edit" id="edit2" class="btn btn-info text-white" onclick="toggleFormElements2()" />
+                            <input type="button" value="Save" id="save2" class="btn btn-info text-white" />
                         </div>
                     </div>
                 </div>
@@ -176,3 +186,100 @@
         </div>
     </div>
 </div>
+
+
+<script>
+	window.onload = function (e) {
+		toggleFormElements1('true')
+		toggleFormElements2('true')
+        $(".form-check-input").prop("disabled", true);
+	}
+
+	function toggleFormElements1(bDisabled) {
+		var inputs = document.getElementsByClassName("input1");
+		var submit = document.getElementById("save1");
+		var editprofile = document.getElementById("edit1");
+		for (var i = 0; i < inputs.length; i++) {
+			inputs[i].disabled = !inputs[i].disabled;
+		}
+        $(".form-check-input").prop("disabled", false);
+		if (inputs[0].disabled) {
+			submit.style.display = "none";
+			editprofile.style.display = "block";
+		} else {
+			submit.style.display = "block";
+			editprofile.style.display = "none";
+		}
+	}
+
+	function toggleFormElements2(bDisabled) {
+		var inputs2 = document.getElementsByClassName("input2");
+		var submit2 = document.getElementById("save2");
+		var editprofile2 = document.getElementById("edit2");
+		for (var i = 0; i < inputs2.length; i++) {
+			inputs2[i].disabled = !inputs2[i].disabled;
+		}
+		if (inputs2[0].disabled) {
+			submit2.style.display = "none";
+			editprofile2.style.display = "block";
+		} else {
+			submit2.style.display = "block";
+			editprofile2.style.display = "none";
+		}
+	}
+
+    
+    $(function () {
+        $('#resetpassbtn').on('click', function () {
+            Swal.fire({
+                title: "Do you want Reset Password  Changes ?",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                denyButtonText: `Don't save`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#resetpassform').submit();
+                }
+            });
+        });
+    });
+
+    $(function () {
+        $('#save1').on('click', function () {
+            let checkboxes = document.querySelectorAll('input[name="Region"]:checked');
+            let regionIds = [];
+            checkboxes.forEach((checkbox) => {
+                regionIds.push(checkbox.value);
+            });
+            document.querySelector('#regionids').value = regionIds.join(',');
+            Swal.fire({
+                title: "Do you want to Edit Information ?",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                denyButtonText: `Don't save`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#AdministratorInfoForm').submit();
+                }
+            });
+        });
+    });
+
+    $(function () {
+        $('#save2').on('click', function () {
+            Swal.fire({
+                title: "Do you want to Edit Information ?",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                denyButtonText: `Don't save`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#BillingInfoForm').submit();
+                }
+            });
+        });
+    });
+</script>

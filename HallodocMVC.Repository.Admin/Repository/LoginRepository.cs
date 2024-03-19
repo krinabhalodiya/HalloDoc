@@ -28,10 +28,20 @@ namespace HallodocMVC.Repository.Admin.Repository
         #region Constructor
         public async Task<UserInfo> CheckAccessLogin(Aspnetuser aspNetUser)
         {
-            var user = await _context.Aspnetusers.FirstOrDefaultAsync(u => u.Email == aspNetUser.Email && u.Passwordhash == aspNetUser.Passwordhash);
+            var user = await _context.Aspnetusers.FirstOrDefaultAsync(u => u.Email == aspNetUser.Email);
             UserInfo admin = new UserInfo();
+            
             if (user != null)
             {
+                    var hasher = new PasswordHasher<string>();
+                    PasswordVerificationResult result = hasher.VerifyHashedPassword(null, user.Passwordhash, aspNetUser.Passwordhash);
+
+                if (result != PasswordVerificationResult.Success)
+                {
+                    return null;
+                }
+                else
+                {
                     var data = _context.Aspnetuserroles.FirstOrDefault(E => E.Userid == user.Id);
                     var datarole = _context.Aspnetroles.FirstOrDefault(e => e.Id == data.Roleid);
                     admin.Username = user.Username;
@@ -54,6 +64,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                         admin.UserId = admindata.Physicianid;
                     }
                     return admin;
+                }
             }
             else
             {
