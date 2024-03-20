@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using HalloDoc.Entity.Models;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using HalloDoc.Models;
 
 namespace HalloDoc.Controllers
 {
@@ -293,8 +294,8 @@ namespace HalloDoc.Controllers
         }
         public IActionResult CloseCaseUnpaid(int id)
         {
-            bool sm = _IAdminDashBoardActionsRepository.CloseCase(id);
-            if (sm)
+            bool result = _IAdminDashBoardActionsRepository.CloseCase(id);
+            if (result)
             {
                 _notyf.Success("Case Closed...");
                 _notyf.Information("You can see Closed case in unpaid State...");
@@ -308,6 +309,7 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
+        #region EditForCloseCase
         public IActionResult EditForCloseCase(ViewCloseCaseModel sm)
         {
             bool result = _IAdminDashBoardActionsRepository.EditForCloseCase(sm);
@@ -324,5 +326,29 @@ namespace HalloDoc.Controllers
             }
 
         }
+        #endregion
+
+        #region Encounter_View
+        public IActionResult Encounter(int id)
+        {
+            ViewEncounterData data = _IAdminDashBoardActionsRepository.GetEncounterDetails(id);
+            return View("../AdminActions/EncounterForm", data);
+        }
+        #endregion
+
+        #region Encounter_View
+        public IActionResult EncounterEdit(ViewEncounterData data)
+        {
+            if (_IAdminDashBoardActionsRepository.EditEncounterDetails(data, CV.ID()))
+            {
+                _notyf.Success("Encounter Changes Saved...");
+            }
+            else
+            {
+                _notyf.Success("Encounter Changes Not Saved...");
+            }
+            return RedirectToAction("Encounter", new { id = data.Requesid });
+        }
+        #endregion
     }
 }

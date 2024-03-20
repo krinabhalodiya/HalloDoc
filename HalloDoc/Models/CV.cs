@@ -59,7 +59,7 @@ namespace HalloDoc.Models
             if (_httpContextAccessor.HttpContext.Request.Cookies["jwt"] != null)
             {
                 cookieValue = _httpContextAccessor.HttpContext.Request.Cookies["jwt"].ToString();
-                UserID = DecodedToken.DecodeJwt(DecodedToken.ConvertJwtStringToJwtSecurityToken(cookieValue)).claims.FirstOrDefault(t => t.Key == "UserId").Value;
+                UserID = DecodedToken.DecodeJwt(DecodedToken.ConvertJwtStringToJwtSecurityToken(cookieValue)).claims.FirstOrDefault(t => t.Key == "AspNetUserID").Value;
             }
             return UserID;
         }
