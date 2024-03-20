@@ -200,7 +200,8 @@
         </div>
     </div>
     @*end filters *@
-
+    <input type="hidden" asp-for="IsAscending" id="sortcol"/>
+    <input type="hidden" asp-for="SortedColumn" id="issort" />
 </form>
 <script>
     function subsubmit() {
@@ -250,4 +251,5 @@
             $('#filterForm').submit();
         });
     });
+
 </script>

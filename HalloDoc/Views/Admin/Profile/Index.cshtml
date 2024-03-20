@@ -109,7 +109,7 @@
                                 @if (Model != null && Model.Regionids.Count > 0 && Model.Regionids.Exists(id => id.regionid == cb.RegionId))
                                 {
                                     <div class="form-check mx-2">
-                                        <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region" id="flexCheckDefault" checked>
+                                        <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region" checked>
                                         <label class="form-check-label" for="flexCheckDefault">
                                             @cb.RegionName
                                         </label>
@@ -118,7 +118,7 @@
                                 else
                                 {
                                     <div class="form-check mx-2">
-                                        <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region" id="flexCheckDefault">
+                                        <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             @cb.RegionName
                                         </label>

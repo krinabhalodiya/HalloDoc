@@ -11,27 +11,27 @@
                 @{
                     var i1 = @Model.SortedColumn;
                     var J1 = @Model.IsAscending;
-                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "Name" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" value="PatientName" onclick="SetColumValue('PatientName')">
+                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "PatientName" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('PatientName')">
                         <small>Name</small>
                         <span class="dt-column-order"></span>
                     </th>
                     <th></th>
-                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc" onclick="SetColumValue('Dob')">
+                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "Dob" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Dob')">
                         <small>Date Of Birth</small>
                         <span class="dt-column-order"></span>
                     </th>
-                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc" onclick="SetColumValue('Requestor')">
+                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "Requestor" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Requestor')">
                         <small>Requestor</small>
                         <span class="dt-column-order"></span>
                     </th>
-                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc" onclick="SetColumValue('RequestedDate')">
+                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "RequestedDate" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('RequestedDate')">
                         <small>Requested Date</small>
                         <span class="dt-column-order"></span>
                     </th>
                     <th scope="col">
                         <small>Phone</small>
                     </th>
-                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc" onclick="SetColumValue('Address')">
+                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "Address" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Address')">
                         <small>Address</small>
                         <span class="dt-column-order"></span>
                     </th>
@@ -45,11 +45,8 @@
                         <small>Actions</small>
                     </th>
                 }
-                
             </tr>
         </thead>
- 
-        
         <tbody class="bg-white">
             @foreach (var (item, index) in Model.adl.Select((item, index) => (item, index)))
             {
@@ -204,13 +201,14 @@
         <ul class="pagination pagination-container">
             @{
                 int i;
-                                        <form id="paginationform" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
-                                              asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate" class="d-flex">
-                                            <input type="hidden" asp-for="RegionId" />
-                                            <input type="hidden" asp-for="RequestType" />
-                                            <input type="hidden" asp-for="SearchInput" />
-                                            <input type="hidden" asp-for="CurrentPage" id="currentpagevalue" />
-                                            
+                <form id="paginationform" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                        asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate" class="d-flex">
+                    <input type="hidden" asp-for="RegionId" />
+                    <input type="hidden" asp-for="RequestType" />
+                    <input type="hidden" asp-for="SearchInput" />
+                    <input type="hidden" asp-for="CurrentPage" id="currentpagevalue" />
+                    <input type="hidden" asp-for="SortedColumn" />
+                    <input type="hidden" asp-for="IsAscending" />
                                             @if (@Model.CurrentPage > 1)
                     {
                                             <li class="page-item me-2"><button class="btn shadow-none" onclick="setpagenumber('previous')">&lt;</button></li>
@@ -237,7 +235,7 @@
     </nav>
 </div>
 
-<form id="sortingform" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+<form class="sortingform" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
       asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate" >
     <input type="hidden" asp-for="RegionId" />
     <input type="hidden" asp-for="RequestType" />
@@ -275,27 +273,23 @@
         }
 
      function SetColumValue(e) {
-       
         var modeldata = @Html.Raw(Json.Serialize(Model)); 
         console.log(modeldata.sortedColumn)
         console.log(modeldata.isAscending)
         if (modeldata.sortedColumn === e) {
-             document.getElementById('isAsc').value = !document.getElementById('isAsc').value;
+            if(modeldata.isAscending == true){
+                document.getElementById('isAsc').value = false;
+            }
+            else{
+                document.getElementById('isAsc').value = true;
+            }
             console.log(document.getElementById('isAsc').value);
         }
         else{
             document.getElementById('sortedcol').value = e;
             document.getElementById('isAsc').value = true;
         }
-        $("#sortingform").submit();
+        $(".sortingform").submit();
      }
-
-    $(function () {
-        $(".dataTable > thead > tr > .dt-orderable-asc").on('click', function () {
-            $(".dataTable > thead > tr > .dt-orderable-asc").removeClass("dt-ordering-asc");
-            $(".dataTable > thead > tr > .dt-orderable-asc").removeClass("dt-ordering-desc");
-        });
-    });
-    
 </script>
 

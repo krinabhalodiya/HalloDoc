@@ -80,16 +80,31 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                        RequestorPhoneNumber = req.Phonenumber
                                                    }).ToList();
 
-
-            allData = data.SortedColumn switch
+            if (data.IsAscending == true)
             {
-                "PatientName" => allData.OrderBy(x => x.PatientName).ToList(),
-                "Requestor" => allData.OrderBy(x => x.Requestor).ToList(),
-                "Dob" => allData.OrderBy(x => x.Dob).ToList(),
-                "Address" => allData.OrderBy(x => x.Address).ToList(),
-                "RequestedDate" => allData.OrderBy(x => x.RequestedDate).ToList(),
-                _ => allData.OrderBy(x => x.RequestedDate).ToList()
-            };
+                allData = data.SortedColumn switch
+                {
+                    "PatientName" => allData.OrderBy(x => x.PatientName).ToList(),
+                    "Requestor" => allData.OrderBy(x => x.Requestor).ToList(),
+                    "Dob" => allData.OrderBy(x => x.Dob).ToList(),
+                    "Address" => allData.OrderBy(x => x.Address).ToList(),
+                    "RequestedDate" => allData.OrderBy(x => x.RequestedDate).ToList(),
+                    _ => allData.OrderBy(x => x.RequestedDate).ToList()
+                };
+            }
+            else
+            {
+                allData = data.SortedColumn switch
+                {
+                    "PatientName" => allData.OrderByDescending(x => x.PatientName).ToList(),
+                    "Requestor" => allData.OrderByDescending(x => x.Requestor).ToList(),
+                    "Dob" => allData.OrderByDescending(x => x.Dob).ToList(),
+                    "Address" => allData.OrderByDescending(x => x.Address).ToList(),
+                    "RequestedDate" => allData.OrderByDescending(x => x.RequestedDate).ToList(),
+                    _ => allData.OrderByDescending(x => x.RequestedDate).ToList()
+                };
+            }
+            
             int totalItemCount = allData.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
             List<AdminDashboardList> list1 = allData.Skip((data.CurrentPage - 1) * data.PageSize).Take(data.PageSize).ToList();
