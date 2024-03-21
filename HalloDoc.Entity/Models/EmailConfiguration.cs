@@ -7,6 +7,8 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using System.Net.Mail;
 using System.Net;
+using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace HalloDoc.Entity.Models
 {
@@ -31,24 +33,21 @@ namespace HalloDoc.Entity.Models
                 {
                     Text = Body
                 };
-                using (var client = new MailKit.Net.Smtp.SmtpClient())
-                {
-                    await client.ConnectAsync(SmtpServer, Port, false);
-                    await client.AuthenticateAsync(UserName, Password);
-                    await client.SendAsync(message);
-                    await client.DisconnectAsync(true);
-                }
+                using var client = new MailKit.Net.Smtp.SmtpClient();
+                await client.ConnectAsync(SmtpServer, Port, false);
+                await client.AuthenticateAsync(UserName, Password);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
-            return false;
         }
         #endregion
 
-        #region SendMail
+        #region SendMailAsync
         public async Task<bool> SendMailAsync(string To, string Subject, string Body, List<string> Attachments)
         {
             MimeMessage message = new MimeMessage();
@@ -113,5 +112,6 @@ namespace HalloDoc.Entity.Models
             return System.Text.Encoding.UTF8.GetString(encoded);
         }
         #endregion
+        
     }
 }

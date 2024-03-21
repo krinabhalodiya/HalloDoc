@@ -5,8 +5,8 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Concellation</h1>
                 <a class="text-white" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></a>
             </div>
-            <form asp-action="CancelCase" asp-controller="AdminActions">
-                <input type="hidden" value="" id="RequestID_Input_ModelCancelCase" name="RequestId" />
+            <form asp-action="CancelCase" asp-controller="AdminActions" class="needs-validation" novalidate>
+                <input type="hidden" value="" id="RequestID_Input_ModelCancelCase" name="RequestId"  />
 
                 <div class="modal-body">
                     <p class="modal-title fs-5 text-secondary" id="exampleModalLabel">Patient Name : <span class="text-info" id="PatientName_ModelCancelCase"> </span></p>
@@ -17,11 +17,17 @@
                                 <option>Cancel Reason</option>
                             </select>
                             <label for="region2">Reason For Cancelation</label>
+                            <div class="invalid-feedback">
+                                Please select a valid Cancel Reason.
+                            </div>
                         </div>
                     </div>
                     <div class="form-floating mb-3">
-                        <textarea id="changenote" rows="4" name="Note" class="input-outline w-100 h-100 fs-6 form-control shadow-none" type="text"></textarea>
+                        <textarea id="changenote" rows="4" name="Note" required class="input-outline w-100 h-100 fs-6 form-control shadow-none" type="text"></textarea>
                         <label class="inputs-lable inputs-lable-textarea fs-6" id="notedata">Provide additional notes</label>
+                        <div class="invalid-feedback">
+                            Please select a valid Cancel Reason.
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

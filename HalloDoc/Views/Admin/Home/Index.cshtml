@@ -10,27 +10,27 @@
     </a> *@
     <h3 class="py-3">Login To Your Account</h3>
     <strong class="text-danger">@ViewData["error"]</strong>
-    <form asp-action="Validate" asp-controller="Home" method="post">
+    <form asp-action="Validate" asp-controller="Home" method="post" id="loginform">
         <div class="form-floating mb-4 email">
-            <input value="admin@gmail.com" type="email" class="form-control shadow-none" asp-for="Email" id="floatingInput" placeholder="name@example.com">
+            <input type="email" class="form-control shadow-none" asp-for="Email" id="loginemail" placeholder="name@example.com">
             <label class="bg-transparent" for="floatingInput">Email</label>
             <div class="btn btn-light">
                 <i class='fa fa-user-circle field-icon position-relative'></i>
             </div>
-            <span class="text-danger"></span>
+            <span class="text-danger emailerror" style="display:none;">Enter valid email address</span>
         </div>
         <div class="form-floating mb-4 password">
-            <input value="admin" type="password" class="form-control shadow-none eyehide" asp-for="Passwordhash" id="floatingPassword" placeholder="Password">
+            <input type="password" class="form-control shadow-none eyehide" asp-for="Passwordhash" id="loginpass" placeholder="Password" required>
             <label for="floatingPassword">Password</label>
             <button type="button" class="btn btn-light" onclick="passtoggle()">
                 <i class="showImg fa fa-eye"></i>
-                <i class="fa fa-eye-slash"></i>
+                <i class="fa fa-eye-slash" style="display:none;"></i>
             </button>
             <span  class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-info text-white w-100 mb-4" role="button">Login</button>
+        <button type="button" class="btn btn-info text-white w-100 mb-4" role="button" onclick="checkvalidation()">Login</button>
     </form>
-    <a asp-controller="Home" asp-action="ResetPassword" class="text-decoration-none d-flex justify-content-center"><strong class="text-info">Forgot Password?</strong></a>
+    <a asp-controller="Home" asp-action="ForgotPass" class="text-decoration-none d-flex justify-content-center"><strong class="text-info">Forgot Password?</strong></a>
 </div>
 
 <script>
@@ -46,5 +46,27 @@
             document.querySelectorAll(".fa-eye-slash").forEach(i => i.style.display = "none");
             document.querySelectorAll(".fa-eye").forEach(i => i.style.display = "block");
         }
+    }
+</script>
+<script>
+    function checkvalidation() {
+        var password = $("#loginpass").val();
+        var email = $("#loginemail").val();
+        
+        if (password != null && email != null) {
+            if (validateEmail(email) == true) {
+                $('#loginform').submit();
+            }
+            else {
+                $('.emailerror').show();
+            }
+        }
+        else{
+            $('.emailerror').show();
+        }
+    }
+    function validateEmail(email){
+        var allowed=/^([a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$)/; 
+        return allowed.test(email);
     }
 </script>

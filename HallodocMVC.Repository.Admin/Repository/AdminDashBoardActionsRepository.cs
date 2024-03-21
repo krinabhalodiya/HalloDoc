@@ -405,7 +405,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         #endregion
 
         #region GetDocumentByRequest
-        public async Task<ViewDocuments> GetDocumentByRequest(int? id)
+        public async Task<ViewDocuments> GetDocumentByRequest(int? id, ViewDocuments viewDocument)
         {
             var req = _context.Requests.FirstOrDefault(r => r.Requestid == id);
             ViewDocuments doc = new ViewDocuments();
@@ -414,14 +414,14 @@ namespace HallodocMVC.Repository.Admin.Repository
             doc.Lastname = req.Lastname;
             doc.RequestID = req.Requestid;
 
-            var result = from requestWiseFile in _context.Requestwisefiles
+            var result = (from requestWiseFile in _context.Requestwisefiles
                          join request in _context.Requests on requestWiseFile.Requestid equals request.Requestid
                          join physician in _context.Physicians on request.Physicianid equals physician.Physicianid into physicianGroup
                          from phys in physicianGroup.DefaultIfEmpty()
                          join admin in _context.Admins on requestWiseFile.Adminid equals admin.Adminid into adminGroup
                          from adm in adminGroup.DefaultIfEmpty()
                          where request.Requestid == id && requestWiseFile.Isdeleted == new BitArray(1)
-                         select new
+                         select new Documents
                          {
                              Uploader = requestWiseFile.Physicianid != null ? phys.Firstname : (requestWiseFile.Adminid != null ? adm.Firstname : request.Firstname),
                              isDeleted = requestWiseFile.Isdeleted.ToString(),
@@ -429,22 +429,26 @@ namespace HallodocMVC.Repository.Admin.Repository
                              Status = requestWiseFile.Doctype,
                              Createddate = requestWiseFile.Createddate,
                              Filename = requestWiseFile.Filename
-                         };
-            List<Documents> doclist = new List<Documents>();
-            foreach (var item in result)
+                         }).ToList();
+            int totalItemCount = result.Count();
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)viewDocument.PageSize);
+
+            List<Documents> list1 = result.Skip((viewDocument.CurrentPage - 1) * viewDocument.PageSize).Take(viewDocument.PageSize).ToList();
+
+            ViewDocuments vd = new()
             {
-                doclist.Add(new Documents
-                {
-                    Uploader = item.Uploader,
-                    isDeleted = item.isDeleted,
-                    RequestwisefilesId = item.RequestwisefilesId,
-                    Status = item.Status,
-                    Createddate = item.Createddate,
-                    Filename = item.Filename
-                });
-            }
-            doc.documentslist = doclist;
-            return doc;
+                documentslist = list1,
+                CurrentPage = viewDocument.CurrentPage,
+                TotalPages = totalPages,
+                PageSize = viewDocument.PageSize,
+                SortedColumn = viewDocument.SortedColumn,
+                IsAscending = viewDocument.IsAscending,
+                Firstname = viewDocument.Firstname,
+                Lastname = viewDocument.Lastname,
+                ConfirmationNumber = viewDocument.ConfirmationNumber,
+                RequestID = doc.RequestID
+            };
+            return vd;
         }
         #endregion
 
@@ -491,6 +495,33 @@ namespace HallodocMVC.Repository.Admin.Repository
         }
         #endregion
 
+        #region SendFilEmail
+        public async Task<bool> SendFileEmail(string ids, int Requestid, string email)
+        {
+            var v = await GetRequestDetails(Requestid);
+            List<int> priceList = ids.Split(',').Select(int.Parse).ToList();
+            List<string> files = new();
+            foreach (int price in priceList)
+            {
+                if (price > 0)
+                {
+                    var data = await _context.Requestwisefiles.Where(e => e.Requestwisefileid == price).FirstOrDefaultAsync();
+                    files.Add(Directory.GetCurrentDirectory() + "\\wwwroot\\Upload" + data.Filename.Replace("Upload/", "").Replace("/", "\\"));
+                }
+            }
+
+            if (await _emailConfig.SendMailAsync(email, "All Document Of Your Request " + v.PatientName, "Heeyy " + v.PatientName + " Kindly Check your Attachments", files))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+        #endregion
+
         #region sendorderd
         public Healthprofessional SelectProfessionlByID(int VendorID)
         {
@@ -515,7 +546,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                 _context.Orderdetails.Add(od);
                 _context.SaveChanges(true);
                 var req = _context.Requests.FirstOrDefault(e => e.Requestid == data.RequestID);
-                //_email.SendMail(data.Email, "New Order arrived", data.Prescription + "Request name" + req.Firstname);
+                _emailConfig.SendMail(data.Email, "New Order arrived", "Prescription : " + data.Prescription + " Request name : " + req.Firstname);
                 return true;
             }
             catch (Exception ex)
@@ -783,7 +814,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                 var admindata = _context.Admins.FirstOrDefault(e => e.Aspnetuserid == id);
                 if (Data.EncounterID == 0)
                 {
-                    Encounterform enc = new Encounterform
+                    Encounterform enc = new()
                     {
                         Abd = Data.ABD,
                         Encounterformid = (int)Data.EncounterID,
@@ -867,6 +898,30 @@ namespace HallodocMVC.Repository.Admin.Repository
                 return false;
             }
 
+        }
+        #endregion
+
+        #region GetRequestDetails
+        public async Task<ViewActions> GetRequestDetails(int? id)
+        {
+
+            return await (from req in _context.Requests
+                          join reqClient in _context.Requestclients
+                          on req.Requestid equals reqClient.Requestid into reqClientGroup
+                          from rc in reqClientGroup.DefaultIfEmpty()
+                          join phys in _context.Physicians
+                        on req.Physicianid equals phys.Physicianid into physGroup
+                          from p in physGroup.DefaultIfEmpty()
+                          where req.Requestid == id
+                          select new ViewActions
+                          {
+                              PhoneNumber = rc.Phonenumber,
+                              ProviderId = p.Physicianid,
+                              PatientName = rc.Firstname + rc.Lastname,
+                              RequestID = req.Requestid,
+                              Email = rc.Email
+
+                          }).FirstAsync();
         }
         #endregion
     }

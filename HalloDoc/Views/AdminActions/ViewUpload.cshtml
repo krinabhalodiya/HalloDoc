@@ -69,13 +69,7 @@
                                 <i class="fa fa-trash me-1" aria-hidden="true"></i><span class="d-none d-sm-inline">Delete all</span>
                             </div>
                         </form>
-                        <form method="post" id="sendmails" asp-action="SendFilEmail" asp-controller="ViewAction">
-                            <input type="hidden" value="@Model.RequestID" name="Requestid" />
-                            <input type="hidden" id="mailids" name="mailids"/>
-                            <div id="sendmail" class="btn btn-outline-info btn-back d-flex text-end mx-1">
-                                <i class="fa fa-envelope me-1"></i><span class="d-none d-sm-block">Send Mail</span>
-                            </div>
-                        </form>
+                        <button id="sendmailmodel" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-outline-info btn-back d-flex text-end mx-1"><i class="fa-solid fa-mail"></i><span class="d-none d-sm-block">Send Mail</span></button>
                     </div>
                 </div>
                 @* dashboard view *@
@@ -157,7 +151,110 @@
 
     </div>
 </div>
+<div class="m-2 d-flex justify-content-center">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination-container">
+            @{
+                int i;
+                <form id="documentform"
+                      asp-action="ViewUpload" asp-controller="AdminActions" asp-route-id="" novalidate="novalidate" class="d-flex">
+                    <input type="hidden" value="@Model.RequestID" asp-for="RequestID"/>
+                    <input type="hidden" asp-for="CurrentPage" id="currentpagevalue1" />
+                    <input type="hidden" asp-for="SortedColumn" />
+                    <input type="hidden" asp-for="IsAscending" />
+                    @if (@Model.CurrentPage > 1)
+                    {
+                    <li class="page-item me-2"><button class="btn shadow-none" onclick="setpagenumber('previous')">&lt;</button></li>
+                    }
+                    else
+                    {
+                    <li class="me-2 page-item"><a class="disabled btn">&lt;</a></li>
+                    }
+                    @for (i = 1; i <= @Model.TotalPages; i++)
+                    {
+                    <li class="page-item me-2"><button class="@(i == @Model.CurrentPage ? "activepagebtn" : "") btn shadow-none" onclick="setpagenumber(@i)">@i</button></li>
+                    }
+                    @if (@Model.TotalPages > @Model.CurrentPage)
+                    {
+                    <li class="page-item me-2"><button class="btn shadow-none" onclick="setpagenumber('next')">&gt;</button></li>
+                    }
+                    else
+                    {
+                    <li class="me-2 page-item"><a class="btn disabled">&gt;</a></li>
+                    }
+                </form>
+            }
+        </ul>
+    </nav>
+</div>
+<form class="sortingform" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+      asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate">
+    <input type="hidden" asp-for="SortedColumn" id="sortedcol" />
+    <input type="hidden" asp-for="IsAscending" id="isAsc" />
+</form>
+<script>
+    function setpagenumber(e) {
+        if (e == 'previous') {
+            var cp = @Model.CurrentPage-1;
+            $('#currentpagevalue1').val(cp);
+        }
+        else if (e == 'next') {
+            var cp = @Model.CurrentPage + 1;
+            $('#currentpagevalue1').val(cp);
+        }
+        else {
+            $('#currentpagevalue1').val(e);
+        }
+        $("#documentform").submit();
+    }
+    function SetColumValue(e) {
+        var modeldata = @Html.Raw(Json.Serialize(Model));
+        console.log(modeldata.sortedColumn)
+        console.log(modeldata.isAscending)
+        if (modeldata.sortedColumn === e) {
+            if (modeldata.isAscending == true) {
+                document.getElementById('isAsc').value = false;
+            }
+            else {
+                document.getElementById('isAsc').value = true;
+            }
+            console.log(document.getElementById('isAsc').value);
+        }
+        else {
+            document.getElementById('sortedcol').value = e;
+            document.getElementById('isAsc').value = true;
+        }
+        $(".sortingform").submit();
+    }
+</script>
 
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Email Files</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="sendmails" asp-action="SendFileEmail" asp-controller="AdminActions">
+                <div class="modal-body">
+                    <input type="hidden" value="@Model.RequestID" name="Requestid" />
+                    <input type="hidden" id="mailids" name="mailids" />
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Email:</label>
+                        <input type="text" class="form-control" name="email">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <div id="sendmail" class="btn btn-outline-info btn-back text-end mx-1">
+                        <i class="fa-solid fa-mail"></i>  Send Mail
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @section Scripts
 {
     <script type="text/javascript">
@@ -212,42 +309,48 @@
             });
 
             $('#sendmail').click(function () {
+                anyCheckboxSelected = false;
                 $('tbody tr').each(function () {
                     if ($(this).find('.form-check-input').prop('checked')) {
+                        anyCheckboxSelected = true;
                         var downloadLink = $(this).find('.RequestwisefilesId').val();
                         var deleteids = $('#mailids').val();
                         console.log(deleteids);
                         if (deleteids == '') {
-
                             $('#mailids').val(downloadLink);
                         } else {
                             $('#mailids').val(deleteids + ',' + downloadLink);
-
                         }
                         console.log($('#mailids').val());
-
                     }
                 });
-
-                Swal.fire({
-                    title: "Do you want to Send Mail That file ?",
-                    showDenyButton: false,
-                    showCancelButton: true,
-                    confirmButtonText: "Yes",
-                    denyButtonText: `Don't save`
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#').submit();
-                    }
-                    console.log(result);
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        Swal.fire("Sending Mail!", "", "success");
-                    } else if (result.isDenied) {
-                        Swal.fire("Changes are not saved", "", "info");
-                    }
-                });
+                if (anyCheckboxSelected) {
+                    Swal.fire({
+                        title: "Do you want to Send Mail That file ?",
+                        showDenyButton: false,
+                        showCancelButton: true,
+                        confirmButtonText: "Yes",
+                        denyButtonText: `Don't save`
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#sendmails').submit();
+                        }
+                        console.log(result);
+                    });
+                }
+                else {
+                    swal.fire({
+                        title: "Oops..",
+                        text: "Oops! Please Select One File ",
+                        icon: "error",
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        cancelButtonText: "Okay",
+                        cancelButtonColor: "#01BBE7",
+                    })
+                }
             });
+                
 
             $('#delete').click(function () {
                 anyCheckboxSelected = false;

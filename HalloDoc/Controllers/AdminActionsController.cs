@@ -176,9 +176,14 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region View_Upload
-        public async Task<IActionResult> ViewUpload(int? id)
+        public async Task<IActionResult> ViewUpload(int? id , ViewDocuments viewDocument)
         {
-            ViewDocuments v = await _IAdminDashBoardActionsRepository.GetDocumentByRequest(id);
+            if (id == null)
+            {
+                id= viewDocument.RequestID;
+
+            }
+            ViewDocuments v = await _IAdminDashBoardActionsRepository.GetDocumentByRequest(id, viewDocument);
             return View("../AdminActions/ViewUpload",v);
         }
         #endregion
@@ -223,6 +228,22 @@ namespace HalloDoc.Controllers
             else
             {
                 _notyf.Error("All Selected File Not Deleted");
+            }
+            return RedirectToAction("ViewUpload", "AdminActions", new { id = Requestid });
+        }
+        #endregion
+
+        #region SendFilEmail
+        public async Task<IActionResult> SendFileEmail(string mailids, int Requestid, string email)
+        {
+            if (await _IAdminDashBoardActionsRepository.SendFileEmail(mailids, Requestid, email))
+            {
+
+                _notyf.Success("Mail Send successfully");
+            }
+            else
+            {
+                _notyf.Error("Mail is not send successfully");
             }
             return RedirectToAction("ViewUpload", "AdminActions", new { id = Requestid });
         }

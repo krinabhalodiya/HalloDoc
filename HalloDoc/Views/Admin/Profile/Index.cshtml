@@ -43,6 +43,7 @@
                             <div class="form-floating">
                                 <input type="text" asp-for="Password" class="form-control shadow-none" id="pass" placeholder="Last Name" />
                                 <label for="pass">PassWord</label>
+                                <span asp-validation-for="Password"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
@@ -60,7 +61,7 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
-                            <input type="button" value="Reset Password" id="resetpassbtn"class="btn border border-info text-info"/>
+                            <input type="submit" value="Reset Password" id="resetpassbtn"class="btn border border-info text-info"/>
                         </div>
                     </div>
                 </div>
@@ -76,30 +77,35 @@
                             <div class="form-floating">
                                 <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="fname1" placeholder="First Name">
                                 <label for="fname1">First Name</label>
+                                <span asp-validation-for="Firstname" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="Lastname" class="form-control shadow-none input1" id="lname1" placeholder="Last Name">
                                 <label for="lname1">Last Name</label>
+                                <span asp-validation-for="Lastname" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="Email" class="form-control shadow-none input1" id="dob1" placeholder="Date Of Birth">
                                 <label for="dob1">Email</label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="Email" class="form-control shadow-none input1" id="email1" placeholder="Date Of Birth">
                                 <label for="email1">Confirm Email</label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
                                 <input type="tel" asp-for="Mobile" class="form-control shadow-none input1" id="phone1" autocomplete="off" placeholder="Phone Number">
                                 <label for="phone1">Phone Number</label>
+                                <span asp-validation-for="Mobile" class="text-danger"></span>
                             </div>
                         </div>
                         <input asp-for="Regionsid" type="hidden" id="regionids" />
@@ -128,7 +134,7 @@
                         </div>
                         <div class="d-flex justify-content-end">
                             <input type="button" value="Edit" id="edit1" class="btn btn-info text-white" onclick="toggleFormElements1()" />
-                            <input type="button" value="Save" id="save1" class="btn btn-info text-white"  />
+                            <input type="submit" value="Save" id="save1" class="btn btn-info text-white"  />
                         </div>
                     </div>
                 </div>
@@ -144,41 +150,47 @@
                             <div class="form-floating">
                                 <input type="text" asp-for="Address1" class="form-control shadow-none input2" id="Address1">
                                 <label for="Address1">Address 1</label>
+                                <span asp-validation-for="Address1" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="Address2" class="form-control shadow-none input2" id="Address2">
                                 <label for="Address2">Address 2</label>
+                                <span asp-validation-for="Address2" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="City" class="form-control shadow-none input2" id="City">
                                 <label for="City">City</label>
+                                <span asp-validation-for="City" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="State" class="form-control shadow-none input2" id="State" placeholder=Suchtext autocomplete=off>
                                 <label for="State">State</label>
+                                <span asp-validation-for="State" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="Zipcode" class="form-control shadow-none input2" id="Zip">
                                 <label for="Zip">Zip</label>
+                                <span asp-validation-for="Zipcode" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
                                 <input type="tel" asp-for="AltMobile" class="form-control shadow-none input2" id="phone" autocomplete="off">
                                 <label for="phone">Phone Number</label>
+                                <span asp-validation-for="AltMobile" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
                             <input type="button" value="Edit" id="edit2" class="btn btn-info text-white" onclick="toggleFormElements2()" />
-                            <input type="button" value="Save" id="save2" class="btn btn-info text-white" />
+                            <input type="submit" value="Save" id="save2" class="btn btn-info text-white" />
                         </div>
                     </div>
                 </div>
@@ -229,21 +241,7 @@
 	}
 
     
-    $(function () {
-        $('#resetpassbtn').on('click', function () {
-            Swal.fire({
-                title: "Do you want Reset Password  Changes ?",
-                showDenyButton: false,
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                denyButtonText: `Don't save`
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#resetpassform').submit();
-                }
-            });
-        });
-    });
+    
 
     $(function () {
         $('#save1').on('click', function () {
@@ -253,33 +251,6 @@
                 regionIds.push(checkbox.value);
             });
             document.querySelector('#regionids').value = regionIds.join(',');
-            Swal.fire({
-                title: "Do you want to Edit Information ?",
-                showDenyButton: false,
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                denyButtonText: `Don't save`
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#AdministratorInfoForm').submit();
-                }
-            });
-        });
-    });
-
-    $(function () {
-        $('#save2').on('click', function () {
-            Swal.fire({
-                title: "Do you want to Edit Information ?",
-                showDenyButton: false,
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                denyButtonText: `Don't save`
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#BillingInfoForm').submit();
-                }
-            });
         });
     });
 </script>

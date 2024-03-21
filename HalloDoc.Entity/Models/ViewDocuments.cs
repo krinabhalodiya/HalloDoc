@@ -22,5 +22,10 @@ namespace HalloDoc.Entity.Models
             public string isDeleted { get; set; }
         }
         public List<Documents>? documentslist { get; set; } = null;
+        public int CurrentPage { get; set; } = 1;
+        public int TotalPages { get; set; } = 1;
+        public int PageSize { get; set; } = 1;
+        public bool? IsAscending { get; set; } = true;
+        public string? SortedColumn { get; set; } = "RequestedDate";
     }
 }

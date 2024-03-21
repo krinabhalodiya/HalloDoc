@@ -20,9 +20,10 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public bool ClearCase(int RequestID);
         public ViewNotesData getNotesByID(int id);
         public bool EditViewNotes(string? adminnotes, string? physiciannotes, int RequestID);
-        public Task<ViewDocuments> GetDocumentByRequest(int? id);
+        public Task<ViewDocuments> GetDocumentByRequest(int? id, ViewDocuments viewDocument);
         public Boolean SaveDoc(int Requestid, IFormFile file);
         public Task<bool> DeleteDocumentByRequest(string ids);
+        public Task<bool> SendFileEmail(string ids, int Requestid, string email);
         public Healthprofessional SelectProfessionlByID(int VendorID);
         public bool SendOrder(ViewSendOrderData data);
         public Boolean SendAgreement(int requestid);

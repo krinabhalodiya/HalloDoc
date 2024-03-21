@@ -6,29 +6,38 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Transfer Physician </h1>
                 <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
             </div>
-            <form asp-action="TransferProvider" asp-controller="AdminActions">
+            <form asp-action="TransferProvider" asp-controller="AdminActions" class="needs-validation" novalidate>
                 <div class="modal-body">
                     <small class="modal-title">to transfer this request,select and search another physician.</small>
                     <input type="hidden" name="requestid" id="RequestID_Input_ModelTransferCase" />
                     <div class="col my-3">
                         <div class="form-floating">
                             <select class="form-select input-outline input-outline-select w-100" required aria-label="Phone" name="region" data-allow-clear="true" tabindex="-1" onchange="myFunction1()" id="region3" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
-                                <option>Select Region</option>
+                                
                             </select>
                             <label for="region2">Region</label>
+                            <div class="invalid-feedback">
+                                Select Valid Region.
+                            </div>
                         </div>
                     </div>
                     <div class="col mb-3">
                         <div class="form-floating">
                             <select class="form-select input-outline input-outline-select w-100" required name="ProviderId" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level">
-                                <option>Select Physician</option>
+                                
                             </select>
                             <label for="provider">Select Physician</label>
+                            <div class="invalid-feedback">
+                                Select Valid Physician.
+                            </div>
                         </div>
                     </div>
                     <div class="form-floating mb-3">
-                        <textarea id="changenote" placeholder=" " name="Notes" class="input-outline w-100 fs-6 form-control shadow-none" type="text" style=" height:100px;"></textarea>
+                        <textarea id="changenote" placeholder=" " name="Notes" class="input-outline w-100 fs-6 form-control shadow-none" type="text" style=" height:100px;" required></textarea>
                         <label class="inputs-lable inputs-lable-textarea fs-6" id="notedata">Notes</label>
+                        <div class="invalid-feedback">
+                            Please Enter Note
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -53,7 +62,7 @@
             cache: false,
             success: function (response) {
                 console.log(response);
-                var s = '<option value="-1">Please Select</option>';
+                var s ;
                 for (var i = 0; i < response.length; i++) {
                     s += '<option value="' + response[i].physicianid + '">' + response[i].firstname + ' ' + response[i].lastname + '</option>';
                 }
@@ -64,5 +73,7 @@
             }
         });
     }
-
+    window.onload = function () {
+        myFunction1() // call onload function here once window has finished loading
+    }
 </script>

@@ -31,4 +31,9 @@
     <None Include="Views\AdminActions\ViewUpload.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Patient\" />
+    <Folder Include="Views\Patient\" />
+  </ItemGroup>
+
 </Project>

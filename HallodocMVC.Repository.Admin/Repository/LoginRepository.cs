@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HalloDoc.Entity.DataContext;
 using HalloDoc.Entity.DataModels;
@@ -70,6 +71,42 @@ namespace HallodocMVC.Repository.Admin.Repository
             else
             {
                 return null;
+            }
+        }
+        #endregion
+        #region Help_functions
+        public async Task<bool> CheckregisterdAsync(string email)
+        {
+            string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
+
+            if (!string.IsNullOrEmpty(email) && Regex.IsMatch(email, pattern))
+            {
+
+                var U = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == email);
+                if (U != null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        #endregion
+        #region SavePass
+        public async Task<bool> SavePass(string email, string Password)
+        {
+            try
+            {
+                Aspnetuser U = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == email);
+                var hasher = new PasswordHasher<string>();
+                U.Passwordhash = hasher.HashPassword(null, Password); ;
+                _context.Update(U);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
             }
         }
         #endregion
