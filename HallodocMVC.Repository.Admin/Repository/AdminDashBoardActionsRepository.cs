@@ -408,12 +408,6 @@ namespace HallodocMVC.Repository.Admin.Repository
         public async Task<ViewDocuments> GetDocumentByRequest(int? id, ViewDocuments viewDocument)
         {
             var req = _context.Requests.FirstOrDefault(r => r.Requestid == id);
-            ViewDocuments doc = new ViewDocuments();
-            doc.ConfirmationNumber = req.Confirmationnumber;
-            doc.Firstname = req.Firstname;
-            doc.Lastname = req.Lastname;
-            doc.RequestID = req.Requestid;
-
             var result = (from requestWiseFile in _context.Requestwisefiles
                          join request in _context.Requests on requestWiseFile.Requestid equals request.Requestid
                          join physician in _context.Physicians on request.Physicianid equals physician.Physicianid into physicianGroup
@@ -432,9 +426,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                          }).ToList();
             int totalItemCount = result.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)viewDocument.PageSize);
-
             List<Documents> list1 = result.Skip((viewDocument.CurrentPage - 1) * viewDocument.PageSize).Take(viewDocument.PageSize).ToList();
-
             ViewDocuments vd = new()
             {
                 documentslist = list1,
@@ -443,10 +435,10 @@ namespace HallodocMVC.Repository.Admin.Repository
                 PageSize = viewDocument.PageSize,
                 SortedColumn = viewDocument.SortedColumn,
                 IsAscending = viewDocument.IsAscending,
-                Firstname = viewDocument.Firstname,
-                Lastname = viewDocument.Lastname,
-                ConfirmationNumber = viewDocument.ConfirmationNumber,
-                RequestID = doc.RequestID
+                Firstname = req.Firstname,
+                Lastname = req.Lastname,
+                ConfirmationNumber = req.Confirmationnumber,
+                RequestID = req.Requestid
             };
             return vd;
         }

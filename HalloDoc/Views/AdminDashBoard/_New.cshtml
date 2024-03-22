@@ -1,5 +1,5 @@
-﻿@using static HalloDoc.Entity.Models.Constant
-@model HalloDoc.Entity.Models.PaginatedViewModel
+﻿@using static HalloDoc.Entity.Models.Constant;
+@model HalloDoc.Entity.Models.PaginatedViewModel;
 
 
 <!--Mobile Screen View of table-->
@@ -274,8 +274,7 @@
 
      function SetColumValue(e) {
         var modeldata = @Html.Raw(Json.Serialize(Model)); 
-        console.log(modeldata.sortedColumn)
-        console.log(modeldata.isAscending)
+        console.log(modeldata)
         if (modeldata.sortedColumn === e) {
             if(modeldata.isAscending == true){
                 document.getElementById('isAsc').value = false;

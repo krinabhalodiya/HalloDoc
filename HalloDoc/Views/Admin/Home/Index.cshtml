@@ -3,11 +3,11 @@
 }
 @model HalloDoc.Entity.DataModels.Aspnetuser;
 <div class="align-self-center w-sm-50">
-    @* <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+    <a asp-controller="Home" asp-action="LandingPage" class="text-decoration-none">
         <strong class="text-info">
             <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
         </strong>
-    </a> *@
+    </a>
     <h3 class="py-3">Login To Your Account</h3>
     <strong class="text-danger">@ViewData["error"]</strong>
     <form asp-action="Validate" asp-controller="Home" method="post" id="loginform">

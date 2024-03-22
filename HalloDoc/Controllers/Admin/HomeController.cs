@@ -41,6 +41,10 @@ namespace HalloDoc.Controllers.Admin
             _jwtService = jwtService;
             _emailConfig = emailConfiguration;
         }
+        public IActionResult LandingPage()
+        {
+            return View("../Admin/Home/LandingPage");
+        }
         public IActionResult Index()
         {
             return View("../Admin/Home/Index");
@@ -56,6 +60,10 @@ namespace HalloDoc.Controllers.Admin
                 var jwttoken = _jwtService.GenerateJWTAuthetication(u);
                 Response.Cookies.Append("jwt", jwttoken);
                 Response.Cookies.Append("Status", "1");
+                if(u.Role == "Patient")
+                {
+                    return RedirectToAction("Index", "PatientDashboard");
+                }
                 return RedirectToAction("Index", "AdminDashBoard");
             }
             else

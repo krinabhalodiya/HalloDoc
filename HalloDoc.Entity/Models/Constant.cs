@@ -17,7 +17,7 @@ namespace HalloDoc.Entity.Models
         }
         public enum Status
         {
-            Unassigne = 1, 
+            Unassigne = 1,
             Accepted, Cancelled, MDEnRoute, MDONSite, Conclude, CancelledByPatients, Closed, Unpaid, Clear,
             Block
 
@@ -33,7 +33,7 @@ namespace HalloDoc.Entity.Models
         }
         public enum AdminStatus
         {
-             Active= 1,Pending , NotActive
+            Active = 1, Pending, NotActive
 
         }
     }

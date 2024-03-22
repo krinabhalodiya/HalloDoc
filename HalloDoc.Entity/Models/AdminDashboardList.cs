@@ -21,7 +21,7 @@
     }
     public class PaginatedViewModel
     {
-        public List< AdminDashboardList>? adl { get; set; }
+        public List<AdminDashboardList>? adl { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; } = 1;
         public int PageSize { get; set; } = 5;

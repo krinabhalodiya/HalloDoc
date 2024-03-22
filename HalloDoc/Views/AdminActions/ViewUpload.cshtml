@@ -60,13 +60,13 @@
                     </div>
                     <div class="text-end d-flex ">
                         <div id="downloadAll" class="btn btn-outline-info btn-back text-end d-flex mx-1">
-                            <i class="fa-solid fa-download me-1"></i><span class="d-none d-sm-block">Downlode all</span>
+                            <i class="fa-solid fa-download me-1 mt-1"></i><span class="d-none d-sm-block">Downlode all</span>
                         </div>
                         <form method="post" id="deleted" asp-action="AllFilesDelete" asp-controller="AdminActions">
                             <input type="hidden" id="deleteids" name="deleteids" />
                             <input type="hidden" value="@Model.RequestID" name="Requestid" />
                             <div id="delete" class="btn btn-outline-info d-flex btn-back text-end mx-1">
-                                <i class="fa fa-trash me-1" aria-hidden="true"></i><span class="d-none d-sm-inline">Delete all</span>
+                                <i class="fa fa-trash me-1 mt-1" aria-hidden="true"></i><span class="d-none d-sm-inline">Delete all</span>
                             </div>
                         </form>
                         <button id="sendmailmodel" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-outline-info btn-back d-flex text-end mx-1"><i class="fa-solid fa-mail"></i><span class="d-none d-sm-block">Send Mail</span></button>
@@ -148,86 +148,63 @@
                 <!--End Mobile screen View-->
             </div>
         </div>
-
+        <div class="m-2 d-flex justify-content-between">
+            <form id="documentformPagesize" asp-action="ViewUpload" asp-controller="AdminActions" asp-route-id="" novalidate="novalidate" class="d-flex">
+                <div class="search m-1 d-flex justify-content-between">
+                    <input type="hidden" value="@Model.RequestID" asp-for="RequestID" />
+                    <span class="pagesize">Page Size</span>
+                    <select class="form-select pagesizeselect" asp-for="PageSize" data-allow-clear="true" tabindex="-1" id="pagesizedropdowndocument" data-control="select2" data-placeholder="Select Level">
+                        <option value="5" selected>5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </form>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-container">
+                    @{
+                        int i;
+                        <form id="documentform"
+                              asp-action="ViewUpload" asp-controller="AdminActions" asp-route-id="" novalidate="novalidate" class="d-flex">
+                            <input type="hidden" value="@Model.RequestID" asp-for="RequestID" />
+                            <input type="hidden" asp-for="CurrentPage" id="currentpagevaluedocument" />
+                            <input type="hidden" asp-for="SortedColumn" />
+                            <input type="hidden" asp-for="IsAscending" />
+                            <input type="hidden" asp-for="PageSize" />
+                            @if (@Model.CurrentPage > 1)
+                            {
+                            <li class="page-item me-2"><button class="btn shadow-none" onclick="setpagenumber('previous')">&lt;</button></li>
+                            }
+                            else
+                            {
+                            <li class="me-2 page-item"><a class="disabled btn">&lt;</a></li>
+                            }
+                            @for (i = 1; i <= @Model.TotalPages; i++)
+                            {
+                            <li class="page-item me-2"><button class="@(i == @Model.CurrentPage ? "activepagebtn" : "") btn shadow-none" onclick="setpagenumber(@i)">@i</button></li>
+                            }
+                            @if (@Model.TotalPages > @Model.CurrentPage)
+                            {
+                            <li class="page-item me-2"><button class="btn shadow-none" onclick="setpagenumber('next')">&gt;</button></li>
+                            }
+                            else
+                            {
+                            <li class="me-2 page-item"><a class="btn disabled">&gt;</a></li>
+                            }
+                        </form>
+                    }
+                </ul>
+            </nav>
+        </div>
     </div>
 </div>
-<div class="m-2 d-flex justify-content-center">
-    <nav aria-label="Page navigation example">
-        <ul class="pagination pagination-container">
-            @{
-                int i;
-                <form id="documentform"
-                      asp-action="ViewUpload" asp-controller="AdminActions" asp-route-id="" novalidate="novalidate" class="d-flex">
-                    <input type="hidden" value="@Model.RequestID" asp-for="RequestID"/>
-                    <input type="hidden" asp-for="CurrentPage" id="currentpagevalue1" />
-                    <input type="hidden" asp-for="SortedColumn" />
-                    <input type="hidden" asp-for="IsAscending" />
-                    @if (@Model.CurrentPage > 1)
-                    {
-                    <li class="page-item me-2"><button class="btn shadow-none" onclick="setpagenumber('previous')">&lt;</button></li>
-                    }
-                    else
-                    {
-                    <li class="me-2 page-item"><a class="disabled btn">&lt;</a></li>
-                    }
-                    @for (i = 1; i <= @Model.TotalPages; i++)
-                    {
-                    <li class="page-item me-2"><button class="@(i == @Model.CurrentPage ? "activepagebtn" : "") btn shadow-none" onclick="setpagenumber(@i)">@i</button></li>
-                    }
-                    @if (@Model.TotalPages > @Model.CurrentPage)
-                    {
-                    <li class="page-item me-2"><button class="btn shadow-none" onclick="setpagenumber('next')">&gt;</button></li>
-                    }
-                    else
-                    {
-                    <li class="me-2 page-item"><a class="btn disabled">&gt;</a></li>
-                    }
-                </form>
-            }
-        </ul>
-    </nav>
-</div>
+
 <form class="sortingform" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
       asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate">
     <input type="hidden" asp-for="SortedColumn" id="sortedcol" />
     <input type="hidden" asp-for="IsAscending" id="isAsc" />
 </form>
-<script>
-    function setpagenumber(e) {
-        if (e == 'previous') {
-            var cp = @Model.CurrentPage-1;
-            $('#currentpagevalue1').val(cp);
-        }
-        else if (e == 'next') {
-            var cp = @Model.CurrentPage + 1;
-            $('#currentpagevalue1').val(cp);
-        }
-        else {
-            $('#currentpagevalue1').val(e);
-        }
-        $("#documentform").submit();
-    }
-    function SetColumValue(e) {
-        var modeldata = @Html.Raw(Json.Serialize(Model));
-        console.log(modeldata.sortedColumn)
-        console.log(modeldata.isAscending)
-        if (modeldata.sortedColumn === e) {
-            if (modeldata.isAscending == true) {
-                document.getElementById('isAsc').value = false;
-            }
-            else {
-                document.getElementById('isAsc').value = true;
-            }
-            console.log(document.getElementById('isAsc').value);
-        }
-        else {
-            document.getElementById('sortedcol').value = e;
-            document.getElementById('isAsc').value = true;
-        }
-        $(".sortingform").submit();
-    }
-</script>
-
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -243,7 +220,6 @@
                         <label for="recipient-name" class="col-form-label">Email:</label>
                         <input type="text" class="form-control" name="email">
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -257,8 +233,43 @@
 </div>
 @section Scripts
 {
+    <script>
+        function setpagenumber(e) {
+            console.log(e)
+            if (e == 'previous') {
+                var cp = @Model.CurrentPage-1;
+                $('#currentpagevaluedocument').val(cp);
+            }
+            else if (e == 'next') {
+                var cp = @Model.CurrentPage + 1;
+                $('#currentpagevaluedocument').val(cp);
+            }
+            else {
+                $('#currentpagevaluedocument').val(e);
+            }
+            $("#documentform").submit();
+        }
+        function SetColumValue(e) {
+            var modeldata = @Html.Raw(Json.Serialize(Model));
+            console.log(modeldata.sortedColumn)
+            console.log(modeldata.isAscending)
+            if (modeldata.sortedColumn === e) {
+                if (modeldata.isAscending == true) {
+                    document.getElementById('isAsc').value = false;
+                }
+                else {
+                    document.getElementById('isAsc').value = true;
+                }
+                console.log(document.getElementById('isAsc').value);
+            }
+            else {
+                document.getElementById('sortedcol').value = e;
+                document.getElementById('isAsc').value = true;
+            }
+            $(".sortingform").submit();
+        }
+    </script>
     <script type="text/javascript">
-        
             $("#file").change(function () {
                 filename = this.files[0].name;
                 console.log(filename);
@@ -266,6 +277,10 @@
             });
 
         $(function () {
+            $('#pagesizedropdowndocument').on('change', function () {
+                console.log("abc");
+                $('#documentformPagesize').submit();
+            });
 
             $('.filename').each(function () {
                 var fileName = $(this).text().trim();
@@ -326,7 +341,7 @@
                 });
                 if (anyCheckboxSelected) {
                     Swal.fire({
-                        title: "Do you want to Send Mail That file ?",
+                        title: "Do you want to Send Mail of All file ?",
                         showDenyButton: false,
                         showCancelButton: true,
                         confirmButtonText: "Yes",
@@ -441,5 +456,6 @@
                 }
             })
         });
+
     </script>
 }

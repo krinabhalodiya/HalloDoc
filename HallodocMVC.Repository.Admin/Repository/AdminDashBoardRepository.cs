@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HalloDoc.Entity.Models;
 using HalloDoc.Entity.DataContext;
 using HallodocMVC.Repository.Admin.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections;
 using Org.BouncyCastle.Ocsp;
 using System.Linq.Expressions;
+using HalloDoc.Entity.Models;
 
 namespace HallodocMVC.Repository.Admin.Repository
 {
@@ -80,7 +80,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                        RequestorPhoneNumber = req.Phonenumber
                                                    }).ToList();
 
-    //465464645
+
             if (data.IsAscending == true)
             {
                 allData = data.SortedColumn switch
