@@ -90,6 +90,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                     "Dob" => allData.OrderBy(x => x.Dob).ToList(),
                     "Address" => allData.OrderBy(x => x.Address).ToList(),
                     "RequestedDate" => allData.OrderBy(x => x.RequestedDate).ToList(),
+                    "ProviderName" => allData.OrderBy(x => x.ProviderName).ToList(),
+                    "Region" => allData.OrderBy(x => x.Region).ToList(),
                     _ => allData.OrderBy(x => x.RequestedDate).ToList()
                 };
             }
@@ -102,6 +104,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                     "Dob" => allData.OrderByDescending(x => x.Dob).ToList(),
                     "Address" => allData.OrderByDescending(x => x.Address).ToList(),
                     "RequestedDate" => allData.OrderByDescending(x => x.RequestedDate).ToList(),
+                    "ProviderName" => allData.OrderByDescending(x => x.ProviderName).ToList(),
+                    "Region" => allData.OrderByDescending(x => x.Region).ToList(),
                     _ => allData.OrderByDescending(x => x.RequestedDate).ToList()
                 };
             }

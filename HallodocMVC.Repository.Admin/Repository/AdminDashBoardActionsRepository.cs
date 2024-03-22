@@ -424,6 +424,26 @@ namespace HallodocMVC.Repository.Admin.Repository
                              Createddate = requestWiseFile.Createddate,
                              Filename = requestWiseFile.Filename
                          }).ToList();
+            if (viewDocument.IsAscending == true)
+            {
+                result = viewDocument.SortedColumn switch
+                {
+                    "Uploader" => result.OrderBy(x => x.Uploader).ToList(),
+                    "Filename" => result.OrderBy(x => x.Filename).ToList(),
+                    "Createddate" => result.OrderBy(x => x.Createddate).ToList(),
+                    _ => result.OrderBy(x => x.Createddate).ToList()
+                };
+            }
+            else
+            {
+                result = viewDocument.SortedColumn switch
+                {
+                    "Uploader" => result.OrderByDescending(x => x.Uploader).ToList(),
+                    "Filename" => result.OrderByDescending(x => x.Filename).ToList(),
+                    "Createddate" => result.OrderByDescending(x => x.Createddate).ToList(),
+                    _ => result.OrderByDescending(x => x.Createddate).ToList()
+                };
+            }
             int totalItemCount = result.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)viewDocument.PageSize);
             List<Documents> list1 = result.Skip((viewDocument.CurrentPage - 1) * viewDocument.PageSize).Take(viewDocument.PageSize).ToList();

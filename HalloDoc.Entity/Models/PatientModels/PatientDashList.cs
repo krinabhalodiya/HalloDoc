@@ -19,7 +19,6 @@ namespace HalloDoc.Entity.Models.PatientModels
         public int TotalPages { get; set; } = 1;
         public int PageSize { get; set; } = 5;
         public bool? IsAscending { get; set; } = false;
-        public string? SortedColumn { get; set; } = "createdDate";
     }
 
 }

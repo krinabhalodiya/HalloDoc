@@ -37,21 +37,11 @@ namespace HallodocMVC.Repository.Patient.Repository
             }).ToList();
             if (listdata.IsAscending == true)
             {
-                allData = listdata.SortedColumn switch
-                {
-                    "createdDate" => allData.OrderBy(x => x.createdDate).ToList(),
-                    "Status" => allData.OrderBy(x => x.Status).ToList(),
-                    _ => allData.OrderBy(x => x.createdDate).ToList()
-                };
+                allData = allData.OrderBy(x => x.createdDate).ToList();
             }
             else
             {
-                allData = listdata.SortedColumn switch
-                {
-                    "createdDate" => allData.OrderByDescending(x => x.createdDate).ToList(),
-                    "Status" => allData.OrderByDescending(x => x.Status).ToList(),
-                    _ => allData.OrderByDescending(x => x.createdDate).ToList()
-                };
+                allData = allData.OrderByDescending(x => x.createdDate).ToList();
             }
 
             int totalItemCount = allData.Count();
@@ -64,7 +54,6 @@ namespace HallodocMVC.Repository.Patient.Repository
                TotalPages = totalPages,
                PageSize = listdata.PageSize,
                IsAscending = listdata.IsAscending,
-               SortedColumn  = listdata.SortedColumn,
                UserId = Int32.Parse(id)
             };
             return Data;

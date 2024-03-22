@@ -57,18 +57,31 @@
                 </div>
                 @* dashboard view *@
                 <div class="table-responsive mt-3 d-none d-sm-block">
-                    <table class="table">
+                    <table class="table dataTable table-responsive">
                         <thead class="border-0">
                             <tr class="table-secondary">
-                                <th scope="col" class="table-text-header px-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="topflexCheckDefault">
-                                    </div>
-                                </th>
-                                <th scope="col" class="table-text-header px-3">File Name</th>
-                                <th scope="col" class="table-text-header px-3">Uploder</th>
-                                <th scope="col" class="table-text-header ">uplode date</th>
-                                <th scope="col" class="table-text-header ">Action</th>
+                                @{
+                                    var i1 = @Model.SortedColumn;
+                                    var J1 = @Model.IsAscending;
+                                    <th scope="col" class="table-text-header px-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="topflexCheckDefault">
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="table-text-header px-3 dt-orderable-asc dt-orderable-desc @(i1 == "Filename" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Filename')" style="position:relative;">
+                                        File Name
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th scope="col" class="table-text-header px-3 dt-orderable-asc dt-orderable-desc @(i1 == "Uploader" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Uploader')" style="position:relative;">
+                                        Uploder
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th scope="col" class="table-text-header dt-orderable-asc dt-orderable-desc @(i1 == "Createddate" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Createddate')" style="position:relative;">
+                                        uplode date
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th scope="col" class="table-text-header ">Action</th>
+                                }
                             </tr>
                         </thead>
                         <tbody>
@@ -176,10 +189,11 @@
     </div>
 </div>
 
-<form class="sortingform" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
-      asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate">
+<form class="sortingform" asp-action="ViewUpload" asp-controller="AdminActions" novalidate="novalidate">
     <input type="hidden" asp-for="SortedColumn" id="sortedcol" />
     <input type="hidden" asp-for="IsAscending" id="isAsc" />
+    <input type="hidden" asp-for="PageSize" />
+    <input type="hidden" value="@Model.RequestID" asp-for="RequestID" />
 </form>
 @section Scripts
 {
