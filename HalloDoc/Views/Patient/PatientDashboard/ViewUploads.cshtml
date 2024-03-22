@@ -1,27 +1,18 @@
-﻿@* @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDocuments *@
-@model HalloDoc.Entity.Models.ViewDocuments
+﻿@model HalloDoc.Entity.Models.ViewDocuments;
 @{
-    Layout = "_Layout";
-    var status = "null";
-    if (TempData["Status"] == null)
-    {
-        status = "null";
-    }
-    else
-    {
-        status = TempData["Status"].ToString();
-    }
+    Layout = "_LayoutPatient";
 }
+
 <div class="container">
     <div class="card bg-transparent border-0 p-2" style="border-radius: 15px;">
         <div class="col-xl-12 d-flex justify-content-between">
             <div class="card-header  border-0 bg-transparent p-1 my-1">
                 <div class="text-start">
-                    
+
                     <h4 class="mt-2 font-weight-bold"><strong>Documents</strong></h4>
                 </div>
             </div>
-            <a asp-controller="AdminDashBoard" asp-action="Index" class="btn border border-info bg-light rounded mt-3 mb-1">
+            <a asp-controller="PatientDashboard" asp-action="Index" class="btn border border-info bg-light rounded mt-3 mb-1">
                 <i class="fa fa-angle-left text-info align-middle"></i>
                 <span class="text-info">
                     <b class="align-text-top">&nbsp;&nbsp;Back</b>
@@ -41,13 +32,13 @@
                 review
             </div>
             <div class="col-md-12 mt-3">
-                <form method="post" id="myForm" asp-action="UploadDoc" asp-controller="PatientDashBoard" enctype="multipart/form-data">
+                <form method="post" id="myForm" asp-action="UploadDoc" asp-controller="AdminActions" enctype="multipart/form-data">
                     <div class="d-flex justify-content-between bg-light border border-secondary rounded">
                         <button type="button" id="choosenfile" class="col btn text-start text-secondary" onclick="document.getElementById('file').click()">
                             Select File
                         </button>
-                        <input id="file" type="file" class="d-none form-control doc_uploder" name="file" >
-                        <input type="hidden" name="Requestid" value="@Model.RequestID"/>
+                        <input id="file" type="file" class="d-none form-control doc_uploder" name="file">
+                        <input type="hidden" name="Requestid" value="@Model.RequestID" />
                         <div class="btn btn-info text-white py-2" value="Upload" id="fileupload">
                             <i class="fa fa-cloud-upload"></i>
                             <span class="d-none d-sm-inline">Upload</span>
@@ -62,14 +53,6 @@
                         <div id="downloadAll" class="btn btn-outline-info btn-back text-end d-flex mx-1">
                             <i class="fa-solid fa-download me-1 mt-1"></i><span class="d-none d-sm-block">Downlode all</span>
                         </div>
-                        <form method="post" id="deleted" asp-action="AllFilesDelete" asp-controller="AdminActions">
-                            <input type="hidden" id="deleteids" name="deleteids" />
-                            <input type="hidden" value="@Model.RequestID" name="Requestid" />
-                            <div id="delete" class="btn btn-outline-info d-flex btn-back text-end mx-1">
-                                <i class="fa fa-trash me-1 mt-1" aria-hidden="true"></i><span class="d-none d-sm-inline">Delete all</span>
-                            </div>
-                        </form>
-                        <button id="sendmailmodel" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-outline-info btn-back d-flex text-end mx-1"><i class="fa-solid fa-mail"></i><span class="d-none d-sm-block">Send Mail</span></button>
                     </div>
                 </div>
                 @* dashboard view *@
@@ -105,10 +88,6 @@
                                         <a class="btn btn-sm btn-outline-info document-button" download href="@item2.Filename.Replace("~","")">
                                             <i class="fa fa-cloud-download"></i>
                                         </a>
-                                        <a class="btn btn-sm btn-outline-info " asp-action="DeleteFile" asp-controller="AdminActions" asp-route-id="@item2.RequestwisefilesId" asp-route-Requestid="@Model.RequestID">
-                                            <i class="fa fa-trash" aria-hidden="true">  </i>
-                                        </a>
-
                                     </td>
                                 </tr>
                             }
@@ -138,9 +117,6 @@
                                 <a class="btn btn-sm download-link btn-outline-info document-button" download href="@item.Filename.Replace("~","")">
                                     <i class="fa fa-cloud-download"></i>
                                 </a>
-                                <a class="btn btn-sm download-link btn-outline-info" asp-action="DeleteFile" asp-controller="AdminActions" asp-route-id="@item.RequestwisefilesId" asp-route-Requestid="@Model.RequestID">
-                                    <i class="fa fa-trash"></i>
-                                </a>
                             </div>
                         </div>
                     }
@@ -149,7 +125,7 @@
             </div>
         </div>
         <div class="m-2 d-flex justify-content-between">
-            <form id="documentformPagesize" asp-action="ViewUpload" asp-controller="AdminActions" asp-route-id="" novalidate="novalidate" class="d-flex">
+            <form id="documentformPagesize" asp-action="ViewUploads" asp-controller="PatientDashboard" asp-route-id="" novalidate="novalidate" class="d-flex">
                 <div class="search m-1 d-flex justify-content-between">
                     <input type="hidden" value="@Model.RequestID" asp-for="RequestID" />
                     <span class="pagesize">Page Size</span>
@@ -166,7 +142,7 @@
                     @{
                         int i;
                         <form id="documentform"
-                              asp-action="ViewUpload" asp-controller="AdminActions" asp-route-id="" novalidate="novalidate" class="d-flex">
+                              asp-action="ViewUploads" asp-controller="PatientDashboard" asp-route-id="" novalidate="novalidate" class="d-flex">
                             <input type="hidden" value="@Model.RequestID" asp-for="RequestID" />
                             <input type="hidden" asp-for="CurrentPage" id="currentpagevaluedocument" />
                             <input type="hidden" asp-for="SortedColumn" />
@@ -205,32 +181,6 @@
     <input type="hidden" asp-for="SortedColumn" id="sortedcol" />
     <input type="hidden" asp-for="IsAscending" id="isAsc" />
 </form>
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-info text-white">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Email Files</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form method="post" id="sendmails" asp-action="SendFileEmail" asp-controller="AdminActions">
-                <div class="modal-body">
-                    <input type="hidden" value="@Model.RequestID" name="Requestid" />
-                    <input type="hidden" id="mailids" name="mailids" />
-                    <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label">Email:</label>
-                        <input type="text" class="form-control" name="email">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <div id="sendmail" class="btn btn-outline-info btn-back text-end mx-1">
-                        <i class="fa-solid fa-mail"></i>  Send Mail
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 @section Scripts
 {
     <script>
@@ -270,11 +220,11 @@
         }
     </script>
     <script type="text/javascript">
-            $("#file").change(function () {
-                filename = this.files[0].name;
-                console.log(filename);
-                $("#choosenfile").text(filename);
-            });
+        $("#file").change(function () {
+            filename = this.files[0].name;
+            console.log(filename);
+            $("#choosenfile").text(filename);
+        });
 
         $(function () {
             $('#pagesizedropdowndocument').on('change', function () {
@@ -323,105 +273,6 @@
                 });
             });
 
-            $('#sendmail').click(function () {
-                anyCheckboxSelected = false;
-                $('tbody tr').each(function () {
-                    if ($(this).find('.form-check-input').prop('checked')) {
-                        anyCheckboxSelected = true;
-                        var downloadLink = $(this).find('.RequestwisefilesId').val();
-                        var deleteids = $('#mailids').val();
-                        console.log(deleteids);
-                        if (deleteids == '') {
-                            $('#mailids').val(downloadLink);
-                        } else {
-                            $('#mailids').val(deleteids + ',' + downloadLink);
-                        }
-                        console.log($('#mailids').val());
-                    }
-                });
-                if (anyCheckboxSelected) {
-                    Swal.fire({
-                        title: "Do you want to Send Mail of All file ?",
-                        showDenyButton: false,
-                        showCancelButton: true,
-                        confirmButtonText: "Yes",
-                        denyButtonText: `Don't save`
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $('#sendmails').submit();
-                        }
-                        console.log(result);
-                    });
-                }
-                else {
-                    swal.fire({
-                        title: "Oops..",
-                        text: "Oops! Please Select One File ",
-                        icon: "error",
-                        showCancelButton: true,
-                        showConfirmButton: false,
-                        cancelButtonText: "Okay",
-                        cancelButtonColor: "#01BBE7",
-                    })
-                }
-            });
-                
-
-            $('#delete').click(function () {
-                anyCheckboxSelected = false;
-                $('tbody tr').each(function () {
-                    if ($(this).find('.form-check-input').prop('checked')) {
-                        anyCheckboxSelected = true;
-                        var downloadLink = $(this).find('.RequestwisefilesId').val();
-                        var deleteids = $('#deleteids').val();
-                        console.log(deleteids);
-                        if (deleteids == '') {
-                            $('#deleteids').val(downloadLink);
-                        } else {
-                            $('#deleteids').val(deleteids + ',' + downloadLink);
-                        }
-                        console.log($('#deleteids').val());
-                    }
-                });
-                $('.t-tab > .border-bottom').each(function () {
-                    if ($(this).find('.form-check-input').prop('checked')) {
-                        anyCheckboxSelected = true;
-                        var downloadLink = $(this).find('.RequestwisefilesId').val();
-                        var deleteids = $('#deleteids').val();
-                        console.log(deleteids);
-                        if (deleteids == '') {
-                            $('#deleteids').val(downloadLink);
-                        } else {
-                            $('#deleteids').val(deleteids + ',' + downloadLink);
-                        }
-                        console.log($('#deleteids').val());
-                    }
-                });
-                if (anyCheckboxSelected) {
-                    Swal.fire({
-                        text: "Do you want to Delete That file ?",
-                        showDenyButton: false,
-                        showCancelButton: true,
-                        confirmButtonText: "Yes",
-                        denyButtonText: "Cancel"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $('#deleted').submit();
-                        }
-                    });
-                }
-                else{
-                    swal.fire({
-                        title: "Oops..",
-                        text: "Oops! Please Select One File ",
-                        icon: "error",
-                        showCancelButton: true,
-                        showConfirmButton: false,
-                        cancelButtonText: "Okay",
-                        cancelButtonColor: "#01BBE7",
-                    })
-                }
-            });
 
             $("form").on("change", ".file-upload-field", function () {
                 $(this).parent(".file-upload-wrapper1").attr("data-text", $(this).val().replace(/.*(\/|\\)/, ''));

@@ -6,7 +6,7 @@
     <div class="collapse navbar-collapse" id="navbar">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item me-3">
-                <a class="nav-link text-dark @(path.StartsWith("/AdminDashBoard") ? "activesbnav" : "")" aria-current="page" asp-controller="AdminDashBoard" asp-action="Index">Dashboard</a>
+                <a class="nav-link text-dark @(path.StartsWith("/PatientDashboard") ? "activesbnav" : "")" aria-current="page" asp-controller="PatientDashboard" asp-action="Index">Dashboard</a>
             </li>
 			<li class="nav-item me-3">
 				<a class="nav-link text-dark @(path.StartsWith("/Profile") ? "activesbnav" : "")" asp-action="Index" asp-controller="Profile">Profile</a>

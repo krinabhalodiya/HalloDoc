@@ -181,7 +181,6 @@ namespace HalloDoc.Controllers
             if (id == null)
             {
                 id= viewDocument.RequestID;
-
             }
             ViewDocuments v = await _IAdminDashBoardActionsRepository.GetDocumentByRequest(id, viewDocument);
             return View("../AdminActions/ViewUpload",v);

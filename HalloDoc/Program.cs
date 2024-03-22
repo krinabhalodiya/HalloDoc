@@ -5,6 +5,8 @@ using HelloDocAdmin.Repositories;
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using HalloDoc.Entity.Models;
+using HallodocMVC.Repository.Patient.Repository;
+using HallodocMVC.Repository.Patient.Repository.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 var emailConfig = builder.Configuration
@@ -23,6 +25,9 @@ builder.Services.AddScoped< ILoginRepository, LoginRepository>();
 builder.Services.AddScoped< IJwtService, JwtService>();
 builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
 builder.Services.AddScoped<IMyProfileRepository, MyProfileRepository>();
+builder.Services.AddScoped<IPatientDashboard, PatientDashboard>();
+builder.Services.AddScoped<IProfile, Profile>();
+builder.Services.AddScoped<ICreateRequest, CreateRequest>();
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 var app = builder.Build();
 

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="bg-light">
     <header class="shadow">
         <div class="d-flex justify-content-between bg-white rounded-0 border-bottom">
             <div class="d-inline-flex">
@@ -24,8 +24,8 @@
                 <a href=""><i class="fas fa-moon text-info border rounded border-info my-3 p-2"></i></a>
             </div>
         </div>
-        <partial name="../PatientDashboard/PatientSubNav" />
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <partial name="../Patient/PatientDashboard/PatientSubNav" />
+        <div class="offcanvas offcanvas-start w-50" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header">
                 <strong class="offcanvas-title" id="offcanvasExampleLabel">Welcome, Admin</strong>
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -42,7 +42,7 @@
             </div>
         </div>
     </header>
-    <main role="main" class="pt-2 min-vh-100 bg-light">
+    <main role="main" class="pt-2 min-vh-100 container">
         @RenderBody()
     </main>
     <footer class="footer sticky-bottom">

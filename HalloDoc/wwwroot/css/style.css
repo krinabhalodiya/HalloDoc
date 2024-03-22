@@ -392,3 +392,7 @@ div.dt-scroll-body > table.dataTable > thead > tr > td {
 :root[data-bs-theme=dark] table.dataTable thead > tr > td.dt-orderable-desc:hover {
   outline: 2px solid rgba(255, 255, 255, 0.05);
 }
+
+.theadbg {
+    background-color: #f0f0f0 !important;
+}
