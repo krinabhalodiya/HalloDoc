@@ -168,8 +168,8 @@ namespace HalloDoc.Controllers
             }
             else
             {
-                _notyf.Information("Please Select one of the note!!");
-                TempData["Errormassage"] = "Please Select one of the note!!";
+                _notyf.Information("Notes can not be empty!!");
+                TempData["Errormassage"] = "Notes can not be empty!!";
                 return RedirectToAction("ViewNotes", new { id = RequestID });
             }
         }

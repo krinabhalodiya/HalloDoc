@@ -226,13 +226,16 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Email Files</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" id="sendmails" asp-action="SendFileEmail" asp-controller="AdminActions">
+            <form method="post" id="sendmails" asp-action="SendFileEmail" asp-controller="AdminActions" class="needs-validation" novalidate>
                 <div class="modal-body">
                     <input type="hidden" value="@Model.RequestID" name="Requestid" />
                     <input type="hidden" id="mailids" name="mailids" />
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label">Email:</label>
-                        <input type="text" class="form-control" name="email">
+                        <input type="text" class="form-control" name="email" required>
+                        <div class="invalid-feedback">
+                            Please Enter Email Address
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -11,5 +11,9 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
     public interface IProviderRepository
     {
         public Task<List<PhysicianLocation>> FindPhysicianLocation();
-    }
+        public Task<List<PhysiciansData>> PhysicianAll();
+        public Task<List<PhysiciansData>> PhysicianByRegion(int? region);
+        public Task<bool> ChangeNotificationPhysician(Dictionary<int, bool> changedValuesDict);
+
+	}
 }
