@@ -12,7 +12,7 @@
     <strong class="text-danger">@ViewData["error"]</strong>
     <form asp-action="Validate" asp-controller="Home" method="post" id="loginform">
         <div class="form-floating mb-4 email">
-            <input type="email" class="form-control shadow-none" asp-for="Email" id="loginemail" placeholder="name@example.com">
+            <input type="email" value="admin@gmail.com" class="form-control shadow-none" asp-for="Email" id="loginemail" placeholder="name@example.com">
             <label class="bg-transparent" for="floatingInput">Email</label>
             <div class="btn btn-light">
                 <i class='fa fa-user-circle field-icon position-relative'></i>
@@ -20,7 +20,7 @@
             <span class="text-danger emailerror" style="display:none;">Enter valid email address</span>
         </div>
         <div class="form-floating mb-4 password">
-            <input type="password" class="form-control shadow-none eyehide" asp-for="Passwordhash" id="loginpass" placeholder="Password" required>
+            <input type="password" value="admin" class="form-control shadow-none eyehide" asp-for="Passwordhash" id="loginpass" placeholder="Password" required>
             <label for="floatingPassword">Password</label>
             <button type="button" class="btn btn-light" onclick="passtoggle()">
                 <i class="showImg fa fa-eye"></i>

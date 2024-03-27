@@ -37,5 +37,11 @@ namespace HalloDoc.Entity.Models
             Pending, 
             NotActive
         }
+        public enum OnCallStatus
+        {
+            Unavailable = 0,
+            Available
+            
+        }
     }
 }

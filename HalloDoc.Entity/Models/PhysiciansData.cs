@@ -31,7 +31,7 @@ namespace HalloDoc.Entity.Models
         public bool Isagreementdoc { get; set; }
         public bool Isbackgrounddoc { get; set; }
         public bool Istrainingdoc { get; set; }
-        public bool Isnondisclosuredoc { get; set; }
+        public bool? Isnondisclosuredoc { get; set; }
         public bool Islicensedoc { get; set; }
         public string? Address1 { get; set; }
         public string? Address2 { get; set; }

@@ -69,7 +69,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                                              notification = nof.Isnotificationstopped,
                                              role = roles.Name,
                                              Status = r.Status,
-                                             Email = r.Email
+                                             Email = r.Email,
+                                             Isnondisclosuredoc = r.Isnondisclosuredoc
                                          })
                                         .ToListAsync();
             return data;

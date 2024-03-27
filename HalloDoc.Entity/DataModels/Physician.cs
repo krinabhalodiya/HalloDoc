@@ -55,9 +55,6 @@ public partial class Physician
     [Column("istrainingdoc", TypeName = "bit(1)")]
     public BitArray? Istrainingdoc { get; set; }
 
-    [Column("isnondisclosuredoc", TypeName = "bit(1)")]
-    public BitArray? Isnondisclosuredoc { get; set; }
-
     [Column("address1")]
     [StringLength(500)]
     public string? Address1 { get; set; }
@@ -132,6 +129,9 @@ public partial class Physician
     [Column("syncemailaddress")]
     [StringLength(50)]
     public string? Syncemailaddress { get; set; }
+
+    [Column("isnondisclosuredoc")]
+    public bool? Isnondisclosuredoc { get; set; }
 
     [ForeignKey("Aspnetuserid")]
     [InverseProperty("PhysicianAspnetusers")]
