@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
+using HalloDoc.Models;
 using HallodocMVC.Repository.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -39,7 +40,7 @@ namespace HalloDoc.Controllers.Admin
             else 
             {
                 v = await _IProviderRepository.PhysicianByRegion(region);
-                return Json(v);
+                /*return Json(v);*/
             }
             return View("../Admin/Providers/Index", v);
         }
@@ -79,6 +80,49 @@ namespace HalloDoc.Controllers.Admin
                 _notyf.Error("Massage Not Send..!");
             }
             return RedirectToAction("Index");
+        }
+        #endregion
+
+        #region AddEdit_Profile
+        public async Task<IActionResult> PhysicianProfile(int? id)
+        {
+
+            //TempData["Status"] = TempData["Status"];
+            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
+            ViewBag.userrolecombobox = await _combobox.UserRoleComboBox();
+            if (id == null)
+            {
+                ViewData["PhysicianAccount"] = "Add";
+            }
+            else
+            {
+                ViewData["PhysicianAccount"] = "Edit";
+                
+                return View("../AdminViews/Physician/PhysicianAddEdit");
+
+            }
+            return View("../Admin/Providers/AddEditProvider");
+        }
+        #endregion
+        #region Physician_Add
+        [HttpPost]
+        public async Task<IActionResult> PhysicianAddEdit(PhysiciansData physicians)
+        {
+            //TempData["Status"] = TempData["Status"];
+            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
+            ViewBag.userrolecombobox = await _combobox.UserRoleComboBox();
+            // bool b = physicians.Isagreementdoc[0];
+
+            if (ModelState.IsValid)
+            {
+                await _IProviderRepository.PhysicianAddEdit(physicians, CV.ID());
+            }
+            else
+            {
+                return View("../AdminViews/Physician/PhysicianAddEdit", physicians);
+            }
+
+            return RedirectToAction("PhysicianAll");
         }
         #endregion
     }

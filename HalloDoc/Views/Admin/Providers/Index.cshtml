@@ -38,7 +38,7 @@
                     <input type="hidden" id="changedValuesInput" name="changedValues">
                     <a class="btn text-info m-1 border border-info align-self-center" style="display:none;" id="saveChangesButton"> Save Changes </a>
 				</form>
-                <a class="btn bg-info text-white m-1 align-self-center">
+                <a class="btn bg-info text-white m-1 align-self-center" asp-action="PhysicianProfile" asp-controller="Providers">
 					Create Provider Account
 				</a>
             </div>
@@ -61,7 +61,7 @@
                         }
                     </tr>
                 </thead>
-                <tbody class="table-group-divider">
+                <tbody class="table-group-divider" id="providerbody">
                     @foreach (var item in Model)
                     {
                         <tr>
@@ -167,37 +167,39 @@
             cache: false,
             success: function (response) {
                 console.log(response);
-                $('table tbody').empty();
-                // Assuming response is an array of objects, iterate through each object
-                response.forEach(function (item) {
-                    // Create a new row for each object
-                    var newRow = $('<tr>');
+                var bodyContent = $(response).find('tbody').html();
+                $('#providerbody').html(bodyContent);
+                // $('table tbody').empty();
+                // // Assuming response is an array of objects, iterate through each object
+                // response.forEach(function (item) {
+                //     // Create a new row for each object
+                //     var newRow = $('<tr>');
 
-                    // Add the checkbox cell
-                    var checkboxCell = $('<td class="table-text" scope="row"  >');
-                    var checkboxInput = $('<input class="form-check-input form-check-inputs" type="checkbox" value="" id="' + item.physicianid + '">');
-                    if (item.notification[0]) {
-                        checkboxInput.prop('checked', true);
-                    }
-                    checkboxCell.append(checkboxInput);
-                    checkboxCell.append('<input class="NotificationId" type="hidden" value="' + item.physicianid + '">');
-                    newRow.append(checkboxCell);
+                //     // Add the checkbox cell
+                //     var checkboxCell = $('<td class="table-text" scope="row"  >');
+                //     var checkboxInput = $('<input class="form-check-input form-check-inputs" type="checkbox" value="" id="' + item.physicianid + '">');
+                //     if (item.notification[0]) {
+                //         checkboxInput.prop('checked', true);
+                //     }
+                //     checkboxCell.append(checkboxInput);
+                //     checkboxCell.append('<input class="NotificationId" type="hidden" value="' + item.physicianid + '">');
+                //     newRow.append(checkboxCell);
 
-                    // Add other cells
-                    newRow.append('<td scope="row" >' + item.firstname + ' ' + item.lastname + '</td>');
-                    newRow.append('<td scope="row" >' + item.role + '</td>');
-                    newRow.append('<td scope="row" >' + item.isnondisclosuredoc + '</td>');
-                    newRow.append('<td scope="row" >' + item.status + '</td>');
+                //     // Add other cells
+                //     newRow.append('<td scope="row" >' + item.firstname + ' ' + item.lastname + '</td>');
+                //     newRow.append('<td scope="row" >' + item.role + '</td>');
+                //     newRow.append('<td scope="row" >' + item.isnondisclosuredoc + '</td>');
+                //     newRow.append('<td scope="row" >' + item.status + '</td>');
 
-                    // Add action buttons cell
-                    var actionButtonsCell = $('<td class="d-flex" data-label="Document">');
-                    actionButtonsCell.append('<a asp-action="Index" asp-controller="Documentsinfo" asp-route-id="' + item.physicianid + '" class="btn btn-outline-info btn-sm document-button mx-1">Contact</a>');
-                    actionButtonsCell.append('<a asp-action="Index" asp-controller="Documentsinfo" asp-route-id="' + item.physicianid + '" class="btn btn-outline-info btn-sm document-button mx-1">Edit</a>');
-                    newRow.append(actionButtonsCell);
+                //     // Add action buttons cell
+                //     var actionButtonsCell = $('<td class="d-flex" data-label="Document">');
+                //     actionButtonsCell.append('<button data-bs-toggle="modal"  onclick="assignemail(' +item.email+')" data-bs-target="#myModal" class="btn btn-outline-info btn-sm document-button mx-1">Contact</button>');
+                //     actionButtonsCell.append('<a asp-action="Index" asp-controller="Documentsinfo" asp-route-id="' + item.physicianid + '" class="btn btn-outline-info btn-sm document-button mx-1">Edit</a>');
+                //     newRow.append(actionButtonsCell);
 
-                    // Append the new row to the table
-                    $('table tbody').append(newRow);
-                });
+                //     // Append the new row to the table
+                //     $('table tbody').append(newRow);
+                // });
             },
             error: function () {
                 alert("Error while Loading data.");
