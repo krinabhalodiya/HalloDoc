@@ -178,8 +178,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                     //aspnet_user_roles
                     var aspnetuserroles = new Aspnetuserrole();
                     aspnetuserroles.Userid = Aspnetuser.Id;
-                    aspnetuserroles.Roleid = "Provider";
-                    _context.Aspnetusers.Add(Aspnetuser);
+                    aspnetuserroles.Roleid = "2";
+                    _context.Aspnetuserroles.Add(aspnetuserroles);
                     _context.SaveChanges();
 
                     // Physician

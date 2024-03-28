@@ -1,4 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
 using HalloDoc.Models;
@@ -98,7 +99,7 @@ namespace HalloDoc.Controllers.Admin
             {
                 ViewData["PhysicianAccount"] = "Edit";
                 
-                return View("../AdminViews/Physician/PhysicianAddEdit");
+                return View("../Admin/Providers/AddEditProvider");
 
             }
             return View("../Admin/Providers/AddEditProvider");
@@ -113,16 +114,23 @@ namespace HalloDoc.Controllers.Admin
             ViewBag.userrolecombobox = await _combobox.UserRoleComboBox();
             // bool b = physicians.Isagreementdoc[0];
 
-            if (ModelState.IsValid)
-            {
+            /*if (ModelState.IsValid)
+            {*/
                 await _IProviderRepository.PhysicianAddEdit(physicians, CV.ID());
-            }
+			/*}
             else
             {
-                return View("../AdminViews/Physician/PhysicianAddEdit", physicians);
-            }
-
-            return RedirectToAction("PhysicianAll");
+                return View("../Admin/Providers/AddEditProvider", physicians);
+            }*/
+			if (await _IProviderRepository.PhysicianAddEdit(physicians, CV.ID()))
+			{
+				_notyf.Success("Physician added Successfully..!");
+			}
+			else
+			{
+				_notyf.Error("Physician not added Successfully..!");
+			}
+			return RedirectToAction("Index");
         }
         #endregion
     }
