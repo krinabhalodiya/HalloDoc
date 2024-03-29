@@ -35,7 +35,7 @@
                     <div class="row pb-4">
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="UserName" class="form-control shadow-none" id="UserName" placeholder=Suchtext />
+                                <input type="text" asp-for="UserName" class="form-control shadow-none input0" id="UserName" placeholder=Suchtext />
                                 <label for="UserName">User Name</label>
                             </div>
                         </div>
@@ -48,19 +48,21 @@
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <select class="form-select" required asp-for="Status" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level" >
+                                <select class="form-select input0" required asp-for="Status" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
                                 </select>
                                 <label for="Status">Status</label>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <select class="form-select" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.userrolecombobox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level" >
+                                <select class="form-select input0" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.userrolecombobox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level" >
                                 </select>
                                 <label for="Roleid">Role</label>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
+                            <input type="button" value="Edit" id="edit0" class="btn btn-info text-white me-2" onclick="toggleFormElements0()" />
+                            <input type="submit" value="Save" id="save0" class="btn btn-info text-white me-2" />
                             <input type="submit" value="Reset Password" id="resetpassbtn" class="btn border border-info text-info" />
                         </div>
                     </div>
@@ -120,7 +122,7 @@
                             </div>
                         </div>
                         <input asp-for="Regionsid" type="hidden" id="regionids" />
-                        <div class="col-md-6 d-flex pb-3">
+                        <div class="col-md-6 d-flex pb-3" style="flex-wrap: wrap;">
                             @foreach (var cb in ViewBag.RegionComboBox)
                             {
                                 @if (Model != null && Model.Regionids.Count > 0 && Model.Regionids.Exists(id => id.regionid == cb.RegionId))
@@ -278,25 +280,27 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-check mx-2">
-                            <input class="form-check-input agreement-checkbox" asp-for="Isagreementdoc" name="Isagreementdoc" type="checkbox" id="flexCheckDefault">
+                            <input class="form-check-input agreement-checkbox " asp-for="Isagreementdoc" name="Isagreementdoc" type="checkbox" id="flexCheckDefault">
                             <label class="form-check-label" for="flexCheckDefault">
                                 Independent Contractor Agreement
                             </label>
                         </div>
                     </div>
                     <div class="col-md-4 d-flex">
-                        <div class="inputWrapper">
+                        <div>
                             @{
                                 var isChecked = Model != null ? Model.Islicensedoc : false;
                             }
-                            <input class="fileInput btn btn-" asp-for="Licensedoc" type="file" name="Licensedoc" />
-                            <span class="btn bg-info text-white upload-button">Upload</span>
+                            
+                                <input id="filebtn1" type="file" class="d-none form-control doc_uploder file " asp-for="Agreementdoc" disabled>
+                                <button type="button" class="btn btn-info text-white upload-button" value="Upload" onclick="document.getElementById('filebtn1').click()" disabled>
+                                    <span class="d-none d-sm-inline">Upload</span>
+                                </button>
                         </div>
                         @{
                             if (Model != null && Model.Isagreementdoc)
                             {
-                                                <a href="~/Upload/Physician/@Model.Physicianid/Agreementdoc.pdf" target="_blank" class="btn bg-info mx-2 text-white ">View</a>
-
+                                    <a href="~/Upload/Physician/@Model.Physicianid/Agreementdoc.pdf" target="_blank" class="btn btn-info text-white">View</a>
                             }
                         }
                         <a class="btn btn-info mx-2 text-white view-button" style="display:none;">View</a>
@@ -321,18 +325,19 @@
                         </div>
                     </div>
                     <div class="col-md-4 d-flex">
-                        <div class="inputWrapper">
+                        <div>
                             @{
                                 isChecked = Model != null ? Model.Islicensedoc : false;
                             }
-                            <input class="fileInput btn btn-" asp-for="Licensedoc" type="file" name="Licensedoc" />
-                            <span class="btn bg-info text-white upload-button">Upload</span>
+                                <input id="filebtn2" type="file" class="d-none form-control doc_uploder file" asp-for="BackGrounddoc" disabled>
+                                <button type="button" class="btn btn-info text-white upload-button" value="Upload" onclick="document.getElementById('filebtn2').click()" disabled>
+                                    <span class="d-none d-sm-inline">Upload</span>
+                                </button>
                         </div>
                         @{
                             if (Model != null && Model.Isbackgrounddoc)
                             {
-                                                <a href="~/Upload/Physician/@Model.Physicianid/BackGrounddoc.pdf" target="_blank" class="btn btn-info mx-2 text-white ">View</a>
-
+                                    <a href="~/Upload/Physician/@Model.Physicianid/BackGrounddoc.pdf" target="_blank" class="btn btn-info text-white">View</a>
                             }
                         }
                         <!-- Display uploaded file details -->
@@ -354,20 +359,22 @@
                         </div>
                     </div>
                     <div class="col-md-4 d-flex">
-                        <div class="inputWrapper">
+                        <div>
                             @{
                                 isChecked = Model != null ? Model.Islicensedoc : false;
                             }
-                            <input class="fileInput btn btn-" asp-for="Licensedoc" type="file" name="Licensedoc" />
-                            <span class="btn bg-info text-white upload-button">Upload</span>
-                        </div>
-                        @{
+                                <input id="filebtn3" type="file" class="d-none form-control doc_uploder file" asp-for="Trainingdoc" disabled>
+                                <button type="button" class="btn btn-info text-white upload-button me-2" value="Upload" onclick="document.getElementById('filebtn3').click()" disabled>
+                                    <span class="d-none d-sm-inline">Upload</span>
+                                </button>
+                        
+                            @{
                             if (Model != null && Model.Istrainingdoc)
                             {
-                                                <a href="~/Upload/Physician/@Model.Physicianid/Trainingdoc.pdf" target="_blank" class="btn btn-info mx-2 text-white ">View</a>
-
+                                <a href="~/Upload/Physician/@Model.Physicianid/Trainingdoc.pdf" target="_blank" class="btn btn-info text-white">View</a>
                             }
-                        }
+								}
+						</div>
 
                         <!-- Display uploaded file details -->
                         <div class="file-details" style="display:none;">
@@ -388,18 +395,19 @@
                         </div>
                     </div>
                     <div class="col-md-4 d-flex">
-                        <div class="inputWrapper">
+                        <div>
                             @{
                                 isChecked = Model != null ? Model.Islicensedoc : false;
                             }
-                            <input class="fileInput btn btn-" asp-for="Licensedoc" type="file" name="Licensedoc" />
-                            <span class="btn bg-info text-white upload-button">Upload</span>
+                                <input id="filebtn4" type="file" class="d-none form-control doc_uploder file" asp-for="NonDisclosuredoc" disabled>
+                                <button type="button" class="btn btn-info text-white upload-button" value="Upload" onclick="document.getElementById('filebtn4').click()" disabled>
+                                    <span class="d-none d-sm-inline">Upload</span>
+                                </button>
                         </div>
                         @{
                             if (Model != null && Model.Isnondisclosuredoc)
                             {
-                                                <a href="~/Upload/Physician/@Model.Physicianid/NonDisclosuredoc.pdf" target="_blank" class="btn btn-info mx-2 text-white ">View</a>
-
+                                    <a href="~/Upload/Physician/@Model.Physicianid/NonDisclosuredoc.pdf" target="_blank" class="btn btn-info text-white">View</a>
                             }
                         }
                         <!-- Display uploaded file details -->
@@ -420,20 +428,23 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-md-4 d-flex">
-                        <div class="inputWrapper">
+                    <div class="col-md-5 d-flex">
+                        <div>
                             @{
                                 isChecked = Model != null ? Model.Islicensedoc : false;
                             }
-                            <input  class="fileInput btn btn-" asp-for="Licensedoc" type="file" name="Licensedoc" />
-                            <span class="btn bg-info text-white upload-button">Upload</span>
-                        </div>
-                        @{
-                            if (Model != null && Model.Islicensedoc)
-                            {
-                                            <a href="~/Upload/Physician/@Model.Physicianid/Agreementdoc.pdf" target="_blank" class="btn btn-info mx-2 text-white ">View</a>
-                            }
-                        }
+                                <input id="filebtn5" type="file" class="d-none form-control doc_uploder file" asp-for="Licensedoc" disabled>
+                                <button type="button" class="btn btn-info text-white upload-button" value="Upload" onclick="document.getElementById('filebtn5').click()" disabled>
+                                   Upload
+                                </button>
+                        
+                            @{
+                                if (Model != null && Model.Islicensedoc)
+                                {
+                                        <a href="~/Upload/Physician/@Model.Physicianid/Agreementdoc.pdf" target="_blank" class="btn btn-info text-white">View</a>
+                                } 
+							}
+						</div>
                         <!-- Display uploaded file details -->
                         <div class="file-details" style="display:none;">
                             <p><span class="file-name"></span></p>
@@ -458,28 +469,45 @@
 <script>
     if ("@ViewData["PhysicianAccount"]" == "Edit") {
         window.onload = function (e) {
+            toggleFormElements0('true')
             toggleFormElements1('true')
                 toggleFormElements2('true')
                 toggleFormElements3('true')
                 $(".region-check").prop("disabled", true);
+            $('#add').css("display", "none");
         }
     }
     $(document).ready(function () {
 
         if ("@ViewData["PhysicianAccount"]" == "Add") {
-            $('#save1,#save2,#save3,#edit1,#edit2,#edit3,#deleteaccount,#formsave').css("display", "none");
+            $('#save0,#save1,#save2,#save3,#edit0,#edit1,#edit2,#edit3,#deleteaccount,#formsave').css("display", "none");
         }
     });
     $("#file").change(function () {
         filename = this.files[0].name;
-        console.log(filename);
         $("#choosenfile").text(filename);
     });
     $("#file1").change(function () {
         filename2 = this.files[0].name;
-        console.log(filename2);
         $("#choosenfile1").text(filename2);
     });
+
+    function toggleFormElements0(bDisabled) {
+        var inputs0 = document.getElementsByClassName("input0");
+        var submit0 = document.getElementById("save0");
+        var editprofile0 = document.getElementById("edit0");
+        for (var i = 0; i < inputs0.length; i++) {
+            inputs0[i].disabled = !inputs0[i].disabled;
+        }
+        if (inputs0[0].disabled) {
+            submit0.style.display = "none";
+            editprofile0.style.display = "block";
+        } else {
+            submit0.style.display = "block";
+            editprofile0.style.display = "none";
+        }
+    }
+
     function toggleFormElements1(bDisabled) {
         var inputs = document.getElementsByClassName("input1");
         var submit = document.getElementById("save1");
@@ -540,4 +568,17 @@
             $('#addedit').submit();
         });
     });
+
+    $(document).ready(function () {
+        $(document).on('change', '.agreement-checkbox', function () {
+            var checkbox = $(this);
+            var row = checkbox.closest('.row');
+            console.log("123")
+            var uploadBtn = row.find('.upload-button');
+            var doc_uploder = row.find('.doc_uploder');
+            uploadBtn.prop('disabled', !checkbox.prop('checked'));
+            doc_uploder.prop('disabled', !checkbox.prop('checked'));
+        });
+    });
+
 </script>

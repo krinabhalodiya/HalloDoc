@@ -90,7 +90,7 @@ namespace HalloDoc.Controllers.Admin
 
             //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
-            ViewBag.userrolecombobox = await _combobox.UserRoleComboBox();
+            ViewBag.userrolecombobox = await _combobox.PhysicianRoleComboBox();
             if (id == null)
             {
                 ViewData["PhysicianAccount"] = "Add";
@@ -98,8 +98,8 @@ namespace HalloDoc.Controllers.Admin
             else
             {
                 ViewData["PhysicianAccount"] = "Edit";
-                
-                return View("../Admin/Providers/AddEditProvider");
+                PhysiciansData v = await _IProviderRepository.GetPhysicianById((int)id);
+                return View("../Admin/Providers/AddEditProvider",v);
 
             }
             return View("../Admin/Providers/AddEditProvider");
@@ -109,14 +109,13 @@ namespace HalloDoc.Controllers.Admin
         [HttpPost]
         public async Task<IActionResult> PhysicianAddEdit(PhysiciansData physicians)
         {
-            //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
-            ViewBag.userrolecombobox = await _combobox.UserRoleComboBox();
+            ViewBag.userrolecombobox = await _combobox.PhysicianRoleComboBox();
             // bool b = physicians.Isagreementdoc[0];
 
             /*if (ModelState.IsValid)
             {*/
-                await _IProviderRepository.PhysicianAddEdit(physicians, CV.ID());
+                
 			/*}
             else
             {

@@ -15,6 +15,7 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public Task<List<PhysiciansData>> PhysicianByRegion(int? region);
         public Task<bool> ChangeNotificationPhysician(Dictionary<int, bool> changedValuesDict);
         public Task<bool> PhysicianAddEdit(PhysiciansData physiciandata, string AdminId);
+        public Task<PhysiciansData> GetPhysicianById(int id);
 
     }
 }

@@ -263,5 +263,72 @@ namespace HallodocMVC.Repository.Admin.Repository
             return false;
         }
         #endregion
+
+        #region GetPhysicianById
+        public async Task<PhysiciansData> GetPhysicianById(int id)
+        {
+
+
+            PhysiciansData? pl = await (from r in _context.Physicians
+                                   join Aspnetuser in _context.Aspnetusers
+                                   on r.Aspnetuserid equals Aspnetuser.Id into aspGroup
+                                   from asp in aspGroup.DefaultIfEmpty()
+                                   join Notifications in _context.Physiciannotifications
+                                    on r.Physicianid equals Notifications.Physicianid into PhyNGroup
+                                   from nof in PhyNGroup.DefaultIfEmpty()
+                                   join role in _context.Roles
+                                   on r.Roleid equals role.Roleid into roleGroup
+                                   from roles in roleGroup.DefaultIfEmpty()
+                                   where r.Physicianid == id
+                                   select new PhysiciansData
+                                   {
+                                       UserName = asp.Username,
+                                       Roleid = r.Roleid,
+                                       Status = r.Status,
+                                       notificationid = nof.Id,
+                                       Createddate = r.Createddate,
+                                       Physicianid = r.Physicianid,
+                                       Address1 = r.Address1,
+                                       Address2 = r.Address2,
+                                       Adminnotes = r.Adminnotes,
+                                       Altphone = r.Altphone,
+                                       Businessname = r.Businessname,
+                                       Businesswebsite = r.Businesswebsite,
+                                       City = r.City,
+                                       Firstname = r.Firstname,
+                                       Lastname = r.Lastname,
+                                       notification = nof.Isnotificationstopped,
+                                       role = roles.Name,
+                                       Email = r.Email,
+                                       Photo = r.Photo,
+                                       Signature = r.Signature,
+                                       Isagreementdoc = r.Isagreementdoc[0],
+                                       Isnondisclosuredoc = r.Isnondisclosuredoc == false ? false : true,
+                                       Isbackgrounddoc = r.Isbackgrounddoc[0],
+                                       Islicensedoc = r.Islicensedoc[0],
+                                       Istrainingdoc = r.Istrainingdoc[0],
+                                       Medicallicense = r.Medicallicense,
+                                       Npinumber = r.Npinumber,
+                                       Syncemailaddress = r.Syncemailaddress,
+                                       Zipcode = r.Zip,
+                                       Regionid = r.Regionid
+
+                                   })
+                                   .FirstOrDefaultAsync();
+
+            List<PhysiciansData.Regions> regions = new List<PhysiciansData.Regions>();
+
+            regions = _context.Physicianregions
+                  .Where(r => r.Physicianid == pl.Physicianid)
+                  .Select(req => new PhysiciansData.Regions()
+                  {
+                      regionid = req.Regionid
+                  })
+                  .ToList();
+
+            pl.Regionids = regions;
+            return pl;
+        }
+        #endregion
     }
 }

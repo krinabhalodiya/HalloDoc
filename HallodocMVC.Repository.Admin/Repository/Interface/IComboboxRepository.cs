@@ -16,5 +16,7 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public Task<List<HealthProfessionalTypeComboBox>> healthprofessionaltype();
         public List<HealthProfessionalComboBox> ProfessionalByType(int? HealthprofessionalID);
         public Task<List<UserRoleCombobox>> UserRoleComboBox();
+        public Task<List<UserRoleCombobox>> PhysicianRoleComboBox();
+        
     }
 }

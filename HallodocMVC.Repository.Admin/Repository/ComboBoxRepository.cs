@@ -77,5 +77,13 @@ namespace HelloDocAdmin.Repositories
                 RoleName = req.Name
             }).ToListAsync();
         }
+        public async Task<List<UserRoleCombobox>> PhysicianRoleComboBox()
+        {
+            return await _context.Roles.Where(r => r.Accounttype == 2).Select(role => new UserRoleCombobox()
+            {
+                RoleId = (role.Roleid).ToString(),
+                RoleName = role.Name
+            }).ToListAsync();
+        }
     }
 }
