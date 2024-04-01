@@ -49,7 +49,7 @@
                     <tr>
                         @{
                             // var J1 = @Model.IsAscending;
-                                            <th scope="col">Stop Notifications</th>
+                            <th scope="col" class="text-center">Stop Notifications</th>
                                             <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc " onclick="SetColumValue('createdDate')">
                                                 Provider Name
                                                 <span class="dt-column-order"></span>
@@ -65,7 +65,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td scope="row">
+                            <td scope="row" class="text-center">
                                 @{
                                     var check = false;
                                     if (item.notification != null)

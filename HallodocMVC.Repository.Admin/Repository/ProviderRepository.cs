@@ -219,13 +219,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                     Physician.Istrainingdoc[0] = physiciandata.Istrainingdoc;
                     Physician.Isdeleted[0] = false;
                     Physician.Adminnotes = physiciandata.Adminnotes;
-
-
                     Physician.Photo = physiciandata.PhotoFile != null ? Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Photo." + Path.GetExtension(physiciandata.PhotoFile.FileName).Trim('.') : null;
                     Physician.Signature = physiciandata.SignatureFile != null ? Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Signature.png" : null;
-
-
-
                     _context.Physicians.Add(Physician);
                     _context.SaveChanges();
 
@@ -328,6 +323,316 @@ namespace HallodocMVC.Repository.Admin.Repository
 
             pl.Regionids = regions;
             return pl;
+        }
+        #endregion
+
+        #region SavePhysicianInfo
+        public async Task<bool> EditAccountInfo(PhysiciansData vm)
+        {
+            try
+            {
+                if (vm == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Physicians
+                        .Where(W => W.Physicianid == vm.Physicianid)
+                        .FirstOrDefaultAsync();
+                    Aspnetuser User = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Id == DataForChange.Aspnetuserid);
+                    if (DataForChange != null && User!=null)
+                    {
+                        User.Username = vm.UserName;
+                        DataForChange.Status = vm.Status;
+                        DataForChange.Roleid = vm.Roleid;
+                        _context.Physicians.Update(DataForChange);
+                        _context.Aspnetusers.Update(User);
+                        _context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region Change_Password
+        public async Task<bool> ChangePasswordAsync(string password, int Physicianid)
+        {
+            var hasher = new PasswordHasher<string>();
+            var req = await _context.Physicians
+                .Where(W => W.Physicianid == Physicianid)
+                    .FirstOrDefaultAsync();
+            if (req != null)
+            {
+                var User = await _context.Aspnetusers.Where(m => m.Id == req.Aspnetuserid).FirstOrDefaultAsync();
+                if(User != null)
+                {
+                    User.Passwordhash = hasher.HashPassword(null, password);
+                    _context.Aspnetusers.Update(User);
+                    _context.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+        #endregion
+
+        #region EditPhysicianInfo
+        public async Task<bool> EditPhysicianInfo(PhysiciansData vm)
+        {
+            try
+            {
+                if (vm == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Physicians
+                        .Where(W => W.Physicianid == vm.Physicianid)
+                        .FirstOrDefaultAsync();
+                    if (DataForChange != null)
+                    {
+                        DataForChange.Firstname = vm.Firstname;
+                        DataForChange.Lastname = vm.Lastname;
+                        DataForChange.Email = vm.Email;
+                        DataForChange.Mobile = vm.Mobile;
+                        DataForChange.Medicallicense = vm.Medicallicense;
+                        DataForChange.Npinumber = vm.Npinumber;
+                        DataForChange.Syncemailaddress = vm.Syncemailaddress;
+                        _context.Physicians.Update(DataForChange);
+                        _context.SaveChanges();
+                        List<int> regions = await _context.Physicianregions.Where(r => r.Physicianid == vm.Physicianid).Select(req => req.Regionid).ToListAsync();
+                        List<int> priceList = vm.Regionsid.Split(',').Select(int.Parse).ToList();
+                        foreach (var item in priceList)
+                        {
+                            if (regions.Contains(item))
+                            {
+                                regions.Remove(item);
+                            }
+                            else
+                            {
+                                Physicianregion pr = new()
+                                {
+                                    Regionid = item,
+                                    Physicianid = (int)vm.Physicianid
+                                };
+                                _context.Physicianregions.Update(pr);
+                                await _context.SaveChangesAsync();
+                                regions.Remove(item);
+                            }
+                        }
+                        if (regions.Count > 0)
+                        {
+                            foreach (var item in regions)
+                            {
+                                Physicianregion pr = await _context.Physicianregions.Where(r => r.Physicianid == vm.Physicianid && r.Regionid == item).FirstAsync();
+                                _context.Physicianregions.Remove(pr);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+        #region EditMailBillingInfo
+        public async Task<bool> EditMailBillingInfo(PhysiciansData vm, string AdminId)
+        {
+            try
+            {
+                if (vm == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Physicians
+                        .Where(W => W.Physicianid == vm.Physicianid)
+                        .FirstOrDefaultAsync();
+                    if (DataForChange != null)
+                    {
+                        DataForChange.Address1 = vm.Address1;
+                        DataForChange.Address2 = vm.Address2;
+                        DataForChange.City = vm.City;
+                        DataForChange.Regionid = vm.Regionid;
+                        DataForChange.Zip = vm.Zipcode;
+                        DataForChange.Altphone = vm.Altphone;
+                        DataForChange.Modifiedby = AdminId;
+                        DataForChange.Modifieddate = DateTime.Now;
+                        _context.Physicians.Update(DataForChange);
+                        _context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+        #region EditProviderProfile
+        public async Task<bool> EditProviderProfile(PhysiciansData vm, string AdminId)
+        {
+            try
+            {
+                if (vm == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Physicians
+                        .Where(W => W.Physicianid == vm.Physicianid)
+                        .FirstOrDefaultAsync();
+                    if (DataForChange != null)
+                    {
+                        if (vm.PhotoFile != null)
+                        {
+                            DataForChange.Photo = vm.PhotoFile != null ? vm.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmm") + "-Photo." + Path.GetExtension(vm.PhotoFile.FileName).Trim('.') : null;
+                            FileSave.UploadProviderDoc(vm.PhotoFile, (int)vm.Physicianid, vm.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmm") + "-Photo." + Path.GetExtension(vm.PhotoFile.FileName).Trim('.'));
+
+                        }
+                        if (vm.SignatureFile != null)
+                        {
+                            DataForChange.Signature = vm.SignatureFile != null ? vm.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmm") + "-Signature.png" : null;
+                            FileSave.UploadProviderDoc(vm.SignatureFile, (int)vm.Physicianid, vm.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmm") + "-Signature.png");
+                        }
+                        DataForChange.Businessname = vm.Businessname;
+                        DataForChange.Businesswebsite = vm.Businesswebsite;
+                        DataForChange.Modifiedby = AdminId;
+                        DataForChange.Adminnotes = vm.Adminnotes;
+                        DataForChange.Modifieddate = DateTime.Now;
+                        _context.Physicians.Update(DataForChange);
+                        _context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+        #region EditProviderOnbording
+        public async Task<bool> EditProviderOnbording(PhysiciansData vm, string AdminId)
+        {
+            try
+            {
+                if (vm == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Physicians
+                        .Where(W => W.Physicianid == vm.Physicianid)
+                        .FirstOrDefaultAsync();
+                    if (DataForChange != null)
+                    {
+                        FileSave.UploadProviderDoc(vm.Agreementdoc, (int)vm.Physicianid, "Agreementdoc.pdf");
+                        FileSave.UploadProviderDoc(vm.BackGrounddoc, (int)vm.Physicianid, "BackGrounddoc.pdf");
+                        FileSave.UploadProviderDoc(vm.NonDisclosuredoc, (int)vm.Physicianid, "NonDisclosuredoc.pdf");
+                        FileSave.UploadProviderDoc(vm.Licensedoc, (int)vm.Physicianid, "Agreementdoc.pdf");
+                        FileSave.UploadProviderDoc(vm.Trainingdoc, (int)vm.Physicianid, "Trainingdoc.pdf");
+
+                        DataForChange.Isagreementdoc = new BitArray(1);
+                        DataForChange.Isbackgrounddoc = new BitArray(1);
+                        DataForChange.Isnondisclosuredoc = false;
+                        DataForChange.Islicensedoc = new BitArray(1);
+                        DataForChange.Istrainingdoc = new BitArray(1);
+
+                        DataForChange.Isagreementdoc[0] = vm.Isagreementdoc;
+                        DataForChange.Isbackgrounddoc[0] = vm.Isbackgrounddoc;
+                        DataForChange.Isnondisclosuredoc = vm.Isnondisclosuredoc;
+                        DataForChange.Islicensedoc[0] = vm.Islicensedoc;
+                        DataForChange.Istrainingdoc[0] = vm.Istrainingdoc;
+                        DataForChange.Modifiedby = AdminId;
+                        DataForChange.Modifieddate = DateTime.Now;
+
+                        _context.Physicians.Update(DataForChange);
+                        _context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+        #region DeletePhysician
+        public async Task<bool> DeletePhysician(int PhysicianID, string AdminID)
+        {
+            try
+            {
+                BitArray bt = new BitArray(1);
+                bt.Set(0, true);
+                if (PhysicianID == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Physicians
+                        .Where(W => W.Physicianid == PhysicianID)
+                        .FirstOrDefaultAsync();
+                    if (DataForChange != null)
+                    {
+                        DataForChange.Isdeleted = bt;
+                        DataForChange.Isdeleted[0] = true;
+                        DataForChange.Modifieddate = DateTime.Now;
+                        DataForChange.Modifiedby = AdminID;
+                        _context.Physicians.Update(DataForChange);
+                        _context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         #endregion
     }

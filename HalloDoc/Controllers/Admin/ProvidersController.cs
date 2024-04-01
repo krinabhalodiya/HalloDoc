@@ -132,5 +132,113 @@ namespace HalloDoc.Controllers.Admin
 			return RedirectToAction("Index");
         }
         #endregion
+        #region Update_Physician_Profile
+        public async Task<IActionResult> EditAccountInfo(PhysiciansData data)
+        {
+            string actionName = RouteData.Values["action"].ToString();
+            string actionNameaq = ControllerContext.ActionDescriptor.ActionName; // Get the current action name
+            if (await _IProviderRepository.EditAccountInfo(data))
+            {
+                _notyf.Success("Account Information Changed Successfully..!");
+            }
+            else
+            {
+                _notyf.Error("Account Information not Changed Successfully..!");
+            }
+            return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+        }
+        #endregion
+        #region ResetPassAdmin
+        public async Task<IActionResult> ResetPassAdmin(string password, int Physicianid)
+        {
+            if (await _IProviderRepository.ChangePasswordAsync(password, Physicianid))
+            {
+                _notyf.Success("Password Information Changed Successfully..!");
+            }
+            else
+            {
+                _notyf.Error("Password not Changed properly Successfully..!");
+            }
+            return RedirectToAction("PhysicianProfile", new { id = Physicianid });
+        }
+        #endregion
+        #region EditPhysicianInfo
+        public async Task<IActionResult> EditPhysicianInfo(PhysiciansData data)
+        {
+            if (await _IProviderRepository.EditPhysicianInfo(data))
+            {
+                _notyf.Success("Administrator Information Changed Successfully..!");
+                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+            }
+            else
+            {
+                _notyf.Error("Administrator Information not Changed Successfully..!");
+                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+            }
+        }
+        #endregion
+
+        #region EditMailBillingInfo
+        public async Task<IActionResult> EditMailBillingInfo(PhysiciansData data)
+        {
+            if (await _IProviderRepository.EditMailBillingInfo(data, CV.ID()))
+            {
+                _notyf.Success("mail and billing Information Changed Successfully...") ;
+                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+            }
+            else
+            {
+                _notyf.Error("mail and billing Information not Changed Successfully...");
+                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+            }
+        }
+        #endregion
+
+        #region EditProviderProfile
+        public async Task<IActionResult> EditProviderProfile(PhysiciansData data)
+        {
+            if (await _IProviderRepository.EditProviderProfile(data, CV.ID()))
+            {
+                _notyf.Success("Profile Changed Successfully...");
+                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+            }
+            else
+            {
+                _notyf.Error("Profile not Changed Successfully...");
+                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+            }
+        }
+        #endregion
+        #region EditProviderOnbording
+        public async Task<IActionResult> EditProviderOnbording(PhysiciansData data)
+        {
+            if (await _IProviderRepository.EditProviderOnbording(data, CV.ID()))
+            {
+                _notyf.Success("Provider Onbording Changed Successfully...");
+                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+            }
+            else
+            {
+                _notyf.Error("Provider Onbording not Changed Successfully...");
+                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+            }
+        }
+        #endregion
+        #region DeletePhysician
+        public async Task<IActionResult> DeletePhysician(int PhysicianID)
+        {
+            bool data = await _IProviderRepository.DeletePhysician(PhysicianID, CV.ID());
+            if (data)
+            {
+                _notyf.Success("Physician deleted successfully...");
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                _notyf.Success("Physician not deleted successfully...");
+                return RedirectToAction("PhysicianAll");
+            }
+        }
+        #endregion
     }
 }
