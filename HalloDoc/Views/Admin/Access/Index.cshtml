@@ -1,4 +1,57 @@
 ﻿@{
     Layout = "_Layout";
 }
-<h1>Access</h1>
+@using static HalloDoc.Entity.Models.Constant;
+@model List<HalloDoc.Entity.DataModels.Role>;
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <div class="d-flex align-self-center">
+            <h4><strong>Account Access</strong></h4>
+        </div>
+        <a asp-controller="AdminDashBoard" asp-action="Index" class="btn border border-info bg-light rounded mt-3 mb-1">
+            <span class="text-info">
+                <i class="fa fa-angle-left align-middle"></i>
+                <b>&nbsp;&nbsp;Back</b>
+            </span>
+        </a>
+    </div>
+    <div class="bg-white rounded shadow mt-3">
+        <div class="d-flex justify-content-end align-self-center p-3">
+			<a class="btn bg-info text-white m-1 align-self-center" asp-action="PhysicianProfile" asp-controller="Providers">
+				Create Access
+			</a>
+        </div>
+		<div class="table-responsive">
+			<table class="table table-responsive mt-3 mb-0 dataTable">
+				<thead class="theadbg">
+					<tr>
+						@{
+							// var J1 = @Model.IsAscending;
+							<th scope="col" class="text-start ms-2">Name</th>
+							<th scope="col">Account Type</th>
+							<th scope="col" class="text-end me-2">Actions</th>
+						}
+					</tr>
+				</thead>
+				<tbody class="table-group-divider" id="providerbody">
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td class ="text-start ms-2">@item.Name</td>
+							<td>@Enum.GetName(typeof(AccountType), item.Accounttype)</td>
+							<td class="d-flex justify-content-end me-2">
+								<a asp-action="PhysicianProfile" asp-controller="Providers" asp-route-id="@item.Roleid" class="btn btn-outline-info btn-sm document-button mx-1">
+									Edit
+								</a>
+								<a asp-action="PhysicianProfile" asp-controller="Providers" asp-route-id="@item.Roleid" class="btn btn-outline-info btn-sm document-button mx-1">
+									Delete
+								</a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+    </div>
+   
+</div>

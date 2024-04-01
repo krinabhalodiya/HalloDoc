@@ -27,6 +27,7 @@ builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
 builder.Services.AddScoped<IMyProfileRepository, MyProfileRepository>();
 builder.Services.AddScoped<IPatientDashboard, PatientDashboard>();
 builder.Services.AddScoped<IProfile, Profile>();
+builder.Services.AddScoped<IRoleAccessRepository, RoleAccessRepository>();
 builder.Services.AddScoped<ICreateRequest, CreateRequest>();
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 var app = builder.Build();

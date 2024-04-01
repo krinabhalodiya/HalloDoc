@@ -43,5 +43,12 @@ namespace HalloDoc.Entity.Models
             Available
             
         }
+        public enum AccountType
+        {
+            All = 1,
+            Admin,
+            Physician,
+            Patient
+        }
     }
 }
