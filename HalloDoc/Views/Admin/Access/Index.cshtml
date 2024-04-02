@@ -17,7 +17,7 @@
     </div>
     <div class="bg-white rounded shadow mt-3">
         <div class="d-flex justify-content-end align-self-center p-3">
-			<a class="btn bg-info text-white m-1 align-self-center" asp-action="PhysicianProfile" asp-controller="Providers">
+			<a class="btn btn-outline-info m-1 align-self-center" asp-action="CreateRoleAccess" asp-controller="Access">
 				Create Access
 			</a>
         </div>
@@ -27,9 +27,9 @@
 					<tr>
 						@{
 							// var J1 = @Model.IsAscending;
-							<th scope="col" class="text-start ms-2">Name</th>
+							<th scope="col" class="text-start ps-3">Name</th>
 							<th scope="col">Account Type</th>
-							<th scope="col" class="text-end me-2">Actions</th>
+							<th scope="col" class="text-end pe-5">Actions</th>
 						}
 					</tr>
 				</thead>
@@ -37,15 +37,18 @@
 					@foreach (var item in Model)
 					{
 						<tr>
-							<td class ="text-start ms-2">@item.Name</td>
+							<td class ="text-start ps-3">@item.Name</td>
 							<td>@Enum.GetName(typeof(AccountType), item.Accounttype)</td>
 							<td class="d-flex justify-content-end me-2">
-								<a asp-action="PhysicianProfile" asp-controller="Providers" asp-route-id="@item.Roleid" class="btn btn-outline-info btn-sm document-button mx-1">
+								<a asp-action="CreateRoleAccess" asp-controller="Access" asp-route-id="@item.Roleid" class="btn btn-outline-info btn-sm document-button mx-1">
 									Edit
 								</a>
-								<a asp-action="PhysicianProfile" asp-controller="Providers" asp-route-id="@item.Roleid" class="btn btn-outline-info btn-sm document-button mx-1">
+								<a id="deletebtn" class="btn btn-outline-info btn-sm document-button mx-1">
 									Delete
 								</a>
+								<form id="deleteroleform" asp-action="DeleteRole" asp-controller="Access" asp-route-roleid="@item.Roleid">
+
+								</form>
 							</td>
 						</tr>
 					}
@@ -53,5 +56,22 @@
 			</table>
 		</div>
     </div>
-   
 </div>
+<script>
+    $(function () {
+        $('#deletebtn').on('click', function () {
+            Swal.fire({
+                title: "Do you want to delete role ?",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                denyButtonText: `Cancel`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#deleteroleform').submit();
+                }
+                /* Read more about isConfirmed, isDenied below */
+            });
+        });
+    });
+</script>
