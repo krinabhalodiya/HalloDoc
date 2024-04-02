@@ -43,7 +43,7 @@
 								<a asp-action="CreateRoleAccess" asp-controller="Access" asp-route-id="@item.Roleid" class="btn btn-outline-info btn-sm document-button mx-1">
 									Edit
 								</a>
-								<a id="deletebtn" class="btn btn-outline-info btn-sm document-button mx-1">
+								<a class="btn btn-outline-info btn-sm document-button mx-1 deletebtn">
 									Delete
 								</a>
 								<form id="deleteroleform" asp-action="DeleteRole" asp-controller="Access" asp-route-roleid="@item.Roleid">
@@ -59,7 +59,7 @@
 </div>
 <script>
     $(function () {
-        $('#deletebtn').on('click', function () {
+        $('.deletebtn').on('click', function () {
             Swal.fire({
                 title: "Do you want to delete role ?",
                 showDenyButton: false,
