@@ -37,14 +37,14 @@
                 <a id="regionicon">
                     <i class="fa fa-search"></i>
                 </a>
-                <select class="form-select" data-allow-clear="true" tabindex="-1" id="accounttype" onchange="ChangeRole()" asp-items="@(new SelectList(enumData,"ID","Name"))" data-control="select2" data-placeholder="Select Level">
+                <select class="form-select" data-allow-clear="true" tabindex="-1" id="roledropdown" onchange="getdatabyrole()" asp-items="@(new SelectList(enumData,"ID","Name"))" data-control="select2" data-placeholder="Select Level">
                 </select>
             </div>
             <div class="d-flex">
-                <a class="btn bg-info text-white m-1 align-self-center" asp-action="PhysicianProfile" asp-controller="Providers">
+                <a class="btn bg-info text-white m-1 align-self-center" asp-action="PhysicianAddEdit" asp-controller="Access">
                     Create Provider Account
                 </a>
-                <a class="btn bg-info text-white m-1 align-self-center" asp-action="PhysicianProfile" asp-controller="Providers">
+                <a class="btn bg-info text-white m-1 align-self-center" asp-action="AdminAddEdit" asp-controller="Access">
                     Create Admin Account
                 </a>
             </div>
@@ -67,7 +67,7 @@
                         }
                     </tr>
                 </thead>
-                <tbody class="table-group-divider" id="providerbody">
+                <tbody class="table-group-divider" id="rolebody">
                     @foreach (var item in Model)
                     {
                         <tr>
@@ -79,13 +79,13 @@
                             <td class="d-flex justify-content-center">
                                 @if (item.isAdmin)
                                 {
-                                    <a asp-action="AdminAddEdit" asp-controller="RoleAccess" asp-route-id="@item.UserID" class="btn btn-outline-info btn-sm document-button mx-1">
+                                    <a asp-action="AdminEdit" asp-controller="Access" asp-route-id="@item.UserID" class="btn btn-outline-info btn-sm document-button mx-1">
                                         Edit
                                     </a>
                                 }
                                 else
                                 {
-                                    <a asp-action="PhysicianAddEdit" asp-controller="RoleAccess" asp-route-id="@item.UserID" class="btn btn-outline-info btn-sm document-button mx-1">
+                                    <a asp-action="PhysicianAddEdit" asp-controller="Access" asp-route-id="@item.UserID" class="btn btn-outline-info btn-sm document-button mx-1">
                                         Edit
                                     </a>
                                 }
@@ -98,145 +98,28 @@
     </div>
 </div>
 
-@* Model_Start_Contact*@
-<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header  bg-info text-white">
-                <h1 class="modal-title fs-5" id="exampleModalLabel"> Contact Your Provide </h1>
-                <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
-            </div>
-            <form asp-action="SendMessage" asp-controller="Providers" class="needs-validation" novalidate>
-                <div class="modal-body">
-                    <small class="text-secondary fs-6" id="exampleModalLabel"> Choose Comunication to send message  <span class="text-info" id="patientname"> </span></small>
-                    <input type="hidden" name="email" id="emailforcontact" />
-                    <input type="hidden" name="id" id="id" />
-                    <div class="mx-4 mt-4">
-                        <div class="form-check p-2 fs-6">
-                            <input class="form-check-input" value="1" type="radio" name="way" id="flexRadioDefault1">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                SMS
-                            </label>
-                        </div>
-                        <div class="form-check p-2 fs-6">
-                            <input class="form-check-input" value="2" type="radio" name="way" id="flexRadioDefault2" checked>
-                            <label class="form-check-label" for="flexRadioDefault2">
-                                Email
-                            </label>
-                        </div>
-                        <div class="form-check p-2 fs-6">
-                            <input class="form-check-input" value="3" type="radio" name="way" id="flexRadioDefault3">
-                            <label class="form-check-label" for="flexRadioDefault2">
-                                Both
-                            </label>
-                        </div>
-                    </div>
-                    <div class="mb-4 form-floating ">
-                        <textarea required rows="4" name="msg" id="msgid" class="input-outline w-100 h-100 fs-6 form-control shadow-none" type="text"></textarea>
-                        <label class="inputs-lable inputs-lable fs-6" for="msgid">Message</label>
-                        <div class="invalid-feedback">
-                            Please Enter Message.
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <input type="submit" class=" btn btn-info text-white" value="Send" style="display:block !important">
-                    <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Close</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-@* Model_End_Contact  *@
 <script>
 
-    function assignemail(e) {
-        console.log(e);
-        document.getElementById('emailforcontact').value = e;
-    }
-
-    function getdatabyregion() {
-        var region = $("#regiondropdown").val();
-        if (region == '-1') {
-            region = null;
+    function getdatabyrole() {
+        var role = $("#roledropdown").val();
+        if (role == '-1') {
+            role = null;
             location.reload();
         }
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Index", "Providers")?region=' + region,
+            url: '@Url.Action("UserAccess", "Access")?role=' + role,
             cache: false,
             success: function (response) {
                 console.log(response);
                 var bodyContent = $(response).find('tbody').html();
-                $('#providerbody').html(bodyContent);
-                // $('table tbody').empty();
-                // // Assuming response is an array of objects, iterate through each object
-                // response.forEach(function (item) {
-                //     // Create a new row for each object
-                //     var newRow = $('<tr>');
-
-                //     // Add the checkbox cell
-                //     var checkboxCell = $('<td class="table-text" scope="row"  >');
-                //     var checkboxInput = $('<input class="form-check-input form-check-inputs" type="checkbox" value="" id="' + item.physicianid + '">');
-                //     if (item.notification[0]) {
-                //         checkboxInput.prop('checked', true);
-                //     }
-                //     checkboxCell.append(checkboxInput);
-                //     checkboxCell.append('<input class="NotificationId" type="hidden" value="' + item.physicianid + '">');
-                //     newRow.append(checkboxCell);
-
-                //     // Add other cells
-                //     newRow.append('<td scope="row" >' + item.firstname + ' ' + item.lastname + '</td>');
-                //     newRow.append('<td scope="row" >' + item.role + '</td>');
-                //     newRow.append('<td scope="row" >' + item.isnondisclosuredoc + '</td>');
-                //     newRow.append('<td scope="row" >' + item.status + '</td>');
-
-                //     // Add action buttons cell
-                //     var actionButtonsCell = $('<td class="d-flex" data-label="Document">');
-                //     actionButtonsCell.append('<button data-bs-toggle="modal"  onclick="assignemail(' +item.email+')" data-bs-target="#myModal" class="btn btn-outline-info btn-sm document-button mx-1">Contact</button>');
-                //     actionButtonsCell.append('<a asp-action="Index" asp-controller="Documentsinfo" asp-route-id="' + item.physicianid + '" class="btn btn-outline-info btn-sm document-button mx-1">Edit</a>');
-                //     newRow.append(actionButtonsCell);
-
-                //     // Append the new row to the table
-                //     $('table tbody').append(newRow);
-                // });
+                $('#rolebody').html(bodyContent);
+                
             },
             error: function () {
                 alert("Error while Loading data.");
             }
         });
     }
-
-    $(document).ready(function () {
-        $(document).on('change', '.form-check-inputs', handleCheckboxChanges);
-
-        $('#saveChangesButton').click(function () {
-            $('#saveChangesForm').submit();
-        });
-        var initialState = {};
-        // Store the initial state of each checkbox when the page loads
-        $('.form-check-inputs').each(function () {
-            initialState[this.id] = this.checked;
-        });
-        $(document).on('change', '.form-check-inputs', function () {
-            handleCheckboxChanges();
-        });
-
-        function handleCheckboxChanges() {
-            var changedValues = {};
-            $('.form-check-inputs').each(function () {
-                if (this.checked !== initialState[this.id]) {
-                    changedValues[this.id] = this.checked;
-                }
-            });
-            $('#changedValuesInput').val(JSON.stringify(changedValues));
-            console.log(changedValues);
-            if (Object.keys(changedValues).length > 0) {
-                $('#saveChangesButton').show();
-            } else {
-                $('#saveChangesButton').hide();
-            }
-        }
-    });
+    
 </script> 

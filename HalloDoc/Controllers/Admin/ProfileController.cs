@@ -30,7 +30,7 @@ namespace HalloDoc.Controllers.Admin
         {
             ViewAdminProfile p = await _IMyProfileRepository.GetProfileDetails((id != null ? (int)id : Convert.ToInt32(CV.UserID())));
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
-            ViewBag.userrolecombobox = await _combobox.UserRoleComboBox();
+            ViewBag.userrolecombobox = await _combobox.AdminRoleComboBox();
             return View("../Admin/Profile/Index",p);
         }
         #endregion
@@ -66,7 +66,7 @@ namespace HalloDoc.Controllers.Admin
         }
         #endregion
 
-        #region EditAdministratorInfo
+        #region BillingInfoEdit
         [HttpPost]
         public async Task<IActionResult> BillingInfoEdit(ViewAdminProfile _viewAdminProfile)
         {

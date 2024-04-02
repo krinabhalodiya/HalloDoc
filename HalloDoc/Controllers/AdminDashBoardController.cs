@@ -41,9 +41,7 @@ namespace HalloDoc.Controllers
             if (Status == null)
             {
             Status = CV.CurrentStatus();
-                
             }
-           
             Response.Cookies.Delete("Status");
             Response.Cookies.Append("Status", Status);
 

@@ -100,14 +100,13 @@ namespace HalloDoc.Controllers.Admin
                 ViewData["PhysicianAccount"] = "Edit";
                 PhysiciansData v = await _IProviderRepository.GetPhysicianById((int)id);
                 return View("../Admin/Providers/AddEditProvider",v);
-
             }
             return View("../Admin/Providers/AddEditProvider");
         }
         #endregion
         #region Physician_Add
         [HttpPost]
-        public async Task<IActionResult> PhysicianAddEdit(PhysiciansData physicians)
+        public async Task<IActionResult> PhysicianAdd(PhysiciansData physicians)
         {
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             ViewBag.userrolecombobox = await _combobox.PhysicianRoleComboBox();

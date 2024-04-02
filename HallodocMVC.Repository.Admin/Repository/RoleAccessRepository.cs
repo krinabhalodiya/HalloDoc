@@ -48,7 +48,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                     FirstName = admin != null ? admin.Firstname : (physician != null ? physician.Firstname : null),
                     isAdmin = admin != null,
                     UserID = admin != null ? admin.Adminid : (physician != null ? physician.Physicianid : null),
-                    accounttype = admin != null ? 2 : (physician != null ? 3 : null),
+                    accounttype = admin != null ? 1 : (physician != null ? 2 : null),
                     status = admin != null ? admin.Status : (physician != null ? physician.Status : null),
                     Mobile = admin != null ? admin.Mobile : (physician != null ? physician.Mobile : null),
                 };
@@ -57,11 +57,14 @@ namespace HallodocMVC.Repository.Admin.Repository
             {
                 switch (User.Value)
                 {
-                    case 2: // Admin data
+                    case 1: // Admin data
                         query = query.Where(u => u.isAdmin);
                         break;
-                    case 3: // Provider data
+                    case 2: // Provider data
                         query = query.Where(u => !u.isAdmin);
+                        break;
+                    case 3:
+                        query = query.Where(u => !u.isAdmin && u.isAdmin);
                         break;
                 }
             }
@@ -86,12 +89,14 @@ namespace HallodocMVC.Repository.Admin.Repository
             return r;
         }
         #endregion
+
         #region GetMenusByAccount
         public async Task<List<HalloDoc.Entity.DataModels.Menu>> GetMenusByAccount(short Accounttype)
         {
             return await _context.Menus.Where(r => r.Accounttype == Accounttype).ToListAsync();
         }
         #endregion
+
         #region CheckMenuByRole
         public async Task<List<int>> CheckMenuByRole(int roleid)
         {
@@ -101,6 +106,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                         .ToListAsync();
         }
         #endregion
+
         #region PostRoleMenu
         public async Task<bool> PostRoleMenu(ViewRoleByMenu role, string Menusid, string ID)
         {
