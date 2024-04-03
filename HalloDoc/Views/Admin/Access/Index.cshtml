@@ -27,15 +27,16 @@
 					<tr>
 						@{
 							// var J1 = @Model.IsAscending;
-							<th scope="col" class="text-start ps-3">Name</th>
-							<th scope="col">Account Type</th>
-							<th scope="col" class="text-end pe-5">Actions</th>
+                                <th scope="col" class="text-start ps-3">Name</th>
+                                <th scope="col">Account Type</th>
+                                <th scope="col" class="text-end pe-5">Actions</th>
 						}
 					</tr>
 				</thead>
 				<tbody class="table-group-divider" id="providerbody">
 					@foreach (var item in Model)
 					{
+                        
 						<tr>
 							<td class ="text-start ps-3">@item.Name</td>
 							<td>@Enum.GetName(typeof(AccountType), item.Accounttype)</td>
@@ -43,12 +44,9 @@
 								<a asp-action="CreateRoleAccess" asp-controller="Access" asp-route-id="@item.Roleid" class="btn btn-outline-info btn-sm document-button mx-1">
 									Edit
 								</a>
-								<a class="btn btn-outline-info btn-sm document-button mx-1 deletebtn">
+								<a class="btn btn-outline-info btn-sm document-button mx-1 deletebtn" data-id="@item.Roleid">
 									Delete
 								</a>
-								<form id="deleteroleform" asp-action="DeleteRole" asp-controller="Access" asp-route-roleid="@item.Roleid">
-
-								</form>
 							</td>
 						</tr>
 					}
@@ -60,6 +58,8 @@
 <script>
     $(function () {
         $('.deletebtn').on('click', function () {
+            var role = $(this).data("id");
+            console.log(role);
             Swal.fire({
                 title: "Do you want to delete role ?",
                 showDenyButton: false,
@@ -68,7 +68,18 @@
                 denyButtonText: `Cancel`
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $('#deleteroleform').submit();
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("DeleteRole", "Access")?roleid=' + role,
+                        cache: false,
+                        success: function (response) {
+                            location.reload();
+                        },
+                        error: function () {
+                            alert("Error while Loading data.");
+                        }
+                    });
                 }
                 /* Read more about isConfirmed, isDenied below */
             });

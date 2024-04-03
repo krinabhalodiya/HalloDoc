@@ -148,6 +148,7 @@ namespace HalloDoc.Controllers.Admin
 			}
 		}
         #endregion
+
         #region AddEdit_Profile
         public async Task<IActionResult> PhysicianAddEdit(int? id)
         {
@@ -221,6 +222,7 @@ namespace HalloDoc.Controllers.Admin
             return RedirectToAction("UserAccess");
         }
         #endregion
+
         #region SaveAdminInfo
         public async Task<IActionResult> SaveAdminInfo(ViewAdminProfile vm)
         {

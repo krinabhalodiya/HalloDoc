@@ -46,7 +46,7 @@ namespace HallodocMVC.Repository.Admin.Repository
 				 {
 					 UserName = user.Username,
 					 FirstName = admin != null ? admin.Firstname : (physician != null ? physician.Firstname : null),
-					 isAdmin = admin != null,
+					 isAdmin = admin != null ?true : false,
 					 UserID = admin != null ? admin.Adminid : (physician != null ? physician.Physicianid : null),
 					 accounttype = admin != null ? 1 : (physician != null ? 2 : null),
 					 status = admin != null ? admin.Status : (physician != null ? physician.Status : null),

@@ -13,7 +13,6 @@
                        Name = e.ToString()
                    };
  }
-
 <div class="container">
     <div class="d-flex justify-content-between">
         <div class="d-flex align-self-center">
@@ -70,7 +69,6 @@
                     </div>
                 </div>
             </form>
-
             @* Administrator Information *@
             <form method="post" asp-controller="@(path.StartsWith("/Profile") ? "Profile" : "Access")" asp-action="EditAdministratorInfo" id="AdministratorInfoForm">
                 <h5><strong>Administrator Information</strong></h5>
@@ -143,7 +141,6 @@
                     </div>
                 </div>
             </form>
-
             @* Mailing/Billing Information *@
             <form method="post" asp-controller="@(path.StartsWith("/Profile") ? "AdminDashBoard" : "Access")" asp-action="BillingInfoEdit" id="BillingInfoForm">
                 <h5><strong>Mailing/Billing Information</strong></h5>
