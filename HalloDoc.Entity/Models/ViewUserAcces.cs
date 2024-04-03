@@ -17,5 +17,7 @@ namespace HalloDoc.Entity.Models
         public int? OpenRequest { get; set; }
         public string? Mobile { get; set; }
         public bool isAdmin { get; set; }
-    }
+        public int ? PhysicianId { get; set; }
+
+	}
 }

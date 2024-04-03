@@ -227,11 +227,11 @@ namespace HalloDoc.Controllers.Admin
             bool data = await _IMyProfileRepository.SaveAdminInfo(vm);
             if (data)
             {
-                TempData["Status"] = "Administration Information Changed...";
+				_notyf.Success("Admin Information Changed successfully...");
             }
             else
             {
-                TempData["Status"] = "Imformation not Changed properly...";
+				_notyf.Error("Admin Information not Changed successfully...");
             }
             return RedirectToAction("AdminEdit", new { id = vm.AdminId });
         }
@@ -243,11 +243,11 @@ namespace HalloDoc.Controllers.Admin
             bool data = await _IMyProfileRepository.EditAdministratorInfo(vm);
             if (data)
             {
-                TempData["Status"] = "Administration Information Changed...";
+				_notyf.Success("Administration Information Changed successfully...");
             }
             else
             {
-                TempData["Status"] = "Imformation not Changed properly...";
+				_notyf.Error("Administration Information not Changed successfully...");
             }
             return RedirectToAction("AdminEdit", new { id = vm.AdminId });
         }
@@ -259,11 +259,11 @@ namespace HalloDoc.Controllers.Admin
             bool data = await _IMyProfileRepository.BillingInfoEdit(vm);
             if (data)
             {
-                TempData["Status"] = "Billing Information Changed...";
+                _notyf.Success("Billing Information Changed successfully...");
             }
             else
             {
-                TempData["Status"] = "Billing not Changed properly...";
+                _notyf.Error("Billing Information not Changed successfully...");
             }
             return RedirectToAction("AdminEdit", new { id = vm.AdminId });
         }
@@ -275,11 +275,11 @@ namespace HalloDoc.Controllers.Admin
             bool data = await _IMyProfileRepository.EditPassword(password, AdminId);
             if (data)
             {
-                TempData["Status"] = "Password changed Successfully...";
+                _notyf.Success("Password changed Successfully...");
             }
             else
             {
-                TempData["Status"] = "Password not Changed...";
+                _notyf.Error("Password not Changed Successfully...");
             }
             return RedirectToAction("AdminEdit", new { id = AdminId });
         }

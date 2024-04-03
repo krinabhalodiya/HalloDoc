@@ -27,53 +27,72 @@ namespace HallodocMVC.Repository.Admin.Repository
             List<Role> v = await _context.Roles.Where(r => r.Isdeleted == new BitArray(1)).ToListAsync();
             return v;
         }
-        #endregion
+		#endregion
 
-        #region GetAllUserDetails
-        public async Task<List<ViewUserAcces>> GetAllUserDetails(int? User)
-        {
-            IQueryable<ViewUserAcces> query =
-                from user in _context.Aspnetusers
-                join admin in _context.Admins on user.Id equals admin.Aspnetuserid into adminGroup
-                from admin in adminGroup.DefaultIfEmpty()
-                join physician in _context.Physicians on user.Id equals physician.Aspnetuserid into physicianGroup
-                from physician in physicianGroup.DefaultIfEmpty()
-                join req in _context.Requests on physician.Physicianid equals req.Physicianid into totalrequestgroup
-                from req in totalrequestgroup.DefaultIfEmpty()
-                where (admin != null || physician != null) &&
-                      (admin.Isdeleted == new BitArray(1) || physician.Isdeleted == new BitArray(1))
-                select new ViewUserAcces
-                {
-                    UserName = user.Username,
-                    FirstName = admin != null ? admin.Firstname : (physician != null ? physician.Firstname : null),
-                    isAdmin = admin != null,
-                    UserID = admin != null ? admin.Adminid : (physician != null ? physician.Physicianid : null),
-                    accounttype = admin != null ? 1 : (physician != null ? 2 : null),
-                    status = admin != null ? admin.Status : (physician != null ? physician.Status : null),
-                    Mobile = admin != null ? admin.Mobile : (physician != null ? physician.Mobile : null),
-                };
+		#region GetAllUserDetails
+		
+		public async Task<List<ViewUserAcces>> GetAllUserDetails(int? User)
+		{
+			// Fetch necessary information without the count
+			var userDetails = await
+				(from user in _context.Aspnetusers
+				 join admin in _context.Admins on user.Id equals admin.Aspnetuserid into adminGroup
+				 from admin in adminGroup.DefaultIfEmpty()
+				 join physician in _context.Physicians on user.Id equals physician.Aspnetuserid into physicianGroup
+				 from physician in physicianGroup.DefaultIfEmpty()
+				 where (admin != null || physician != null) &&
+					   (admin.Isdeleted == new BitArray(1) || physician.Isdeleted == new BitArray(1))
+				 select new ViewUserAcces
+				 {
+					 UserName = user.Username,
+					 FirstName = admin != null ? admin.Firstname : (physician != null ? physician.Firstname : null),
+					 isAdmin = admin != null,
+					 UserID = admin != null ? admin.Adminid : (physician != null ? physician.Physicianid : null),
+					 accounttype = admin != null ? 1 : (physician != null ? 2 : null),
+					 status = admin != null ? admin.Status : (physician != null ? physician.Status : null),
+					 Mobile = admin != null ? admin.Mobile : (physician != null ? physician.Mobile : null),
+					 PhysicianId = physician.Physicianid // Keep the Physician ID for counting requests
+				 }).ToListAsync();
 
-            if (User.HasValue)
-            {
-                switch (User.Value)
-                {
-                    case 1: // Admin data
-                        query = query.Where(u => u.isAdmin);
-                        break;
-                    case 2: // Provider data
-                        query = query.Where(u => !u.isAdmin);
-                        break;
-                    case 3:
-                        query = query.Where(u => !u.isAdmin && u.isAdmin);
-                        break;
-                }
-            }
-            return await query.ToListAsync();
-        }
-        #endregion
+			// Prepare the final list with RequestCount calculated
+			var result = userDetails.Select(u => new ViewUserAcces
+			{
+				UserName = u.UserName,
+				FirstName = u.FirstName,
+				isAdmin = u.isAdmin,
+				UserID = u.UserID,
+				accounttype = u.accounttype,
+				status = u.status,
+				Mobile = u.Mobile,
+				// Calculate RequestCount for each physician
+				OpenRequest = u.PhysicianId.HasValue ? _context.Requests.Count(r => r.Physicianid == u.PhysicianId) : 0
+			}).ToList();
 
-        #region GetRoleByMenus
-        public async Task<ViewRoleByMenu> GetRoleByMenus(int roleid)
+			// Further filtering based on User input
+			if (User.HasValue)
+			{
+				switch (User.Value)
+				{
+					case 1: // Admin data
+						result = result.Where(u => u.isAdmin).ToList();
+						break;
+					case 2: // Provider data
+						result = result.Where(u => !u.isAdmin).ToList();
+						break;
+					case 3: // This case seems incorrect as it filters nothing. Assuming it's a placeholder for now.
+							// Adjust according to the correct condition
+						break;
+				}
+			}
+
+			return result;
+		}
+
+
+		#endregion
+
+		#region GetRoleByMenus
+		public async Task<ViewRoleByMenu> GetRoleByMenus(int roleid)
         {
             var r = await _context.Roles
                         .Where(r => r.Roleid == roleid)
