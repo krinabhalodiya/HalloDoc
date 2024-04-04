@@ -107,11 +107,11 @@
         </div>
         <div class="d-flex justify-content-between mt-3">
             <div class="calbtn">
-                <span class="dot bg-info text-center text-white me-1" id="prevDateBtn" style="height:27px;width:27px"><i class="fa-solid fa-chevron-left"></i></span>
+                <span class="dot bg-info text-center text-white me-1 rounded-circle" id="prevDateBtn"><i class="fa-solid fa-chevron-left p-2"></i></span>
                 <span>
                     <i class="fa-solid fa-calendar-days"></i>
                 </span>
-                <span class="dot bg-info text-center text-white ms-1" id="nextDateBtn" style="height:27px;width:27px"><i class="fa-solid fa-chevron-right"></i></span>
+                <span class="dot bg-info text-center text-white ms-1 rounded-circle" id="nextDateBtn"><i class="fa-solid fa-chevron-right p-2"></i></span>
             </div>
             <div class="d-flex">
                 <button type="button" onclick="loadSchedulingPartial('_DayWise')" class="btn btn-outline-info removeactive" id="Day">Day</button>
@@ -296,6 +296,28 @@
                 }
             });
         }
+
+        // function getdatabyregion() {
+        //     var region = $("#regiondropdown").val();
+        //     if (region == '-1') {
+        //         region = null;
+        //         location.reload();
+        //     }
+        //     $.ajax({
+        //         type: "POST",
+        //         url: 'Url.Action("LoadSchedulingPartial", "Scheduling")?PartialName=' + region, PartialName, string date, int regionid
+        //         cache: false,
+        //         success: function (response) {
+        //             console.log(response);
+        //             var bodyContent = $(response).find('tbody').html();
+        //             $('#rolebody').html(bodyContent);
+
+        //         },
+        //         error: function () {
+        //             alert("Error while Loading data.");
+        //         }
+        //     });
+        // }
 
         // Change Physician according to Region
         $(document).ready(function () {
