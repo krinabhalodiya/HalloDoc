@@ -39,7 +39,7 @@
                     <a id="regionicon">
                         <i class="fa fa-search"></i>
                     </a>
-                    <select class="form-select" data-allow-clear="true" tabindex="-1" id="roledropdown" onchange="getdatabyrole()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                    <select class="form-select" data-allow-clear="true" tabindex="-1" id="regiondropdown" onchange="getdatabyrole()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                         <option value="">All Region</option>
                     </select>
                 </div>
@@ -95,14 +95,14 @@
 <script>
 
     function getdatabyrole() {
-        var role = $("#roledropdown").val();
-        if (role == '-1') {
-            role = null;
+        var region = $("#regiondropdown").val();
+        if (region == '-1') {
+            region = null;
             location.reload();
         }
         $.ajax({
             type: "POST",
-            url: '@Url.Action("UserAccess", "Access")?role=' + role,
+            url: '@Url.Action("Index", "Partners")?regionId=' + region,
             cache: false,
             success: function (response) {
                 console.log(response);
