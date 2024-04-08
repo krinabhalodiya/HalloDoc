@@ -159,5 +159,18 @@ namespace HalloDoc.Controllers.Admin
             return RedirectToAction("Index");
         }
         #endregion
+
+        #region Provider_on_call
+        public async Task<IActionResult> MDSOnCall(int? regionId)
+        {
+            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
+            List<PhysiciansData> v = await _schedulingRepository.PhysicianOnCall(regionId);
+            if (regionId != null)
+            {
+                return Json(v);
+            }
+            return View("../Admin/Scheduling/MDSOnCall", v);
+        }
+        #endregion
     }
 }

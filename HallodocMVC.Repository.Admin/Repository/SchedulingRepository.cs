@@ -234,5 +234,89 @@ namespace HallodocMVC.Repository.Admin.Repository
             return true;
         }
         #endregion
+
+        #region PhysicianOnCall
+        public async Task<List<PhysiciansData>> PhysicianOnCall(int? region)
+        {
+            DateTime currentDateTime = DateTime.Now;
+            TimeOnly currentTimeOfDay = TimeOnly.FromDateTime(DateTime.Now);
+
+            List<PhysiciansData> pl = await (from r in _context.Physicians
+                                         where r.Isdeleted == new BitArray(1)
+                                         select new PhysiciansData
+                                         {
+                                             Createddate = r.Createddate,
+                                             Physicianid = r.Physicianid,
+                                             Address1 = r.Address1,
+                                             Address2 = r.Address2,
+                                             Adminnotes = r.Adminnotes,
+                                             Altphone = r.Altphone,
+                                             Businessname = r.Businessname,
+                                             Businesswebsite = r.Businesswebsite,
+                                             City = r.City,
+                                             Firstname = r.Firstname,
+                                             Lastname = r.Lastname,
+                                             Status = r.Status,
+                                             Email = r.Email,
+                                             Photo = r.Photo
+
+                                         }).ToListAsync();
+            if (region != null)
+            {
+                pl = await (
+                                        from pr in _context.Physicianregions
+
+                                        join ph in _context.Physicians
+                                         on pr.Physicianid equals ph.Physicianid into rGroup
+                                        from r in rGroup.DefaultIfEmpty()
+                                        where pr.Regionid == region && r.Isdeleted == new BitArray(1)
+                                        select new PhysiciansData
+                                        {
+                                            Createddate = r.Createddate,
+                                            Physicianid = r.Physicianid,
+                                            Address1 = r.Address1,
+                                            Address2 = r.Address2,
+                                            Adminnotes = r.Adminnotes,
+                                            Altphone = r.Altphone,
+                                            Businessname = r.Businessname,
+                                            Businesswebsite = r.Businesswebsite,
+                                            City = r.City,
+                                            Firstname = r.Firstname,
+                                            Lastname = r.Lastname,
+                                            Status = r.Status,
+                                            Email = r.Email,
+                                            Photo = r.Photo
+
+                                        })
+                                        .ToListAsync();
+            }
+
+            foreach (var item in pl)
+            {
+                List<int> shiftIds = await (from s in _context.Shifts
+                                            where s.Physicianid == item.Physicianid
+                                            select s.Shiftid).ToListAsync();
+
+                foreach (var shift in shiftIds)
+                {
+                    var shiftDetail = (from sd in _context.Shiftdetails
+                                       where sd.Shiftid == shift &&
+                                             sd.Shiftdate.Date == currentDateTime.Date &&
+                                             sd.Starttime <= currentTimeOfDay &&
+                                             currentTimeOfDay <= sd.Endtime
+                                       select sd).FirstOrDefault();
+
+                    if (shiftDetail != null)
+                    {
+                        item.onCallStatus = 1;
+                    }
+                }
+            }
+
+            return pl;
+
+
+        }
+        #endregion
     }
 }
