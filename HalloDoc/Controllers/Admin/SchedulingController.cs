@@ -1,4 +1,5 @@
-﻿using HalloDoc.Entity.DataContext;
+﻿using System.Collections;
+using HalloDoc.Entity.DataContext;
 using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
 using HalloDoc.Models;
@@ -11,7 +12,6 @@ namespace HalloDoc.Controllers.Admin
 {
     public class SchedulingController : Controller
     {
-        
         private readonly HalloDocContext _context;
         private readonly IComboboxRepository _combobox;
         private readonly ISchedulingRepository _schedulingRepository;
@@ -35,17 +35,7 @@ namespace HalloDoc.Controllers.Admin
 
             return Json(PhysiciansByRegion);
         }
-        #region
-        //public IActionResult Scheduling()
-        //{
-        //    ViewBag.Adminname = HttpContext.Session.GetString("Adminname");
-        //    ViewBag.RegionCombobox = _adminFunction.RegionComboBox();
-        //    ViewBag.PhysiciansByRegion = new SelectList(Enumerable.Empty<SelectListItem>());
-        //    SchedulingModel modal = new SchedulingModel();
-        //    modal.regions = _context.Regions.ToList();
-        //    return View(modal);
-        //}
-
+        #region LoadSchedulingPartial
         public IActionResult LoadSchedulingPartial(string PartialName, string date, int regionid)
         {
             var currentDate = DateTime.Parse(date);
@@ -57,14 +47,17 @@ namespace HalloDoc.Controllers.Admin
 
             switch (PartialName)
             {
-
                 case "_DayWise":
                     DayWiseScheduling day = new DayWiseScheduling
                     {
                         date = currentDate,
                         physicians = physician,
-                        shiftdetails = _context.Shiftdetails.Include(u => u.Shift).ToList()
+                        shiftdetails = _context.Shiftdetailregions.Include(u => u.Shiftdetail).ThenInclude(u => u.Shift).Where(u => u.Regionid == regionid && u.Isdeleted == new BitArray(new[] { false })).Select(u => u.Shiftdetail).ToList()
                     };
+                    if (regionid == 0)
+                    {
+                        day.shiftdetails = _context.Shiftdetails.Include(u => u.Shift).Where(u => u.Isdeleted == new BitArray(new[] { false })).ToList();
+                    }
                     return PartialView("../Admin/Scheduling/_DayWise", day);
 
                 case "_WeekWise":
@@ -72,24 +65,33 @@ namespace HalloDoc.Controllers.Admin
                     {
                         date = currentDate,
                         physicians = physician,
-                        shiftdetails = _context.Shiftdetails.Include(u => u.Shift).ThenInclude(u => u.Physician).ToList()
+                        shiftdetails = _context.Shiftdetailregions.Include(u => u.Shiftdetail).ThenInclude(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.Isdeleted == new BitArray(new[] { false })).Where(u => u.Regionid == regionid).Select(u => u.Shiftdetail).ToList()
                     };
+                    if (regionid == 0)
+                    {
+                        week.shiftdetails = _context.Shiftdetails.Include(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.Isdeleted == new BitArray(new[] { false })).ToList();
+                    }
                     return PartialView("../Admin/Scheduling/_WeekWise", week);
 
                 case "_MonthWise":
                     MonthWiseScheduling month = new MonthWiseScheduling
                     {
                         date = currentDate,
-                        shiftdetails = _context.Shiftdetails.Include(u => u.Shift).ThenInclude(u => u.Physician).ToList()
+                        shiftdetails = _context.Shiftdetailregions.Include(u => u.Shiftdetail).ThenInclude(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.Isdeleted == new BitArray(new[] { false })).Where(u => u.Regionid == regionid).Select(u => u.Shiftdetail).ToList()
                     };
+                    if (regionid == 0)
+                    {
+                        month.shiftdetails = _context.Shiftdetails.Include(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.Isdeleted == new BitArray(new[] { false })).ToList();
+                    }
                     return PartialView("../Admin/Scheduling/_MonthWise", month);
 
                 default:
                     return PartialView("../Admin/Scheduling/_DayWise");
             }
         }
+        #endregion
 
-
+        #region AddShift
         public IActionResult AddShift(SchedulingModel model)
         {
             string adminId = CV.ID();
@@ -98,9 +100,9 @@ namespace HalloDoc.Controllers.Admin
             return RedirectToAction("Index");
 
         }
+        #endregion
 
-
-
+        #region viewshift
         public SchedulingModel viewshift(int shiftdetailid)
         {
             SchedulingModel modal = new SchedulingModel();
@@ -122,6 +124,9 @@ namespace HalloDoc.Controllers.Admin
             modal.shiftdetailid = shiftdetailid;
             return modal;
         }
+        #endregion
+
+        #region ViewShiftreturn
         public IActionResult ViewShiftreturn(SchedulingModel modal)
         {
             var shiftdetail = _context.Shiftdetails.FirstOrDefault(u => u.Shiftdetailid == modal.shiftdetailid);
@@ -138,7 +143,21 @@ namespace HalloDoc.Controllers.Admin
 
             return RedirectToAction("Index");
         }
+        #endregion
 
+        #region EditShift
+        public void EditShiftSave(SchedulingModel modal)
+        {
+            _schedulingRepository.EditShiftSave(modal, CV.ID());
+        }
+        #endregion
+
+        #region DeleteShift
+        public IActionResult ViewShiftDelete(SchedulingModel modal)
+        {
+            _schedulingRepository.ViewShiftDelete(modal, CV.ID());
+            return RedirectToAction("Index");
+        }
         #endregion
     }
 }

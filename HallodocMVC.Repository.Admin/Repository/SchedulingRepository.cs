@@ -2,6 +2,7 @@
 using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
 using HallodocMVC.Repository.Admin.Repository.Interface;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
@@ -24,8 +25,6 @@ namespace HallodocMVC.Repository.Admin.Repository
 
         public void AddShift(SchedulingModel model, List<string?>? chk, string adminId)
         {
-
-
             var shiftid = _context.Shifts.Where(u => u.Physicianid == model.physicianid).Select(u => u.Shiftid).ToList();
             if (shiftid.Count() > 0)
             {
@@ -163,15 +162,12 @@ namespace HallodocMVC.Repository.Admin.Repository
                         newcurdate = newcurdate.AddDays(7);
                     }
                 }
-
             }
         }
-
         public void ViewShift(int shiftdetailid)
         {
             SchedulingModel modal = new SchedulingModel();
             var shiftdetail = _context.Shiftdetails.FirstOrDefault(u => u.Shiftdetailid == shiftdetailid);
-
             if (shiftdetail != null)
             {
                 _context.Entry(shiftdetail)
@@ -180,16 +176,13 @@ namespace HallodocMVC.Repository.Admin.Repository
                     .Include(s => s.Physician)
                     .Load();
             }
-
             modal.regionid = (int)shiftdetail.Regionid;
             modal.physicianname = shiftdetail.Shift.Physician.Firstname + " " + shiftdetail.Shift.Physician.Lastname;
             modal.modaldate = shiftdetail.Shiftdate.ToString("yyyy-MM-dd");
             modal.starttime = shiftdetail.Starttime;
             modal.endtime = shiftdetail.Endtime;
             modal.shiftdetailid = shiftdetailid;
-
         }
-
         public void ViewShiftreturn(SchedulingModel modal)
         {
             var shiftdetail = _context.Shiftdetails.FirstOrDefault(u => u.Shiftdetailid == modal.shiftdetailid);
@@ -206,6 +199,40 @@ namespace HallodocMVC.Repository.Admin.Repository
         }
         #endregion
 
-
+        #region EditShiftSave
+        public bool EditShiftSave(SchedulingModel modal, string id)
+        {
+            var shiftdetail = _context.Shiftdetails.FirstOrDefault(u => u.Shiftdetailid == modal.shiftdetailid);
+            if (shiftdetail != null)
+            {
+                shiftdetail.Shiftdate = modal.shiftdate;
+                shiftdetail.Starttime = modal.starttime;
+                shiftdetail.Endtime = modal.endtime;
+                shiftdetail.Modifiedby = id;
+                shiftdetail.Modifieddate = DateTime.Now;
+                _context.Shiftdetails.Update(shiftdetail);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+        #endregion
+        #region DeleteShiftSave
+        public bool ViewShiftDelete(SchedulingModel modal, string id)
+        {
+            var shiftdetail = _context.Shiftdetails.FirstOrDefault(u => u.Shiftdetailid == modal.shiftdetailid);
+            var shiftdetailRegion = _context.Shiftdetailregions.FirstOrDefault(u => u.Shiftdetailid == modal.shiftdetailid);
+            string adminname = id;
+            shiftdetail.Isdeleted = new BitArray(new[] { true });
+            shiftdetail.Modifieddate = DateTime.Now;
+            shiftdetail.Modifiedby = adminname;
+            _context.Shiftdetails.Update(shiftdetail);
+            _context.SaveChanges();
+            shiftdetailRegion.Isdeleted = new BitArray(new[] { true });
+            _context.Shiftdetailregions.Update(shiftdetailRegion);
+            _context.SaveChanges();
+            return true;
+        }
+        #endregion
     }
 }

@@ -77,8 +77,8 @@
                 <a id="regionicon">
                     <i class="fa fa-search"></i>
                 </a>
-                <select class="form-select" data-allow-clear="true" tabindex="-1" id="suggestions" onchange="myFunction()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" style="padding-left:5px">
-                    <option value="-1">All Region</option>
+                <select class="form-select" data-allow-clear="true" tabindex="-1" id="schedulingregion"  asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" style="padding-left:5px">
+                    <option value="0">All Region</option>
                 </select>
             </div>
             
@@ -134,15 +134,15 @@
             <form asp-action="AddShift" asp-controller="Scheduling">
                 <div class="modal-body">
                     <div class="form-floating">
-                      
-                        <select class="form-select form-select-sm mt-3 p-2" required data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region1" asp-for="regionid" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
-                            <option id="defaultreason" value="">All Region</option>
+                        <select class="form-select form-select-sm mt-3 p-2" required data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="addshiftregion" asp-for="regionid" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                        
                         </select>
                     </div>
-                    <select class="form-select form-select-sm mt-3 p-2" required asp-for="physicianid" data-allow-clear="true" tabindex="-1" id="Physician" data-control="select2" data-placeholder="Select Level">
-                        @* <option>Select Physician</option> *@
-                    </select>
-                    <label for="region2">Select Physician</label>
+                    <div class="form-floating">
+                        <select class="form-select form-select-sm mt-3 p-2" required asp-for="physicianid" data-allow-clear="true" tabindex="-1" id="Physician" data-control="select2" data-placeholder="Select Level">
+                            @* <option>Select Physician</option> *@
+                        </select>
+                    </div>
                     <div class="form-floating mt-3">
                         <input asp-for="shiftdate" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" placeholder="Date">
                         <label for="floatingInput">Shift Date</label>
@@ -206,11 +206,11 @@
                 <h1 class="modal-title fs-5" id="viewShiftModalLabel">View Shift</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form asp-action="ViewShiftreturn" asp-controller="Scheduling">
+            <form asp-action="ViewShiftreturn" asp-controller="Scheduling" id="ViewShiftForm">
                 <input asp-for="shiftdetailid" type="hidden" id="shiftmodalid"/>
                 <div class="modal-body">
                     <div class="form-floating">
-                        <select class="form-select" data-allow-clear="true" tabindex="-1"  id="shiftmodalRegion" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" disabled>
+                        <select class="form-select" data-allow-clear="true" tabindex="-1" asp-for="regionid" id="shiftmodalRegion" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" disabled>
                             <option value="">Select Region</option>
                         </select>
                         <label for="floatingSelect" class="text-info">
@@ -221,19 +221,19 @@
                         <option id="shiftmodalPhysician" selected>Select Physician</option>
                     </select>
                     <div class="form-floating mt-3">
-                        <input asp-for="shiftdate" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" id="shiftmodalDate" class="form-control disable" placeholder="Date" disabled>
+                        <input asp-for="shiftdate" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" id="shiftmodalDate" class="form-control disable" placeholder="Date" readonly>
                         <label for="floatingInput">Shift Date</label>
                     </div>
                     <div class="row row-cols-md-2 row-cols-sm-1 row-cols-1 mt-3">
                         <div class="col mb-3 mb-md-0">
                             <div class="form-floating">
-                                <input asp-for="starttime" type="time" class="form-control disable" id="shiftmodalStart" placeholder="Date" disabled />
+                                <input asp-for="starttime" type="time" class="form-control disable" id="shiftmodalStart" placeholder="Date" readonly />
                                 <label for="floatingInput">Start</label>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-floating">
-                                <input asp-for="endtime" type="time" class="form-control disable" id="shiftmodalEnd" placeholder="Date" disabled />
+                                <input asp-for="endtime" type="time" class="form-control disable" id="shiftmodalEnd" placeholder="Date" readonly />
                                 <label for="floatingInput">End</label>
                             </div>
                         </div>
@@ -242,9 +242,9 @@
                 <div class="modal-footer">
                     <button type="submit" id="returnbtn" class="btn btn-info text-white">Return</button>
                     <button type="button" onclick="editclick()" class="btn btn-info text-white edit">Edit</button>
-                    <button type="button" onclick="editclick()" class="btn btn-info text-white d-none save">Save</button>
+                    <button type="button" onclick="SaveShift()" class="btn btn-info text-white d-none save">Save</button>
                     <button type="reset" onclick="cancelclick()" class="btn btn-outline-info d-none cancel">Cancel</button>
-                    <button type="button" class="btn btn-danger text-white">Delete</button>
+                    <button type="button" onclick="DeleteShift()" class="btn btn-danger text-white">Delete</button>
                 </div>
             </form>
         </div>
@@ -276,7 +276,7 @@
         }
 
         function myFunction() {
-            var region = $("#region1").val();
+            var region = $("#addshiftregion").val();
             console.log(region);
             $.ajax({
                 type: "POST",
@@ -285,7 +285,7 @@
                 success: function (response) {
 
                     console.log(response);
-                    var s = '<option value="-1">Please Select</option>';
+                    var s ;
                     for (var i = 0; i < response.length; i++) {
                         s += '<option value="' + response[i].physicianid + '">' + response[i].firstname + '</option>';
                     }
@@ -296,33 +296,11 @@
                 }
             });
         }
-
-        // function getdatabyregion() {
-        //     var region = $("#regiondropdown").val();
-        //     if (region == '-1') {
-        //         region = null;
-        //         location.reload();
-        //     }
-        //     $.ajax({
-        //         type: "POST",
-        //         url: 'Url.Action("LoadSchedulingPartial", "Scheduling")?PartialName=' + region, PartialName, string date, int regionid
-        //         cache: false,
-        //         success: function (response) {
-        //             console.log(response);
-        //             var bodyContent = $(response).find('tbody').html();
-        //             $('#rolebody').html(bodyContent);
-
-        //         },
-        //         error: function () {
-        //             alert("Error while Loading data.");
-        //         }
-        //     });
-        // }
-
         // Change Physician according to Region
         $(document).ready(function () {
             localStorage.getItem("currentPartial");
-            $('.region').on('change', function () {
+            myFunction();
+            $('#schedulingregion').on('change', function () {
                 regionid = $(this).val();
                 console.log(regionid);
                 $.ajax({
@@ -378,36 +356,6 @@
             });
 
 
-            $('.physiciandata').on('change', function (e) {
-                var regionid = $(this).val();
-                console.log(regionid);
-                $.ajax({
-                    url: '/Scheduling/filterregion',
-                    data: { regionid: regionid },
-                    success: function (response) {
-                        //console.log(response);
-                        var physelect = $('#physelect');
-                        //console.log(physelect);
-                        physelect.empty();
-                        physelect.append($('<option>', {
-                            value: "",
-                            text: "Select Physician"
-                        }))
-                        response.forEach(function (item) {
-                            //console.log(item);
-                            physelect.append(
-                                $('<option>', {
-                                    value: item.physicianid,
-                                    text: item.firstname
-                                }));
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(error);
-                    }
-                });
-            });
-
             $('.repeatchk').on('change', function () {
                 if ($(this).prop('checked')) {
                     $('.disable').each(function () {
@@ -428,7 +376,7 @@
             $('.edit').removeClass('d-inline-block').addClass('d-none');
             $('.save').removeClass('d-none').addClass('d-inline-block');
             $('.disable').each(function () {
-                $(this).prop('disabled', false);
+                $(this).prop('readonly', false);
             });
         }
         function cancelclick() {
@@ -436,7 +384,7 @@
             $('.cancel').removeClass('d-inline-block').addClass('d-none');
             $('.save').removeClass('d-inline-block').addClass('d-none');
             $('.disable').each(function () {
-                $(this).prop('disabled', true);
+                $(this).prop('readonly', true);
             });
         }
 
@@ -459,7 +407,44 @@
             });
         });
 
+        function SaveShift() {
+            var modal = $('#ViewShiftForm').serialize();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("EditShiftSave", "Scheduling")',
+                cache: false,
+                data: modal,
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function () {
+                    alert("Error .");
+                }
+            });
 
+            $('.cancel').removeClass('d-inline-block').addClass('d-none');
+            $('.edit').removeClass('d-none').addClass('d-inline-block');
+            $('.save').removeClass('d-inline-block').addClass('d-none');
+            $('.disable').each(function () {
+                $(this).prop('readonly', false);
+            });
+        }
+        function DeleteShift() {
+            var modal = $('#ViewShiftForm').serialize();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ViewShiftDelete", "Scheduling")',
+                cache: false,
+                data: modal,
+                success: function (response) {
+                    console.log(response);
+                    location.reload();
+                },
+                error: function () {
+                    alert("Error .");
+                }
+            });
+        }
 
     </script>
 

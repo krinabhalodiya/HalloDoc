@@ -46,126 +46,131 @@
             <th>10P</th>
             <th>11P</th>
         </tr>
-        <tr>
-            <td style="width:10rem;">Coverage</td>
-            @for (int i = 0; i < 24; i++)
-            {
-                <td class="dates"></td>
-            }
-        </tr>
-        @foreach (var obj in Model.physicians)
-        {
-            var shift = Model.shiftdetails.Where(u => u.Shiftdate == now && u.Shift.Physicianid == obj.Physicianid).ToList();
-            <tr>
-                @if (obj.Photo == null)
-                {
-                    <td>
-                        <span class="d-flex">
-                            <i class="fa-solid fa-user me-1 mt-1"></i> @obj.Firstname @obj.Lastname.ElementAt(0).
-                        </span>
-                    </td>
-                }
-                else
-                {
-                    <td>
-                        <span class="d-flex">
-                            <img class="me-1" src="@obj.Photo" height="25px" width="25px" /> @obj.Firstname @obj.Lastname.ElementAt(0).
-                        </span>
-                    </td>
-                }
-                @*@for (int i = 0; i < 24; i++)
-                {
-                    if (shift.Count() > 0)
-                    {
-                        int flag = 0;
-                        foreach (var item in shift)
-                        {
-                            var diff = item.Endtime.Hour - item.Starttime.Hour + 1;
-                            if (item.Starttime.Hour <= i && item.Endtime.Hour >= i)
-                            {
-                                var perstart = (item.Starttime.Minute / 60.00) * 100;
-                                int wid = 100;
-                                if (item.Endtime.Minute != 0)
-                                {
-                                wid = 58;
-                                }
-                                perstart /= 2;
-                                <td id="i_@obj.Physicianid" colspan="@diff" class="p-0" data-bs-toggle="modal" data-bs-target="#viewShiftModal">
-                                <span class="dates d-flex align-items-center justify-content-center" style="margin-left:@perstart%;width:@wid%">
-                                @item.Starttime-@item.Endtime
-                                </span>
-                                </td>
-                                i += (@diff - 1);
-                                flag = 1;
-                            }
-                        }
-                        if (flag == 0)
-                        {
-                            <td id="i_@obj.Physicianid"></td>
-                        }
-                    }
-                    else
-                    {
-                     <td id="i_@obj.Physicianid"></td>
-                    }
-                } *@
-                @for (int i = 0; i < 24; i++)
-                {
-                    if (shift.Count() > 0)
-                    {
-                        int flag = 0;
-                        foreach (var item in shift)
-                        {
-                            f = 0;
-                            var diff = item.Endtime.Hour - item.Starttime.Hour;
-                            if (diff <= 0)
-                            {
-                                diff = 1;
-                            }
-                            if (item.Starttime.Hour == i)
-                            {
-                                var perstart = (item.Starttime.Minute / 60.00) * 100;
-                                var perend = ((60.00 - item.Endtime.Minute) / 60.00) * 100;
-                                if (item.Endtime.Minute != 0)
-                                {
-                                    diff = diff + 1;
-                                }
-                                perstart /= diff;
-                                perend /= diff;
-                                if (item.Endtime.Minute == 0)
-                                {
-                                    perend = 0;
-                                }
-                                <td id="i_@obj.Physicianid" colspan="@diff" class="p-0">
-                                    @if (item.Status == 0)
-                                    {
-                                        <div class="shiftdisplay shiftmodal d-flex align-items-center justify-content-center" id="@item.Shiftdetailid" data-bs-toggle="modal" data-bs-target="#viewShiftModal" style="margin-left:@perstart%;margin-right:@perend%; " data-bs-id="@item.Shiftdetailid">
-                                            @item.Starttime-@item.Endtime
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="shiftdisplay2 shiftmodal d-flex align-items-center justify-content-center" id="@item.Shiftdetailid" style="margin-left:@perstart%;margin-right:@perend%;" data-bs-toggle="modal" data-bs-target="#viewShiftModal" data-bs-id="@item.Shiftdetailid">
-                                            @item.Starttime-@item.Endtime
-                                        </div>
-                                    }
-                                </td>
-                                i += (@diff - 1);
-                                flag = 1;
-                            }
-                        }
-                        if (flag == 0)
-                        {
-                            <td id="i_@obj.Physicianid"></td>
-                        }
-                    }
-                    else
-                    {
-                        <td id="i_@obj.Physicianid"></td>
-                    }
-                }
-            </tr>
-        }
+		<tbody id="regionshift">
+			<tr>
+				<td style="width:10rem;">Coverage</td>
+				@for (int i = 0; i < 24; i++)
+				{
+					<td class="dates"></td>
+				}
+			</tr>
+
+			@foreach (var obj in Model.physicians)
+			{
+				var shift = Model.shiftdetails.Where(u => u.Shiftdate == now && u.Shift.Physicianid == obj.Physicianid).ToList();
+				<tr>
+					@if (obj.Photo == null)
+					{
+						<td>
+							<span class="d-flex">
+								<i class="fa-solid fa-user me-1 mt-1"></i> @obj.Firstname @obj.Lastname.ElementAt(0).
+							</span>
+						</td>
+					}
+					else
+					{
+						<td>
+							
+							<span class="d-flex">
+								<img class="me-1" src="~/Upload/Physician/@obj.Physicianid/@obj.Photo" height="25px" width="25px" /> @obj.Firstname @obj.Lastname.ElementAt(0).
+							</span>
+						</td>
+					}
+					@*@for (int i = 0; i < 24; i++)
+				{
+				if (shift.Count() > 0)
+				{
+				int flag = 0;
+				foreach (var item in shift)
+				{
+				var diff = item.Endtime.Hour - item.Starttime.Hour + 1;
+				if (item.Starttime.Hour <= i && item.Endtime.Hour >= i)
+				{
+				var perstart = (item.Starttime.Minute / 60.00) * 100;
+				int wid = 100;
+				if (item.Endtime.Minute != 0)
+				{
+				wid = 58;
+				}
+				perstart /= 2;
+				<td id="i_@obj.Physicianid" colspan="@diff" class="p-0" data-bs-toggle="modal" data-bs-target="#viewShiftModal">
+				<span class="dates d-flex align-items-center justify-content-center" style="margin-left:@perstart%;width:@wid%">
+				@item.Starttime-@item.Endtime
+				</span>
+				</td>
+				i += (@diff - 1);
+				flag = 1;
+				}
+				}
+				if (flag == 0)
+				{
+				<td id="i_@obj.Physicianid"></td>
+				}
+				}
+				else
+				{
+				<td id="i_@obj.Physicianid"></td>
+				}
+				} *@
+					@for (int i = 0; i < 24; i++)
+					{
+						if (shift.Count() > 0)
+						{
+							int flag = 0;
+							foreach (var item in shift)
+							{
+								f = 0;
+								var diff = item.Endtime.Hour - item.Starttime.Hour;
+								if (diff <= 0)
+								{
+									diff = 1;
+								}
+								if (item.Starttime.Hour == i)
+								{
+									var perstart = (item.Starttime.Minute / 60.00) * 100;
+									var perend = ((60.00 - item.Endtime.Minute) / 60.00) * 100;
+									if (item.Endtime.Minute != 0)
+									{
+										diff = diff + 1;
+									}
+									perstart /= diff;
+									perend /= diff;
+									if (item.Endtime.Minute == 0)
+									{
+										perend = 0;
+									}
+									<td id="i_@obj.Physicianid" colspan="@diff" class="p-0">
+										@if (item.Status == 0)
+										{
+											<div class="shiftdisplay shiftmodal d-flex align-items-center justify-content-center" id="@item.Shiftdetailid" data-bs-toggle="modal" data-bs-target="#viewShiftModal" style="margin-left:@perstart%;margin-right:@perend%; " data-bs-id="@item.Shiftdetailid">
+												@item.Starttime-@item.Endtime
+											</div>
+										}
+										else
+										{
+											<div class="shiftdisplay2 shiftmodal d-flex align-items-center justify-content-center" id="@item.Shiftdetailid" style="margin-left:@perstart%;margin-right:@perend%;" data-bs-toggle="modal" data-bs-target="#viewShiftModal" data-bs-id="@item.Shiftdetailid">
+												@item.Starttime-@item.Endtime
+											</div>
+										}
+									</td>
+									i += (@diff - 1);
+									flag = 1;
+								}
+							}
+							if (flag == 0)
+							{
+								<td id="i_@obj.Physicianid"></td>
+							}
+						}
+						else
+						{
+							<td id="i_@obj.Physicianid"></td>
+						}
+					}
+				</tr>
+			}
+        </tbody>
+        
     </table>
 
 </div>
