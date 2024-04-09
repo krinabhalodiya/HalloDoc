@@ -46,7 +46,7 @@
             </div>
             
             <div class="d-flex">
-                <a class="btn btn-outline-info m-1 align-self-center" asp-action="PhysicianAddEdit" asp-controller="Access">
+                <a class="btn btn-outline-info m-1 align-self-center" asp-action="AddEditBusiness" asp-controller="Partners">
                     <i class="fa fa-plus me-1"></i>Add Business
                 </a>
             </div>
@@ -76,13 +76,18 @@
                             <td>@item.Faxnumber</td>
                             <td>@item.Phonenumber</td>
                             <td>@item.Businesscontact</td>
-                            <td class="d-flex justify-content-center">
-                                <a asp-action="AdminEdit" asp-controller="Access" asp-route-id="@item.Vendorid" class="btn btn-outline-info btn-sm document-button mx-1">
-                                    Edit
-                                </a>
-                                <a asp-action="AdminEdit" asp-controller="Access" asp-route-id="@item.Vendorid" class="btn btn-outline-info btn-sm document-button mx-1">
-                                    Delete
-                                </a>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center">
+                                    <a asp-controller="Partners" asp-action="AddEditBusiness" asp-route-VendorId="@item.Vendorid" class="btn btn-sm border-info text-info shadow-none mx-1 mb-2">
+                                        Edit
+                                    </a>
+                                    <form class="DeleteForm" asp-controller="Partners" asp-action="DeleteVendor">
+                                        <input type="hidden" name="VendorId" value="@item.Vendorid" />
+                                        <div class="btn btn-sm border-info text-info shadow-none mx-1 mb-2 delete">
+                                            Delete
+                                        </div>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     }
@@ -93,7 +98,31 @@
 </div>
 
 <script>
+    modeldata = @Html.Raw(Json.Serialize(Model))
 
+        var deleteButton = document.querySelectorAll('.delete');
+
+    deleteButton.forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            var form = button.closest('.DeleteForm');
+            var vendorIdInput = form.querySelector('input[name="VendorId"]');
+            var vendorId = vendorIdInput.value;
+
+            Swal.fire({
+                title: "Do you want to delete this partner?",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                denyButtonText: "No"
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
     function getdatabyrole() {
         var region = $("#regiondropdown").val();
         if (region == '-1') {
