@@ -172,5 +172,41 @@ namespace HalloDoc.Controllers.Admin
             return View("../Admin/Scheduling/MDSOnCall", v);
         }
         #endregion
+        #region RequestedShift
+        public async Task<IActionResult> RequestedShift(int? regionId)
+        {
+            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
+            List<SchedulingModel> v = await _schedulingRepository.GetAllNotApprovedShift(regionId);
+            
+            return View("../Admin/Scheduling/ShiftForReview", v);
+        }
+        #endregion
+
+        #region _ApprovedShifts
+
+        public async Task<IActionResult> _ApprovedShifts(string shiftids)
+        {
+            if (await _schedulingRepository.UpdateStatusShift(shiftids, CV.ID()))
+            {
+                TempData["Status"] = "Approved Shifts Successfully..!";
+            }
+
+
+            return RedirectToAction("RequestedShift");
+        }
+        #endregion
+
+        #region _DeleteShifts
+
+        public async Task<IActionResult> _DeleteShifts(string shiftids)
+        {
+            if (await _schedulingRepository.DeleteShift(shiftids, CV.ID()))
+            {
+                TempData["Status"] = "Delete Shifts Successfully..!";
+            }
+
+            return RedirectToAction("RequestedShift");
+        }
+        #endregion
     }
 }

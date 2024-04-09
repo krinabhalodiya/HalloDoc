@@ -22,7 +22,6 @@ namespace HallodocMVC.Repository.Admin.Repository
             _context = context;
         }
         #region Scheduling
-
         public void AddShift(SchedulingModel model, List<string?>? chk, string adminId)
         {
             var shiftid = _context.Shifts.Where(u => u.Physicianid == model.physicianid).Select(u => u.Shiftid).ToList();
@@ -217,6 +216,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             return false;
         }
         #endregion
+
         #region DeleteShiftSave
         public bool ViewShiftDelete(SchedulingModel modal, string id)
         {
@@ -240,7 +240,6 @@ namespace HallodocMVC.Repository.Admin.Repository
         {
             DateTime currentDateTime = DateTime.Now;
             TimeOnly currentTimeOfDay = TimeOnly.FromDateTime(DateTime.Now);
-
             List<PhysiciansData> pl = await (from r in _context.Physicians
                                          where r.Isdeleted == new BitArray(1)
                                          select new PhysiciansData
@@ -290,13 +289,11 @@ namespace HallodocMVC.Repository.Admin.Repository
                                         })
                                         .ToListAsync();
             }
-
             foreach (var item in pl)
             {
                 List<int> shiftIds = await (from s in _context.Shifts
                                             where s.Physicianid == item.Physicianid
                                             select s.Shiftid).ToListAsync();
-
                 foreach (var shift in shiftIds)
                 {
                     var shiftDetail = (from sd in _context.Shiftdetails
@@ -305,17 +302,104 @@ namespace HallodocMVC.Repository.Admin.Repository
                                              sd.Starttime <= currentTimeOfDay &&
                                              currentTimeOfDay <= sd.Endtime
                                        select sd).FirstOrDefault();
-
                     if (shiftDetail != null)
                     {
                         item.onCallStatus = 1;
                     }
                 }
             }
-
             return pl;
+        }
+        #endregion
 
+        #region GetAllNotApprovedShift
+        public async Task<List<SchedulingModel>> GetAllNotApprovedShift(int? regionId)
+        {
 
+            List<SchedulingModel> ss = await (from s in _context.Shifts
+                                       join pd in _context.Physicians
+                                       on s.Physicianid equals pd.Physicianid
+                                       join sd in _context.Shiftdetails
+                                       on s.Shiftid equals sd.Shiftid into shiftGroup
+                                       from sd in shiftGroup.DefaultIfEmpty()
+                                       join rg in _context.Regions
+                                       on sd.Regionid equals rg.Regionid
+                                       where (regionId == null || regionId == -1 || sd.Regionid == regionId) && sd.Status == 0 && sd.Isdeleted == new BitArray(1)
+                                       select new SchedulingModel
+                                       {
+                                           regionid = (int)sd.Regionid,
+                                           RegionName = rg.Name,
+                                           shiftdetailid = sd.Shiftdetailid,
+                                           status = sd.Status,
+                                           starttime = sd.Starttime,
+                                           endtime = sd.Endtime,
+                                           physicianid = s.Physicianid,
+                                           physicianname = pd.Firstname + ' ' + pd.Lastname,
+                                           shiftdate = sd.Shiftdate
+                                       })
+                                .ToListAsync();
+            return ss;
+        }
+        #endregion
+
+        #region DeleteShift
+        public async Task<bool> DeleteShift(string s, string AdminID)
+        {
+            List<int> shidtID = s.Split(',').Select(int.Parse).ToList();
+            try
+            {
+                foreach (int i in shidtID)
+                {
+                    Shiftdetail sd = _context.Shiftdetails.FirstOrDefault(sd => sd.Shiftdetailid == i);
+                    if (sd != null)
+                    {
+                        sd.Isdeleted[0] = true;
+                        sd.Modifiedby = AdminID;
+                        sd.Modifieddate = DateTime.Now;
+                        _context.Shiftdetails.Update(sd);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+        #region UpdateStatusShift
+        public async Task<bool> UpdateStatusShift(string s, string AdminID)
+        {
+            List<int> shidtID = s.Split(',').Select(int.Parse).ToList();
+            try
+            {
+                foreach (int i in shidtID)
+                {
+                    Shiftdetail sd = _context.Shiftdetails.FirstOrDefault(sd => sd.Shiftdetailid == i);
+                    if (sd != null)
+                    {
+                        sd.Status = (short)(sd.Status == 1 ? 0 : 1);
+                        sd.Modifiedby = AdminID;
+                        sd.Modifieddate = DateTime.Now;
+                        _context.Shiftdetails.Update(sd);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         #endregion
     }
