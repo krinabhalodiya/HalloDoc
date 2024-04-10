@@ -40,7 +40,38 @@
             </li>
             
             <li class="nav-item me-3">
-                <a class="nav-link text-dark @(path.StartsWith("/Records") ? "activesbnav" : "")" asp-action="Index" asp-controller="Records">Records</a>
+                <div class="dropdown">
+                    <button data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn rounded-0 nav-link px-3 text-dark shadow-none @(path.StartsWith("/Records") ? "activesbnav" : "")">
+                        <small>Records</small>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a asp-controller="Records" asp-action="SearchRecords" class="dropdown-item">
+                                Search Records
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="" asp-action="" class="dropdown-item">
+                                Email Logs
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="" asp-action="" class="dropdown-item">
+                                SMS Logs
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Records" asp-action="PatientHistory" class="dropdown-item">
+                                Patient Records
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Records" asp-action="BlockHistory" class="dropdown-item">
+                                Blocked History
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
         </ul>
     </div>

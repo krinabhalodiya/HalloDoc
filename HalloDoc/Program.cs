@@ -31,6 +31,7 @@ builder.Services.AddScoped<IRoleAccessRepository, RoleAccessRepository>();
 builder.Services.AddScoped<ICreateRequest, CreateRequest>();
 builder.Services.AddScoped<IPartnersRepository, PartnersRepository>();
 builder.Services.AddScoped<ISchedulingRepository, SchedulingRepository>();
+builder.Services.AddScoped<IRecords, Records>();
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 var app = builder.Build();
 

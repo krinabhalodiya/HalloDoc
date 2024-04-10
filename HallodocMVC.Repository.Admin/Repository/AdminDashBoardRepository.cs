@@ -29,12 +29,12 @@ namespace HallodocMVC.Repository.Admin.Repository
         {
             return new PaginatedViewModel
             {
-                NewRequest = _context.Requests.Where(r => r.Status == 1).Count(),
-                PendingRequest = _context.Requests.Where(r => r.Status == 2).Count(),
-                ActiveRequest = _context.Requests.Where(r => (r.Status == 4 || r.Status == 5)).Count(),
-                ConcludeRequest = _context.Requests.Where(r => r.Status == 6).Count(),
-                ToCloseRequest = _context.Requests.Where(r => (r.Status == 3 || r.Status == 7 || r.Status == 8)).Count(),
-                UnpaidRequest = _context.Requests.Where(r => r.Status == 9).Count()
+                NewRequest = _context.Requests.Where(r => r.Status == 1 && r.Isdeleted == new BitArray(1)).Count(),
+                PendingRequest = _context.Requests.Where(r => r.Status == 2 && r.Isdeleted == new BitArray(1)).Count(),
+                ActiveRequest = _context.Requests.Where((r => (r.Status == 4 || r.Status == 5) && r.Isdeleted == new BitArray(1))).Count(),
+                ConcludeRequest = _context.Requests.Where(r => r.Status == 6 && r.Isdeleted == new BitArray(1)).Count(),
+                ToCloseRequest = _context.Requests.Where((r => (r.Status == 3 || r.Status == 7 || r.Status == 8) && r.Isdeleted == new BitArray(1))).Count(),
+                UnpaidRequest = _context.Requests.Where(r => r.Status == 9 && r.Isdeleted == new BitArray(1)).Count()
             };
         }
         public PaginatedViewModel GetRequests(string Status, PaginatedViewModel data) {
@@ -53,7 +53,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                 join reg in _context.Regions
                                                 on rc.Regionid equals reg.Regionid into RegGroup
                                                 from rg in RegGroup.DefaultIfEmpty()
-                                                where statusdata.Contains(req.Status) && (data.SearchInput == null ||
+                                                where statusdata.Contains(req.Status) && (req.Isdeleted == new BitArray(1)) && (data.SearchInput == null ||
                                                          rc.Firstname.Contains(data.SearchInput) || rc.Lastname.Contains(data.SearchInput) ||
                                                          req.Firstname.Contains(data.SearchInput) || req.Lastname.Contains(data.SearchInput) ||
                                                          rc.Email.Contains(data.SearchInput) || rc.Phonenumber.Contains(data.SearchInput) ||

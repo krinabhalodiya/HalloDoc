@@ -18,6 +18,11 @@
         public string? ProviderName { get; set; }
         public string? Region { get; set; }
         public string ADStatus { get; set; }
+        public int RegionId { get; set; }
+        public short Status { get; set; }
+        public string ConfirmationNumber { get; set; }
+        public DateTime ConcludedDate { get; set; }
+        public int? RequestClientId { get; set; }
     }
     public class PaginatedViewModel
     {
@@ -38,6 +43,7 @@
         public int ToCloseRequest { get; set; }
         public int UnpaidRequest { get; set; }
 
+        public int? UserId { get; set; }
     }
 
 }
