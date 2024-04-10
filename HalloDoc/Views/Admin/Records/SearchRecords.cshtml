@@ -36,8 +36,8 @@
             <div class="row p-2">
                 <div class="col-md-3 col-sm-6 col-12">
                     <div class="form-floating mb-3">
-                        <select asp-items="@(new SelectList(requestStaus, "ID", "Name"))" class="form-select form-control shadow-none" id="RequestStatusDropDown">
-                            <option value="-1">Select Request Status</option>
+                        <select asp-items="@(new SelectList(requestStaus, "ID", "Name"))" asp-for="Status" class="form-select form-control shadow-none" id="RequestStatusDropDown">
+                            <option >Select Request Status</option>
                         </select>
                         <label for="RequestStatusDropDown">Select Request Status</label>
                     </div>
@@ -50,8 +50,8 @@
                 </div>
                 <div class="col-md-3 col-sm-6 col-12">
                     <div class="form-floating mb-3">
-                        <select asp-items="@(new SelectList(requestType, "ID", "Name"))" class="form-select form-control shadow-none" id="RequestStatusTypeDropDown">
-                            <option value="-1">Select Request Type</option>
+                        <select asp-items="@(new SelectList(requestType, "ID", "Name"))" asp-for="RequestType" class="form-select form-control shadow-none" id="RequestStatusTypeDropDown">
+                            <option >Select Request Type</option>
                         </select>
                         <label for="RequestStatusTypeDropDown">Select Request Type</label>
                     </div>
