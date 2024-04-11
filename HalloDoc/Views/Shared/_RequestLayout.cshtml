@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/patientsubmitreq.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</head>
+<body class="bg-light">
+
+    <div class="d-flex justify-content-between mw-100 bg-white text-dark hdr position-sticky">
+        <div class=" start-0 btn p-2 mx-3 my-auto">
+            <img src="~/images/Fig56._Patient_site_1.png" class="header-img">
+        </div>
+        <button type="button" class="top-0 end-0 btn btn-outline-info px-2 my-4 mx-3">
+            <i class="fa fa-moon-o fa-2x text-info"></i>
+        </button>
+    </div>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <div class="col-12 fixed-bottom mw-100 bg-dark text-light d-flex justify-content-end py-2 px-4">
+        <a href=" " class="text-light text-decoration-none">
+            <small class="text-body-secondary">
+                Terms of Conditions
+            </small>
+        </a>&nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href=" " class="text-light text-decoration-none">
+            <small class="text-body-secondary">
+                Privacy Policy
+            </small>
+        </a>
+    </div>
+
+    <script src="~/js/custom.js"></script>
+</body>
+</html>

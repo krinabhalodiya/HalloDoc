@@ -1,0 +1,164 @@
+﻿@using static HalloDoc.Entity.Models.Constant;
+@model HalloDoc.Entity.Models.PatientModels.ViewDataUserProfile;
+@{
+    Layout = "_LayoutPatient";
+}
+
+<div class="mb-5 container">
+    <div class="col-xl-12 d-flex justify-content-between  mb-3">
+        <h4 class="fw-bolder mt-4">
+            Profile
+        </h4>
+        <a asp-controller="PatientDashboard" asp-action="Index" class="btn border border-info bg-light rounded mt-3 mb-1">
+            <i class="fa fa-angle-left text-info align-middle"></i>
+            <span class="text-info">
+                <b class="align-text-top">&nbsp;&nbsp;Back</b>
+            </span>
+        </a>
+    </div>
+    <form method="post" asp-action="EditPatientProfile" asp-controller="PatientProfile">
+        <input type="hidden" asp-for="Userid" />
+        <div class="col-xl-12 ">
+            <div class="bg-white rounded p-3">
+                @*General information *@
+                <div class="py-3">
+                    <div>
+                        <h5 class="fw-bolder">General Information</h5>
+                    </div>
+                </div>
+                <div class="row pb-4">
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input asp-for="Firstname" type="text" class="form-control shadow-none" id="fname" placeholder="First Name">
+                            <label for="fname">First Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input asp-for="Lastname" type="text" class="form-control shadow-none" id="lname" placeholder="Last Name">
+                            <label for="lname">Last Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input asp-for="Birthdate" type="date" class="form-control shadow-none" id="dob" placeholder="Date Of Birth">
+                            <label for="dob">Date Of Birth</label>
+                        </div>
+                    </div>
+                </div>
+
+                @*Contact information *@
+                <div class="pb-3">
+                    <div>
+                        <h5 class="fw-bolder">Contact Information</h5>
+                    </div>
+                </div>
+                <div class="row pb-4">
+                    <div class="col-md-2 pb-3">
+                        <div class="form-floating">
+                            <select class="form-select" aria-label="Phone" id="dd">
+                                <option selected>Phone</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <label for="dd">Type</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 pb-3">
+                        <div class="form-floating phone">
+                            <input asp-for="Mobile" type="tel" class="form-control shadow-none col-xl-4" id="phone">
+                            <label for="phone">Phone Number</label>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input asp-for="Email" type="text" class="form-control shadow-none" id="Email" placeholder="Email">
+                            <label for="Email">Email</label>
+                        </div>
+                    </div>
+                </div>
+
+                @*Location information *@
+                <div class="pb-3">
+                    <div>
+                        <h5 class="fw-bolder">Location Information</h5>
+                    </div>
+                </div>
+                <div class="row pb-4">
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input asp-for="Street" type="text" class="form-control shadow-none" id="Street" placeholder="Date Of Birth">
+                            <label for="Street">Street</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input asp-for="City" type="text" class="form-control shadow-none" id="City" placeholder="Date Of Birth">
+                            <label for="City">City</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input asp-for="State" type="text" class="form-control shadow-none" id="Stata" placeholder="Date Of Birth">
+                            <label for="Stata">Stata</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input asp-for="Zipcode" type="text" class="form-control shadow-none" id="Zip Code" placeholder="Date Of Birth">
+                            <label for="Zip Code">Zip Code</label>
+                        </div>
+                    </div>
+                </div>
+
+                @* Edit *@
+                <div class="row px-3 d-flex justify-content-end">
+                    <a id="editprofile" onclick="enable_disable()" class="col-1 btn btn-info text-white rounded p-2">Edit</a>
+                    <input type="submit" id="submit" class="col-1 btn bg-info text-white rounded p-2" value="save">
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("form").submit(function () {
+            var full_number = phoneInput.getNumber(intlTelInputUtils.numberFormat.E164);
+            $("input[name='PhoneNumber']").val(full_number);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("input").prop("readonly", true);
+        $("select").prop("readonly", true);
+        $("input").css("background-color", "#e9ecef");
+        $("select").css("background-color", "#e9ecef");
+        $("#submit").css("display", "none");
+        //$("#cancel").css("display", "none");
+        $('#cancel').click(function () {
+            $("#submit").css("display", "none");
+            //$("#cancel").css("display", "none");
+            $(".inputs-control :input").prop("readonly", true);
+            $("select").prop("readonly", true);
+            $("input").css("background-color", "#e9ecef");
+            $("select").css("background-color", "#e9ecef");
+            $("#editprofile").css("display", "block");
+        });
+    });
+</script>
+<script>
+    function enable_disable() {
+        $("input").prop("readonly", false);
+        $("#submit").prop("readonly", false);
+        //$("#cancel").prop("readonly", false);
+        $("#submit").css("display", "block");
+        //$("#cancel").css("display", "block");
+        $("#editprofile").css("display", "none");
+        $("input").css("background-color", "transparent");
+        $("select").css("background-color", "transparent");
+    }
+</script>

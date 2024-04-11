@@ -80,5 +80,20 @@ namespace HalloDoc.Controllers.Admin
             return RedirectToAction("BlockHistory");
         }
         #endregion Unblock
+        #region EmailLogs
+        public IActionResult EmailLogs(RecordsModel rm)
+        {
+            RecordsModel r = _IRecords.GetFilteredEmailLogs(rm);
+            return View("../Admin/Records/EmailLogs", r);
+        }
+        #endregion EmailLogs
+
+        #region SMSLog
+        public IActionResult SMSLogs(RecordsModel rm)
+        {
+            RecordsModel r = _IRecords.GetFilteredSMSLogs(rm);
+            return PartialView("../Admin/Records/SMSLogs", r);
+        }
+        #endregion SMSLog
     }
 }

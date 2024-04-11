@@ -15,5 +15,7 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         Task<PaginatedViewModel> PatientRecord(int UserId, PaginatedViewModel data);
         RecordsModel BlockHistory(RecordsModel rm);
         bool Unblock(int RequestId, string id);
+        public RecordsModel GetFilteredSMSLogs(RecordsModel rm);
+        public RecordsModel GetFilteredEmailLogs(RecordsModel rm);
     }
 }

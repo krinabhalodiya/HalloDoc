@@ -9,7 +9,7 @@
                 <a class="nav-link text-dark @(path.StartsWith("/PatientDashboard") ? "activesbnav" : "")" aria-current="page" asp-controller="PatientDashboard" asp-action="Index">Dashboard</a>
             </li>
 			<li class="nav-item me-3">
-				<a class="nav-link text-dark @(path.StartsWith("/Profile") ? "activesbnav" : "")" asp-action="Index" asp-controller="Profile">Profile</a>
+                <a class="nav-link text-dark @(path.StartsWith("/PatientProfile") ? "activesbnav" : "")" asp-action="Index" asp-controller="PatientProfile">Profile</a>
 			</li>
         </ul>
     </div>

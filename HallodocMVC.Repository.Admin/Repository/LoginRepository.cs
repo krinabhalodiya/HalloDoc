@@ -49,11 +49,14 @@ namespace HallodocMVC.Repository.Admin.Repository
                     admin.FirstName = admin.FirstName ?? string.Empty;
                     admin.LastName = admin.LastName ?? string.Empty;
                     admin.Role = datarole.Name;
+                   
                     admin.AspNetUserID = user.Id;
                     if (admin.Role == "Admin")
                     {
                         var admindata = _context.Admins.FirstOrDefault(u => u.Aspnetuserid == user.Id);
                         admin.UserId = admindata.Adminid;
+                        admin.RoleID = (int)admindata.Roleid;
+
                     }
                     else if (admin.Role == "Patient")
                     {
@@ -64,6 +67,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                     {
                         var admindata = _context.Physicians.FirstOrDefault(u => u.Aspnetuserid == user.Id);
                         admin.UserId = admindata.Physicianid;
+                        admin.RoleID=(int)admindata.Roleid;
                     }
                     return admin;
                 }
@@ -110,5 +114,20 @@ namespace HallodocMVC.Repository.Admin.Repository
             }
         }
         #endregion
+
+        public bool isAccessGranted(int roleId, string menuName)
+        {
+            // Get the list of menu IDs associated with the role
+            IQueryable<int> menuIds = _context.Rolemenus
+                                            .Where(e => e.Roleid == roleId)
+                                            .Select(e => e.Menuid);
+
+            // Check if any menu with the given name exists in the list of menu IDs
+            bool accessGranted = _context.Menus
+                                         .Any(e => menuIds.Contains(e.Menuid) && e.Name == menuName);
+
+            return accessGranted;
+        }
+
     }
 }

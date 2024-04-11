@@ -50,5 +50,16 @@ namespace HalloDoc.Entity.Models
             Physician,
             Patient
         }
+        public enum EmailAction
+        {
+            Sendorder = 1,
+            Request,
+            SendLink,
+            SendAgreement,
+            Forgot,
+            NewRegistration,
+            contact
+
+        }
     }
 }

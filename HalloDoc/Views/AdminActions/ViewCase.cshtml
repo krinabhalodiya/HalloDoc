@@ -119,8 +119,8 @@
                         {
                             <a class="btn btn-info text-white rounded me-2" onclick="model_Case(@Model.RequestID)" data-bs-toggle="modal" data-bs-target="#assigncase" data-bs-requestid="@Model.RequestID" data-bs-patientname="@Model.FirstName">Assign</a>
                         }
-                        <a asp-action="ViewNotes" asp-controller="AdminActions" class="btn btn-info text-white rounded me-1">View Notes</a>
-                        <a asp-action="Index" asp-controller="AdminDashBoard" class="btn btn-danger text-white rounded">Cancel</a>
+                        <a asp-action="ViewNotes" asp-controller="AdminActions" asp-route-id="@Model.RequestID" class="btn btn-info text-white rounded me-1">View Notes</a>
+                        <a asp-action="Index" asp-controller="AdminDashBoard"  class="btn btn-danger text-white rounded">Cancel</a>
                     </div>
                 </div>
             </form>

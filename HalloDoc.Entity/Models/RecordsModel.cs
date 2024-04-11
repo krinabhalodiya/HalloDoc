@@ -12,7 +12,12 @@ namespace HalloDoc.Entity.Models
         public List<SearchRecords>? SearchRecords { get; set; }
         public List<User>? Users { get; set; }
         public List<BlockRequests>? BlockRequests { get; set; }
+        public List<EmailLogs>? EmailLogs { get; set; }
+        public List<SMSLogs>? SMSLogs { get; set; }
 
+        // Email Logs
+        public int? AccountType { get; set; }
+        public string? ReceiverName { get; set; }
         // Extra Input Fields For Search Record
         public string? SearchInput { get; set; }
         public int? RegionId { get; set; }
@@ -33,6 +38,6 @@ namespace HalloDoc.Entity.Models
         // Pagination
         public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; } = 1;
-        public int PageSize { get; set; } = 5;
+        public int PageSize { get; set; } = 1;
     }
 }

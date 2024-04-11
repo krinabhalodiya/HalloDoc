@@ -1,36 +1,59 @@
-﻿﻿@{
+﻿@using HallodocMVC.Repository.Admin.Repository.Interface
+﻿@{
     string path = Context.Request.Path;
 }
-
+@inject ILoginRepository loginRepository
 <nav class="navbar px-5 navbar-expand-md bg-white shadow mb-2 border border-top d-none d-md-block">
     <div class="collapse navbar-collapse" id="navbar">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            @if (loginRepository.isAccessGranted((int)CV.RoleID(), "Dashboard"))
+                    {
             <li class="nav-item me-3">
                 <a class="nav-link text-dark @(path.StartsWith("/AdminDashBoard") ? "activesbnav" : "")" aria-current="page" asp-controller="AdminDashBoard" asp-action="Index">Dashboard</a>
             </li>
+                    }
+            @if (loginRepository.isAccessGranted((int)CV.RoleID(), "ProviderLocation"))
+ {
             <li class="nav-item me-3">
                 <a class="nav-link text-dark @(path.StartsWith("/ProviderLocation") ? "activesbnav" : "")" asp-action="Index" asp-controller="ProviderLocation">Provider Location</a>
 			</li>
+ }
+            @if (loginRepository.isAccessGranted((int)CV.RoleID(), "MyProfile"))
+                    {
 			<li class="nav-item me-3">
 				<a class="nav-link text-dark @(path.StartsWith("/Profile") ? "activesbnav" : "")" asp-action="Index" asp-controller="Profile">My Profile</a>
 			</li>
+                    }
             
             <li class="nav-item dropdown me-3">
                 <a class="nav-link dropdown text-dark @(path.StartsWith("/Providers") ? "activesbnav" : "")" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Providers
                 </a>
                 <div class="dropdown-menu mt-2" aria-labelledby="navbarDropdown">
+                    @if (loginRepository.isAccessGranted((int)CV.RoleID(), "Provider"))
+                    {
                     <a class="dropdown-item" asp-action="Index" asp-controller="Providers">Provider</a>
-                    <a class="dropdown-item" asp-action="Index" asp-controller="Scheduling">Scheduling</a>
+                    }
+                    @if (loginRepository.isAccessGranted((int)CV.RoleID(), "Scheduling"))
+                     {
+                        <a class="dropdown-item" asp-action="Index" asp-controller="Scheduling">Scheduling</a>
+                     }
+                    @if (loginRepository.isAccessGranted((int)CV.RoleID(), "Invoicing"))
+                     {
                     <a class="dropdown-item" href="#">Invoicing</a>
+                     }
                 </div>
             </li> 
-            
+            @if (loginRepository.isAccessGranted((int)CV.RoleID(), "VendorsInfo"))
+                     {
             <li class="nav-item me-3">
                 <a class="nav-link text-dark @(path.StartsWith("/Partners") ? "activesbnav" : "")" asp-action="Index" asp-controller="Partners">Partners</a>
             </li>
-            <li class="nav-item dropdown me-3">
-                <a class="nav-link dropdown text-dark @(path.StartsWith("/Access") ? "activesbnav" : "")" id="AccessnavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     }
+            @if (loginRepository.isAccessGranted((int)CV.RoleID(), "Role"))
+            {
+                <li class="nav-item dropdown me-3">
+                    <a class="nav-link dropdown text-dark @(path.StartsWith("/Access") ? "activesbnav" : "")" id="AccessnavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Access
                 </a>
                 <div class="dropdown-menu mt-2" aria-labelledby="navbarDropdown">
@@ -38,38 +61,54 @@
                     <a class="dropdown-item" asp-action="UserAccess" asp-controller="Access">User Access</a>
                 </div>
             </li>
-            
-            <li class="nav-item me-3">
-                <div class="dropdown">
+            }
+           
+                <li class="nav-item me-3">
+                    <div class="dropdown">
                     <button data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn rounded-0 nav-link px-3 text-dark shadow-none @(path.StartsWith("/Records") ? "activesbnav" : "")">
-                        <small>Records</small>
+                        Records
                     </button>
                     <ul class="dropdown-menu">
+                        @if (loginRepository.isAccessGranted((int)CV.RoleID(), "History"))
+ {
                         <li>
                             <a asp-controller="Records" asp-action="SearchRecords" class="dropdown-item">
                                 Search Records
                             </a>
                         </li>
+ }
+                        @if (loginRepository.isAccessGranted((int)CV.RoleID(), "EmailLogs"))
+ {
                         <li>
-                            <a asp-controller="" asp-action="" class="dropdown-item">
+                            <a asp-controller="Records" asp-action="EmailLogs" class="dropdown-item">
                                 Email Logs
                             </a>
                         </li>
+ }
+                        @if (loginRepository.isAccessGranted((int)CV.RoleID(), "SMSLogs"))
+ {
                         <li>
-                            <a asp-controller="" asp-action="" class="dropdown-item">
+                            <a asp-controller="Records" asp-action="SMSLogs" class="dropdown-item">
                                 SMS Logs
                             </a>
                         </li>
-                        <li>
-                            <a asp-controller="Records" asp-action="PatientHistory" class="dropdown-item">
-                                Patient Records
-                            </a>
-                        </li>
+ }
+                        @if (loginRepository.isAccessGranted((int)CV.RoleID(), "PatientRecords"))
+                        {
+                            <li>
+                                <a asp-controller="Records" asp-action="PatientHistory" class="dropdown-item">
+                                    Patient Records
+                                </a>
+                            </li>
+                        }
+                        @if (loginRepository.isAccessGranted((int)CV.RoleID(), "BlockedHistory"))
+ {
                         <li>
                             <a asp-controller="Records" asp-action="BlockHistory" class="dropdown-item">
                                 Blocked History
                             </a>
                         </li>
+ }
                     </ul>
                 </div>
             </li>

@@ -13,5 +13,7 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         Task<UserInfo> CheckAccessLogin(Aspnetuser aspNetUser);
         public Task<bool> CheckregisterdAsync(string email);
         public Task<bool> SavePass(string email, string Password);
+        public bool isAccessGranted(int roleId, string menuName);
+
     }
 }

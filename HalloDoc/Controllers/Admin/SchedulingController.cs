@@ -26,7 +26,7 @@ namespace HalloDoc.Controllers.Admin
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             ViewBag.PhysiciansByRegion = new SelectList(Enumerable.Empty<SelectListItem>());
             SchedulingModel modal = new SchedulingModel();
-            return View("../Admin/Scheduling/Index", modal);
+            return View("../Admin/Providers/Scheduling/Index", modal);
 
         }
         public IActionResult GetPhysicianByRegion(int regionid)
@@ -58,7 +58,7 @@ namespace HalloDoc.Controllers.Admin
                     {
                         day.shiftdetails = _context.Shiftdetails.Include(u => u.Shift).Where(u => u.Isdeleted == new BitArray(new[] { false })).ToList();
                     }
-                    return PartialView("../Admin/Scheduling/_DayWise", day);
+                    return PartialView("../Admin/Providers/Scheduling/_DayWise", day);
 
                 case "_WeekWise":
                     WeekWiseScheduling week = new WeekWiseScheduling
@@ -71,7 +71,7 @@ namespace HalloDoc.Controllers.Admin
                     {
                         week.shiftdetails = _context.Shiftdetails.Include(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.Isdeleted == new BitArray(new[] { false })).ToList();
                     }
-                    return PartialView("../Admin/Scheduling/_WeekWise", week);
+                    return PartialView("../Admin/Providers/Scheduling/_WeekWise", week);
 
                 case "_MonthWise":
                     MonthWiseScheduling month = new MonthWiseScheduling
@@ -83,10 +83,10 @@ namespace HalloDoc.Controllers.Admin
                     {
                         month.shiftdetails = _context.Shiftdetails.Include(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.Isdeleted == new BitArray(new[] { false })).ToList();
                     }
-                    return PartialView("../Admin/Scheduling/_MonthWise", month);
+                    return PartialView("../Admin/Providers/Scheduling/_MonthWise", month);
 
                 default:
-                    return PartialView("../Admin/Scheduling/_DayWise");
+                    return PartialView("../Admin/Providers/Scheduling/_DayWise");
             }
         }
         #endregion
@@ -169,7 +169,7 @@ namespace HalloDoc.Controllers.Admin
             {
                 return Json(v);
             }
-            return View("../Admin/Scheduling/MDSOnCall", v);
+            return View("../Admin/Providers/Scheduling/MDSOnCall", v);
         }
         #endregion
         #region RequestedShift
@@ -178,7 +178,7 @@ namespace HalloDoc.Controllers.Admin
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             List<SchedulingModel> v = await _schedulingRepository.GetAllNotApprovedShift(regionId);
             
-            return View("../Admin/Scheduling/ShiftForReview", v);
+            return View("../Admin/Providers/Scheduling/ShiftForReview", v);
         }
         #endregion
 
