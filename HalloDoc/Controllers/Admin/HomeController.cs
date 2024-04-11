@@ -140,15 +140,23 @@ namespace HalloDoc.Controllers.Admin
                 }
                 try
                 {
-                    if(await _loginRepository.SavePass(Email, Password))
+                    if (Email == null)
                     {
-                        _notyf.Success("Password Saved successfully");
+                        _notyf.Error("Password is not Saved successfully");
                         return View("../Admin/Home/ResetPassword");
                     }
                     else
                     {
-                        _notyf.Error("Password is not Saved successfully");
-                        return View("../Admin/Home/ResetPassword");
+                        if (await _loginRepository.SavePass(Email, Password))
+                        {
+                            _notyf.Success("Password Saved successfully");
+                            return View("../Admin/Home/ResetPassword");
+                        }
+                        else
+                        {
+                            _notyf.Error("Password is not Saved successfully");
+                            return View("../Admin/Home/ResetPassword");
+                        }
                     }
                 }
                 catch (DbUpdateConcurrencyException)

@@ -36,7 +36,7 @@
                     <div class="row pb-4">
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="UserName" class="form-control shadow-none input0" id="UserName" placeholder=Suchtext />
+                                <input type="text" asp-for="UserName" class="form-control shadow-none" id="UserName" placeholder=Suchtext />
                                 <label for="UserName">User Name</label>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
                             <div class="form-floating">
                                 <input type="text" asp-for="PassWord" class="form-control shadow-none" id="PassWord" placeholder="Last Name" />
                                 <label for="PassWord">PassWord</label>
-                                @* <span asp-validation-for="Password"></span> *@
+                                <span asp-validation-for="PassWord" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
@@ -52,6 +52,7 @@
                                 <select class="form-select input0" required asp-for="Status" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
                                 </select>
                                 <label for="Status">Status</label>
+                                <span asp-validation-for="Status" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
@@ -59,6 +60,7 @@
                                 <select class="form-select input0" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.userrolecombobox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level" >
                                 </select>
                                 <label for="Roleid">Role</label>
+                                <span asp-validation-for="Roleid" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
@@ -80,46 +82,49 @@
                             <div class="form-floating">
                                 <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="Firstname" placeholder="First Name">
                                 <label for="Firstname">First Name</label>
-                                @* <span asp-validation-for="Firstname" class="text-danger"></span> *@
+                                <span asp-validation-for="Firstname" class="text-danger"></span> 
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="Lastname" class="form-control shadow-none input1" id="lname1" placeholder="Last Name">
                                 <label for="lname1">Last Name</label>
-                                @* <span asp-validation-for="Lastname" class="text-danger"></span> *@
+                                <span asp-validation-for="Lastname" class="text-danger"></span> 
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="Email" class="form-control shadow-none input1" id="Email" placeholder="Date Of Birth">
                                 <label for="Email">Email</label>
-                                @* <span asp-validation-for="Email" class="text-danger"></span> *@
+                                 <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
                                 <input type="text" asp-for="Mobile" class="form-control shadow-none input1" id="Mobile" autocomplete="off" placeholder="Phone Number">
                                 <label for="Mobile">Phone Number</label>
-                                @* <span asp-validation-for="Mobile" class="text-danger"></span> *@
+                                <span asp-validation-for="Mobile" class="text-danger"></span> 
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
                                 <input type="tel" asp-for="Medicallicense" class="form-control shadow-none input1" id="Medicallicense" autocomplete="off" placeholder="Phone Number">
                                 <label for="Medicallicense">Medical License#</label>
+                                <span asp-validation-for="Medicallicense" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
                                 <input type="tel" asp-for="Npinumber" class="form-control shadow-none input1" id="Npinumber" autocomplete="off" placeholder="Phone Number">
                                 <label for="Npinumber">NPI Number</label>
+                                <span asp-validation-for="Npinumber" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
                                 <input type="tel" asp-for="Syncemailaddress" class="form-control shadow-none input1" id="Syncemailaddress" autocomplete="off" placeholder="Phone Number">
                                 <label for="Syncemailaddress">Synchronization Email Address</label>
+                                <span asp-validation-for="Syncemailaddress" class="text-danger"></span>
                             </div>
                         </div>
                         <input asp-for="Regionsid" type="hidden" id="regionids" />
@@ -164,39 +169,42 @@
                             <div class="form-floating h-100 w-100">
                                 <input type="text" asp-for="Address1" class="form-control shadow-none input2" id="Address1" autocomplete="off" placeholder="Phone Number">
                                 <label for="Address1">Address 1</label>
+                                <span asp-validation-for="Npinumber" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
                                 <input type="text" asp-for="Address2" class="form-control shadow-none input2" id="Address2" autocomplete="off" placeholder="Phone Number">
                                 <label for="Address2">Address 2</label>
+                                <span asp-validation-for="Npinumber" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
                                 <input type="text" asp-for="City" class="form-control shadow-none input2" id="City" autocomplete="off" placeholder="Phone Number">
                                 <label for="City">City</label>
+                                <span asp-validation-for="Npinumber" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="State" class="form-control shadow-none input2" id="State" placeholder=Suchtext autocomplete=off>
                                 <label for="State">State</label>
-                                @* <span asp-validation-for="State" class="text-danger"></span> *@
+                                <span asp-validation-for="State" class="text-danger"></span> 
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="Zipcode" class="form-control shadow-none input2" id="Zipcode" placeholder=Suchtext autocomplete=off>
                                 <label for="Zipcode">Zip</label>
-                                @* <span asp-validation-for="State" class="text-danger"></span> *@
+                                 <span asp-validation-for="State" class="text-danger"></span> 
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
                                 <input type="tel" asp-for="Altphone" class="form-control shadow-none input2" id="phone" placeholder=Suchtext autocomplete ="off">
                                 <label for="phone">Phone Number</label>
-                                @* <span asp-validation-for="Altphone" class="text-danger"></span> *@
+                                 <span asp-validation-for="Altphone" class="text-danger"></span> 
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
@@ -217,14 +225,14 @@
                             <div class="form-floating">
                                 <input type="text" asp-for="Businessname" class="form-control shadow-none input3" id="Businessname" placeholder=Suchtext>
                                 <label for="Businessname">Business Name</label>
-                                @* <span asp-validation-for="Address1" class="text-danger"></span> *@
+                                 <span asp-validation-for="Address1" class="text-danger"></span> 
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="Businesswebsite" class="form-control shadow-none input3" id="Businesswebsite" placeholder=Suchtext>
                                 <label for="Businesswebsite">Business Website</label>
-                                @* <span asp-validation-for="Address2" class="text-danger"></span> *@
+                                <span asp-validation-for="Address2" class="text-danger"></span> 
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">

@@ -29,7 +29,7 @@
     <div class="bg-white rounded shadow mt-3">
         <div class="p-4">
             @* Account Information *@
-            <form method="post" asp-controller="@(path.StartsWith("/Profile") ? "AdminDashBoard" : "Access")" asp-action="EditPassword" id="resetpassform">
+            <form method="post" asp-controller="@(path.StartsWith("/Profile") ? "Profile" : "Access")" asp-action="EditPassword" id="resetpassform">
 			<h5><strong>Account Information</strong></h5>
                 <input type="hidden" asp-for="AdminId" />
                 <div class="col-xl-12">
@@ -44,7 +44,7 @@
                             <div class="form-floating">
                                 <input type="text" asp-for="Password" class="form-control shadow-none" id="pass" placeholder="Last Name" />
                                 <label for="pass">PassWord</label>
-                                <span asp-validation-for="Password"></span>
+                                <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
@@ -142,7 +142,7 @@
                 </div>
             </form>
             @* Mailing/Billing Information *@
-            <form method="post" asp-controller="@(path.StartsWith("/Profile") ? "AdminDashBoard" : "Access")" asp-action="BillingInfoEdit" id="BillingInfoForm">
+            <form method="post" asp-controller="@(path.StartsWith("/Profile") ? "Profile" : "Access")" asp-action="BillingInfoEdit" id="BillingInfoForm">
                 <h5><strong>Mailing/Billing Information</strong></h5>
                 <input type="hidden" asp-for="AdminId" />
                 <div class="col-xl-12">
