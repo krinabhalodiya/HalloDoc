@@ -1,13 +1,12 @@
 ﻿@{
     Layout = "_RequestLayout";
 }
-
 <div class="container">
     <div class="divgrpsubreq position-relative">
         <div class="row">
             <div class="col-xl-12 text-center">
                 <strong class="poppinsfont h3 font-weight-bold pt-5"><b>I am a...</b></strong>
-                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-info backbtnsubreq">
+                <a asp-controller="Home" asp-action="LandingPage" class="btn border border-info text-info backbtnsubreq">
                     <i class="fa fa-angle-left fa-2x text-info align-middle"></i>
                     <span class=" text-info">
                         <b class="align-text-top">&nbsp;&nbsp;Back</b>
@@ -17,24 +16,23 @@
         </div>
         <div class="row my-4">
             <div class="col-xl-5 col-md-8 mx-auto">
-                <a asp-controller="PatientRequest" asp-action="Index" class="form-control btn shadow-none patientbtn py-3"><b>PATIENT</b></a>
+                <a asp-controller="SubmitRequest" asp-action="PatientRequest" class="form-control btn shadow-none patientbtn py-3"><b>PATIENT</b></a>
             </div>
         </div>
         <div class="row my-4">
             <div class="col-xl-5 col-md-8 mx-auto">
-                <a asp-controller="FamilyFriendRequest" asp-action="Index" class="form-control btn shadow-none familyfriendbtn py-3"><b>FAMILY/FRIENDS</b></a>
+                <a asp-controller="SubmitRequest" asp-action="FamilyFriendRequest" class="form-control btn shadow-none familyfriendbtn py-3"><b>FAMILY/FRIENDS</b></a>
             </div>
         </div>
         <div class="row my-4">
             <div class="col-xl-5 col-md-8 mx-auto">
-                <a asp-controller="ConciergeRequest" asp-action="Index" class="form-control btn shadow-none cinciergebtn py-3"><b>CONCIERGE</b></a>
+                <a asp-controller="SubmitRequest" asp-action="ConciergeRequest" class="form-control btn shadow-none cinciergebtn py-3"><b>CONCIERGE</b></a>
             </div>
         </div>
         <div class="row my-4">
             <div class="col-xl-5 col-md-8 mx-auto">
-                <a asp-controller="BusinessRequest" asp-action="Index" class="form-control btn shadow-none businesspartnerbtn py-3"><b>BUSINESS PARTNERS</b></a>
+                <a asp-controller="SubmitRequest" asp-action="BusinessRequest" class="form-control btn shadow-none businesspartnerbtn py-3"><b>BUSINESS PARTNERS</b></a>
             </div>
         </div>
     </div>
 </div>
-

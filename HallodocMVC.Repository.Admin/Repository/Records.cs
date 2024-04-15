@@ -250,7 +250,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             {
                 Blockrequest block = _context.Blockrequests.FirstOrDefault(e => e.Requestid == RequestId.ToString());
                 block.Isactive = new BitArray(1);
-                block.Isactive[0] = true;
+                block.Isactive[0] = false;
                 _context.Blockrequests.Update(block);
                 _context.SaveChanges();
 
@@ -279,6 +279,43 @@ namespace HallodocMVC.Repository.Admin.Repository
             }
         }
         #endregion Unblock
+
+        #region block
+        public bool block(int RequestId, string id)
+        {
+            try
+            {
+                Blockrequest block = _context.Blockrequests.FirstOrDefault(e => e.Requestid == RequestId.ToString());
+                block.Isactive = new BitArray(1);
+                block.Isactive[0] = true;
+                _context.Blockrequests.Update(block);
+                _context.SaveChanges();
+
+                Request request = _context.Requests.FirstOrDefault(e => e.Requestid == RequestId);
+                request.Status = 11;
+                request.Modifieddate = DateTime.Now;
+                _context.Requests.Update(request);
+                _context.SaveChanges();
+
+                var admindata = _context.Admins.FirstOrDefault(e => e.Aspnetuserid == id);
+                Requeststatuslog rs = new()
+                {
+                    Status = 11,
+                    Requestid = RequestId,
+                    Adminid = admindata.Adminid,
+                    Createddate = DateTime.Now
+                };
+                _context.Requeststatuslogs.Add(rs);
+                _context.SaveChanges();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        #endregion block
 
         #region GetFilteredEmailLogs
         public RecordsModel GetFilteredEmailLogs(RecordsModel rm)

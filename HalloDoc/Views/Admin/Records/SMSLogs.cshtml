@@ -103,7 +103,7 @@
         </div>
         <!-- End List of Outcomes-->
         <!--Pagination-->
-        <nav aria-label="Page navigation example" id="Pagination">
+        <nav aria-label="Page navigation example Paginationsms" id="Pagination">
             <div class="d-flex justify-content-between mx-2 mt-3">
                 <div>
                     @if (Model.TotalPages == 0)
@@ -192,7 +192,7 @@
                 success: function (response) {
                     console.log(response);
                     var bodyContent = $(response).find('tbody').html();
-                    var pagination = $(response).find('nav').html();
+                    var pagination = $(response).find('.Paginationsms').html();
                     $('#SMSLogs').html(bodyContent);
                     $('#Pagination').html(pagination);
                 }

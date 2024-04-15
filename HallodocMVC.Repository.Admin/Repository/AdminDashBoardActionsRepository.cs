@@ -572,7 +572,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         public bool SendAgreement(int requestid)
         {
             var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == requestid);
-            var agreementUrl = "https://localhost:44306/SendAgreement?RequestID=" + requestid;
+            var agreementUrl = "https://localhost:44306/SendAgreement/Index?RequestID=" + requestid;
             _emailConfig.SendMail(res.Email, "Agreement for your request", $"<a href='{agreementUrl}'>Agree/Disagree</a>");
             return true;
         }

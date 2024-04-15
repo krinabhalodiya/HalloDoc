@@ -14,16 +14,19 @@ using System.Collections;
 using Org.BouncyCastle.Ocsp;
 using System.Linq.Expressions;
 using HalloDoc.Entity.Models;
+using Twilio.TwiML.Messaging;
+using Twilio.TwiML.Voice;
 
 namespace HallodocMVC.Repository.Admin.Repository
 {
     public class AdminDashBoardRepository : IAdminDashBoardRepository
     {
         private readonly HalloDocContext _context;
-
-        public AdminDashBoardRepository(HalloDocContext context)
+        private readonly EmailConfiguration _emailConfig;
+        public AdminDashBoardRepository(HalloDocContext context, EmailConfiguration emailConfiguration)
         {
             _context = context;
+            _emailConfig = emailConfiguration;
         }
         public PaginatedViewModel Indexdata()
         {
@@ -125,5 +128,57 @@ namespace HallodocMVC.Repository.Admin.Repository
             };
             return paginatedViewModel;
         }
+        #region Export
+        public List<AdminDashboardList> Export(string status)
+        {
+            List<int> statusdata = status.Split(',').Select(int.Parse).ToList();
+            List<AdminDashboardList> allData = (from req in _context.Requests
+                                                join reqClient in _context.Requestclients
+                                                on req.Requestid equals reqClient.Requestid into reqClientGroup
+                                                from rc in reqClientGroup.DefaultIfEmpty()
+                                                join phys in _context.Physicians
+                                                on req.Physicianid equals phys.Physicianid into physGroup
+                                                from p in physGroup.DefaultIfEmpty()
+                                                join reg in _context.Regions
+                                                on rc.Regionid equals reg.Regionid into RegGroup
+                                                from rg in RegGroup.DefaultIfEmpty()
+                                                where statusdata.Contains((int)req.Status)
+                                                orderby req.Createddate descending
+                                                select new AdminDashboardList
+                                                {
+                                                    RequestID = req.Requestid,
+                                                    RequestTypeID = req.Requesttypeid,
+                                                    Requestor = req.Firstname + " " + req.Lastname,
+                                                    PatientName = rc.Firstname + " " + rc.Lastname,
+                                                    Dob = new DateOnly((int)rc.Intyear, DateTime.ParseExact(rc.Strmonth, "MMMM", new CultureInfo("en-US")).Month, (int)rc.Intdate),
+                                                    RequestedDate = req.Createddate,
+                                                    Email = rc.Email,
+                                                    Region = rg.Name,
+                                                    ProviderName = p.Firstname + " " + p.Lastname,
+                                                    PhoneNumber = rc.Phonenumber,
+                                                    Address = rc.Address,
+                                                    Notes = rc.Notes,
+                                                    ProviderID = req.Physicianid,
+                                                    RequestorPhoneNumber = req.Phonenumber
+                                                }).ToList();
+            return allData;
+        }
+        #endregion
+        #region SendLink
+        public bool SendLink(String Email)
+        {
+            var agreementUrl = "https://localhost:44306/SubmitRequest/Index";
+            _emailConfig.SendMail(Email,"ResubmitRequest", $"<a href='{agreementUrl}'>Agree/Disagree</a>");
+            return true;
+        }
+        #endregion
+        #region SendLink
+        public bool SendSMS(String mobile)
+        {
+            var agreementUrl = "https://localhost:44306/SubmitRequest/Index";
+            _emailConfig.SendSMS(mobile, $"<a href='{agreementUrl}'>Agree/Disagree</a>");
+            return true;
+        }
+        #endregion
     }
 }

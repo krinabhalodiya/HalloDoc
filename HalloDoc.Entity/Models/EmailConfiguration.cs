@@ -9,6 +9,8 @@ using System.Net.Mail;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 
 namespace HalloDoc.Entity.Models
 {
@@ -112,6 +114,33 @@ namespace HalloDoc.Entity.Models
             return System.Text.Encoding.UTF8.GetString(encoded);
         }
         #endregion
-        
+
+        #region SMS
+        public async Task<bool> SendSMS(string receiverPhoneNumber, string message)
+        {
+            string accountSid = "AC9e9ac9dd9d1ad8c559523c1de6c3214f";
+            string authToken = "dbb55a315ac9468eff4bc05d075f86a3";
+            string twilioPhoneNumber = "+12513698856";
+
+            TwilioClient.Init(accountSid, authToken);
+
+            try
+            {
+                var smsMessage = MessageResource.Create(
+                    body: message,
+                    from: new Twilio.Types.PhoneNumber(twilioPhoneNumber),
+                    to: new Twilio.Types.PhoneNumber(receiverPhoneNumber)
+                );
+
+                Console.WriteLine("SMS sent successfully. SID: " + smsMessage.Sid);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while sending the SMS: " + ex.Message);
+            }
+            return false;
+        }
+        #endregion SMS
     }
 }

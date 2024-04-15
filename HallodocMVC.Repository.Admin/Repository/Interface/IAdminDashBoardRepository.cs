@@ -12,5 +12,8 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
     {
         PaginatedViewModel Indexdata();
         PaginatedViewModel GetRequests(string Status, PaginatedViewModel data);
+        public List<AdminDashboardList> Export(string status);
+        public bool SendLink(String Email);
+        public bool SendSMS(String mobile);
     }
 }

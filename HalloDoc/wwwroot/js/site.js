@@ -18,3 +18,10 @@ $(document).ready(function () {
         $(this).addClass("filterborder");
     });
 });
+
+function DisplayFileName() {
+    const fileInput = document.getElementById('files');
+    if (fileInput.files.length > 0) {
+        document.getElementById('fileName').innerHTML = fileInput.files[0].name;
+    }
+}

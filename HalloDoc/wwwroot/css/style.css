@@ -428,3 +428,67 @@ div.dt-scroll-body > table.dataTable > thead > tr > td {
     filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0)
 }
 
+.divgrpsubreq {
+    top: 5vh;
+}
+
+.backbtnsubreq {
+    position: absolute;
+    right: 0.5vw;
+    margin-right: 1vw;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+.patientbtn {
+    background-color: #e9eaef;
+    color: #77809f;
+    border: 2px solid #77809f;
+}
+
+    .patientbtn:hover {
+        background-color: #77809f;
+        color: white;
+    }
+
+.familyfriendbtn {
+    background-color: #e5f2fa;
+    color: #7bbdd1;
+    border: 2px solid #7bbdd1;
+}
+
+    .familyfriendbtn:hover {
+        background-color: #7bbdd1;
+        color: white;
+    }
+
+.cinciergebtn {
+    background-color: #e9f0e8;
+    color: #5d885b;
+    border: 2px solid #5d885b;
+}
+
+    .cinciergebtn:hover {
+        background-color: #5d885b;
+        color: white;
+    }
+
+.businesspartnerbtn {
+    background-color: #f6e7ee;
+    color: #a46b8a;
+    border: 2px solid #a46b8a;
+}
+
+    .businesspartnerbtn:hover {
+        background-color: #a46b8a;
+        color: white;
+    }
+
+    .iti{
+        width:100%;
+    }
+
+.phone .form-control {
+    line-height: 2.5;
+}

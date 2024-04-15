@@ -79,6 +79,21 @@ namespace HalloDoc.Controllers.Admin
 
             return RedirectToAction("BlockHistory");
         }
+        #endregion 
+        #region Unblock
+        public IActionResult block(int RequestId)
+        {
+            if (_IRecords.block(RequestId, CV.ID()))
+            {
+                _notyf.Success("Case Unblocked Successfully.");
+            }
+            else
+            {
+                _notyf.Error("Case remains blocked.");
+            }
+
+            return RedirectToAction("BlockHistory");
+        }
         #endregion Unblock
         #region EmailLogs
         public IActionResult EmailLogs(RecordsModel rm)

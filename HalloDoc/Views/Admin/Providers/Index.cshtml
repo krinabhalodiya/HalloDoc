@@ -82,7 +82,7 @@
                             <td>@Enum.GetName(typeof(OnCallStatus), item.Isnondisclosuredoc)</td>
                             <td>@Enum.GetName(typeof(AdminStatus), item.Status)</td>
                             <td class="d-flex">
-                                <button data-bs-toggle="modal"  onclick="assignemail('@item.Email')" data-bs-target="#myModal" class="btn btn-outline-info btn-sm document-button mx-1">
+                                <button data-bs-toggle="modal" onclick="AssignContact('@item.Email','@item.Mobile')" data-bs-target="#myModal" class="btn btn-outline-info btn-sm document-button mx-1">
                                     Contact
                                 </button>
                                 <a asp-action="PhysicianProfile" asp-controller="Providers" asp-route-id="@item.Physicianid" class="btn btn-outline-info btn-sm document-button mx-1">
@@ -109,6 +109,7 @@
                 <div class="modal-body">
                     <small class="text-secondary fs-6" id="exampleModalLabel"> Choose Comunication to send message  <span class="text-info" id="patientname"> </span></small>
                     <input type="hidden" name="email" id="emailforcontact" />
+                    <input type="hidden" name="contact" id="Contact" />
                     <input type="hidden" name="id" id="id" />
                     <div class="mx-4 mt-4">
                         <div class="form-check p-2 fs-6">
@@ -131,7 +132,7 @@
                         </div>
                     </div>
                     <div class="mb-4 form-floating ">
-                        <textarea required rows="4" name="msg" id="msgid" class="input-outline w-100 h-100 fs-6 form-control shadow-none" type="text"></textarea>
+                        <textarea required rows="4" name="message" id="msgid" class="input-outline w-100 h-100 fs-6 form-control shadow-none" type="text"></textarea>
                         <label class="inputs-lable inputs-lable fs-6" for="msgid">Message</label>
                         <div class="invalid-feedback">
                             Please Enter Message.
@@ -150,15 +151,17 @@
 @* Model_End_Contact  *@
  <script>
 
-     function assignemail(e) {
-         console.log(e);
-        document.getElementById('emailforcontact').value = e;
-     }
+    function AssignContact(email, contact) {
+        console.log(email);
+        console.log(contact);
+        document.getElementById('emailforcontact').value = email;
+        document.getElementById('Contact').value = contact;
+    }
+
 
     function getdatabyregion() {
         var region = $("#regiondropdown").val();
         if (region == '-1') {
-            region = null;
             location.reload();
         }
          $.ajax({

@@ -109,31 +109,31 @@
             <strong class="fs-6">Patients</strong> <small>(New)</small>
         </div>
         <div>
-            <button class="btn btn-info text-white shadow-none mb-2">
+            <button class="btn btn-info text-white shadow-none mb-2" data-bs-toggle="modal" data-bs-target="#SendLink">
                 <small>
                     <i class="bi bi-send"></i>
                     <span class="adminIcon">Send Link</span>
                 </small>
             </button>
-            <button class="btn btn-info text-white shadow-none mb-2">
+            <a class="btn btn-info text-white shadow-none mb-2" asp-action="PatientRequest" asp-controller="AdminDashBoard">
                 <small>
                     <i class="bi bi-file-earmark-plus"></i>
                     <span class="adminIcon">Create Requests</span>
                 </small>
-            </button>
-            <button class="btn btn-info text-white shadow-none mb-2">
+            </a>
+            <button class="btn btn-info text-white shadow-none mb-2" onclick="Export(@CV.CurrentStatus())">
                 <small>
                     <i class="fa-solid fa-share"></i>
                     <span class="adminIcon">Export</span>
                 </small>
             </button>
-            <button class="btn btn-info text-white shadow-none mb-2">
+            <button class="btn btn-info text-white shadow-none mb-2" onclick="Export('1,2,3,4,5,6,7,8,9,10,11')">
                 <small>
                     <i class="fa-solid fa-share-from-square"></i>
                     <span class="adminIcon">Export All</span>
                 </small>
             </button>
-            <button class="btn btn-info text-white shadow-none mb-2">
+            <button class="btn btn-info text-white shadow-none mb-2" data-bs-toggle="modal" data-bs-target="#requestSupport">
                 <small>
                     <i class="fa-solid fa-user-nurse"></i>
                     <span class="adminIcon">Request DIY Support</span>
@@ -203,6 +203,8 @@
     <input type="hidden" asp-for="IsAscending" id="sortcol"/>
     <input type="hidden" asp-for="SortedColumn" id="issort" />
 </form>
+
+<partial name="../AdminActions/_partial/SendLink.cshtml" />
 <script>
     function subsubmit() {
         console.log("abc");
@@ -251,5 +253,35 @@
             $('#filterForm').submit();
         });
     });
+    function Export(status) {
+        location.reload();
+        console.log(status);
+        $.ajax({
+            method: "POST",
+            url: "/AdminDashBoard/Export",
+            data: { status: status },
+            xhrFields: {
+                responseType: 'blob'
+            },
 
+            success: function (result) {
+
+                var blob = new Blob([result], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'RequestData.xlsx';
+
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(link.href);
+            },
+
+            error: function () {
+                console.log("error");
+            }
+        });
+    }
 </script>

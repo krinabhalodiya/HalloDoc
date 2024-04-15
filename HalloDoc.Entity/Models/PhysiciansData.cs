@@ -19,7 +19,6 @@ namespace HalloDoc.Entity.Models
         public int? Physicianid { get; set; }
         public string? Aspnetuserid { get; set; }
         public string? UserName { get; set; }
-        [Required(ErrorMessage = "Password is required")]
         public string? PassWord { get; set; }
         public string? Regionsid { get; set; }
         [Required(ErrorMessage = "Firstname is required")]

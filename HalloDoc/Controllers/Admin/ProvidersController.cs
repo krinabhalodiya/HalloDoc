@@ -1,4 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using AspNetCoreHero.ToastNotification.Notyf;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
@@ -57,28 +58,29 @@ namespace HalloDoc.Controllers.Admin
         #endregion
 
         #region SendMessage
-        public async Task<IActionResult> SendMessage( string? email, int? way, string? msg)
+        public async Task<IActionResult> SendMessage(string? email, string? contact, int? way, string? message)
         {
-            bool result;
+            bool result = false, sms = false;
             if (way == 1)
             {
-                result = await _emailConfig.SendMail(email, "Check massage", "Hello " + msg);
+                sms = _emailConfig.SendSMS(contact, message).Result;
             }
             else if (way == 2)
             {
-                result = await _emailConfig.SendMail(email, "Check massage", "Hello " + msg);
+                result = await _emailConfig.SendMail(email, "Check Message", "Hello " + message);
             }
             else
             {
-                result = await _emailConfig.SendMail(email, "Check massage", "Hello " + msg);
+                result = await _emailConfig.SendMail(email, "Check Message", "Hello " + message);
+                sms = _emailConfig.SendSMS(contact, message).Result;
             }
             if (result)
             {
-                _notyf.Success("Massage Send Successfully..!");
+                _notyf.Success("Email sent Successfully.");
             }
-            else
+            if (sms)
             {
-                _notyf.Error("Massage Not Send..!");
+                _notyf.Success("Message sent Successfully.");
             }
             return RedirectToAction("Index");
         }

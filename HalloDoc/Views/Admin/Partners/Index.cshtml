@@ -1,88 +1,77 @@
 ﻿@{
     Layout = "_Layout";
 }
-@{
-    var enumData = from AccountType e in Enum.GetValues(typeof(AccountType))
-                   select new
-                   {
-                       ID = (int)e,
-                       Name = e.ToString()
-                   };
-}
-@using static HalloDoc.Entity.Models.Constant;
-@model List<HalloDoc.Entity.DataModels.Healthprofessional>;
-@* ﻿@model HalloDoc.Entity.DataModels.Healthprofessional; *@
-<style>
-    .was-validated .form-check-input:valid ~ .form-check-label, .form-check-input:valid {
-        color: black !important;
-        border-color: #0dcaf0 !important;
-    }
-</style>
-<div class="container-fluid px-5">
-    @* heading *@
+@model HalloDoc.Entity.Models.VendorsPagination
+<div class="container-fluid px-4 mt-2 pb-3">
     <div class="d-flex justify-content-between">
         <div class="d-flex align-self-center">
-            <h4><strong>Vender(s)</strong></h4>
+            <h4><strong>Vendor(s)</strong></h4>
+        </div>
+        <div>
+            <a asp-controller="Dashboard" asp-action="Index" class="btn border border-info shadow-none">
+                <strong class="text-info">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+                </strong>
+            </a>
         </div>
     </div>
+    
+    <div class="bg-white rounded shadow my-3 mx-2">
+        <form method="post" asp-action="index" asp-controller="Partners" id="searchform">
+            <div class="d-flex justify-content-between align-self-center p-3">
+                <div class="d-flex">
+                    <div class="search m-1">
+                        <a id="searchicon">
+                            <i class="fa fa-search"></i>
+                        </a>
+                        <input type="text" asp-for="searchvendors" id="searchInput" class="form-control" onkeydown="GetDataByProfession()" placeholder="Search Vendors">
+                    </div>
+                    <div class="search m-1">
+                        <a id="regionicon">
+                            <i class="fa fa-search"></i>
+                        </a>
+                        <select class="form-select" asp-for="searchprofessions" data-allow-clear="true" tabindex="-1" id="regiondropdown" onchange="GetDataByProfession()" asp-items="@(new SelectList(ViewBag.ProfessionType,"HealthprofessionalID","ProfessionName"))" data-control="select2" data-placeholder="Select Level">
+                            <option value="">All Professions</option>
+                        </select>
+                    </div>
+                </div>
 
-    <div class="bg-white rounded shadow mt-3">
-        <div class="d-flex justify-content-between align-self-center p-3">
-            <div class="d-flex">
-                <div class="search m-1">
-                    <a id="searchicon">
-                        <i class="fa fa-search"></i>
+                <div class="d-flex">
+                    <a class="btn btn-outline-info m-1 align-self-center" asp-action="AddEditBusiness" asp-controller="Partners">
+                        <i class="fa fa-plus me-1"></i>Add Business
                     </a>
-                    <input type="text" id="searchInput"  class="form-control" onkeydown="subsubmit()" placeholder="Search Vendors">
-                </div>
-                <div class="search m-1">
-                    <a id="regionicon">
-                        <i class="fa fa-search"></i>
-                    </a>
-                    <select class="form-select" data-allow-clear="true" tabindex="-1" id="regiondropdown" onchange="getdatabyrole()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
-                        <option value="">All Region</option>
-                    </select>
                 </div>
             </div>
-            
-            <div class="d-flex">
-                <a class="btn btn-outline-info m-1 align-self-center" asp-action="AddEditBusiness" asp-controller="Partners">
-                    <i class="fa fa-plus me-1"></i>Add Business
-                </a>
-            </div>
-        </div>
+        </form>
+        
         <div class="table-responsive">
-            <table class="table table-responsive mt-3 mb-0 dataTable">
-                <thead class="theadbg">
+            <table class="table table-responsive mt-3 mb-0">
+                <thead class="bg-light">
                     <tr>
-                        @{
-                            <th scope="col">Profession</th>
-                            <th scope="col">BusinessName</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Fax Number</th>
-                            <th scope="col">Phone Number</th>
-							<th scope="col">Business Contact</th>
-                            <th scope="col" class="text-center">Actions</th>
-                        }
+                        <th scope="col">Profession</th>
+                        <th scope="col">Business Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Fax Number</th>
+                        <th scope="col">Business Contact</th>
+                        <th scope="col" class="text-center">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="table-group-divider" id="rolebody">
-                    @foreach (var item in Model)
+                <tbody class="table-group-divider" id="VendorBody">
+                    @foreach (var item in Model.Vendors)
                     {
                         <tr>
-                            <td>@item.Vendorname</td>
-                            <td>@item.</td>
+                            <td>@item.VendorName</td>
+                            <td>@item.BusinessName</td>
                             <td>@item.Email</td>
-                            <td>@item.Faxnumber</td>
-                            <td>@item.Phonenumber</td>
-                            <td>@item.Businesscontact</td>
+                            <td>@item.FaxNumber</td>
+                            <td>@item.BusinessContact</td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center">
-                                    <a asp-controller="Partners" asp-action="AddEditBusiness" asp-route-VendorId="@item.Vendorid" class="btn btn-sm border-info text-info shadow-none mx-1 mb-2">
+                                    <a asp-controller="Partners" asp-action="AddEditBusiness" asp-route-VendorId="@item.VendorId" class="btn btn-sm border-info text-info shadow-none mx-1 mb-2">
                                         Edit
                                     </a>
-                                    <form class="DeleteForm" asp-controller="Partners" asp-action="DeleteVendor">
-                                        <input type="hidden" name="VendorId" value="@item.Vendorid" />
+                                    <form class="DeleteForm" asp-controller="Parteners" asp-action="DeleteVendor">
+                                        <input type="hidden" name="VendorId" value="@item.VendorId" />
                                         <div class="btn btn-sm border-info text-info shadow-none mx-1 mb-2 delete">
                                             Delete
                                         </div>
@@ -94,13 +83,83 @@
                 </tbody>
             </table>
         </div>
+        <!--Pagination-->
+        <nav aria-label="Page navigation example" class="vendorpagination" id="Pagination">
+            <div class="d-flex justify-content-between mx-2 mt-3">
+                <div>
+                    @if (Model.TotalPages == 0)
+                    {
+                        Model.CurrentPage = 0;
+                    }
+                    Page @Model.CurrentPage / @Model.TotalPages
+                </div>
+                <div>
+                    <ul class="pagination pagination-container">
+                        @{
+                            int i;
+                            <form id="paginationform" asp-action="Index" asp-controller="Partners" novalidate="novalidate" class="d-flex">
+                                <input type="hidden" asp-for="PageSize" />
+                                <input type="hidden" asp-for="CurrentPage" id="currentpagevalue" />
+                                <input type="hidden" asp-for="searchprofessions"/>
+                                <input type="hidden" asp-for="searchvendors"/>
+                                @if (@Model.CurrentPage > 1)
+                                {
+                                <li class="page-item me-2">
+                                    <button class="btn shadow-none" onclick="setpagenumber('previous')">&lt;</button>
+                                </li>
+                                }
+                                else
+                                {
+                                <li class="me-2 page-item">
+                                    <button class="disabled btn">&lt;</button>
+                                </li>
+                                }
+                                @for (i = 1; i <= @Model.TotalPages; i++)
+                                {
+                                <li class="page-item me-2">
+                                    <button class="@(i == @Model.CurrentPage ? "activepagebtn" : "") btn shadow-none" onclick="setpagenumber(@i)">@i</button>
+                                </li>
+                                }
+                                @if (@Model.TotalPages > @Model.CurrentPage)
+                                {
+                                <li class="page-item me-2">
+                                    <button class="btn shadow-none" onclick="setpagenumber('next')">&gt;</button>
+                                </li>
+                                }
+                                else
+                                {
+                                <li class="page-item">
+                                    <button class="btn disabled">&gt;</button>
+                                </li>
+                                }
+                            </form>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!--End Pagination-->
     </div>
 </div>
 
 <script>
     modeldata = @Html.Raw(Json.Serialize(Model))
-
-        var deleteButton = document.querySelectorAll('.delete');
+    function setpagenumber(e) {
+    console.log(e)
+    if (e == 'previous') {
+        var cp = @Model.CurrentPage-1;
+        $('#currentpagevalue').val(cp);
+    }
+    else if (e == 'next') {
+        var cp = @Model.CurrentPage + 1;
+        $('#currentpagevalue').val(cp);
+    }
+    else {
+        $('#currentpagevalue').val(e);
+    }
+    $("#paginationform").submit();
+}
+    var deleteButton = document.querySelectorAll('.delete');
 
     deleteButton.forEach(function (button) {
         button.addEventListener('click', function (event) {
@@ -123,21 +182,27 @@
             });
         });
     });
-    function getdatabyrole() {
-        var region = $("#regiondropdown").val();
-        if (region == '-1') {
-            region = null;
-            location.reload();
-        }
+    $(function () {
+        $('#searchicon').on('click', function () {
+            console.log("abc");
+            $('#searchform').submit();
+        });
+    });
+    function GetDataByProfession() {
+        var searchInput = $("#searchInput").val();
+        var FormData = $('#searchform').serialize();
+        
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Index", "Partners")?regionId=' + region,
+            url: '@Url.Action("Index", "Partners")',
+            data: FormData,
             cache: false,
             success: function (response) {
                 console.log(response);
                 var bodyContent = $(response).find('tbody').html();
-                $('#rolebody').html(bodyContent);
-
+                var pagination = $(response).find('.vendorpagination').html();
+                $('#VendorBody').html(bodyContent);
+                $('#Pagination').html(pagination);
             },
             error: function () {
                 alert("Error while Loading data.");

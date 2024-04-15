@@ -36,7 +36,7 @@
                     <div class="row pb-4">
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="UserName" class="form-control shadow-none" id="UserName" placeholder=Suchtext />
+                                <input type="text" asp-for="UserName" class="form-control shadow-none" id="UserName" placeholder=Suchtext disabled/>
                                 <label for="UserName">User Name</label>
                             </div>
                         </div>
@@ -44,7 +44,6 @@
                             <div class="form-floating">
                                 <input type="text" asp-for="PassWord" class="form-control shadow-none" id="PassWord" placeholder="Last Name" />
                                 <label for="PassWord">PassWord</label>
-                                <span asp-validation-for="PassWord" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
@@ -260,7 +259,7 @@
                             </div>
                         </div>
                         <div class="col-md-1 pb-3 p-0">
-                            <a class="btn btn-info mx-2 text-white provider-prof" id="create-signature-button"><i class="fa fa-pen"></i>Create</a>
+                            <button type="button" class="btn btn-info mx-2 text-white provider-prof input3" id="create-signature-button"><i class="fa fa-pen"></i>Create</button>
                         </div>
                         <div class="col-md-6 pb-3">
                             @if (Model != null && Model.Photo != null)

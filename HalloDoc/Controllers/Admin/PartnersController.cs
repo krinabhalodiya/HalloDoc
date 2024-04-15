@@ -27,10 +27,11 @@ namespace HalloDoc.Controllers.Admin
             _emailConfig = emailConfiguration;
         }
         #endregion
-        public async Task<IActionResult> Index(int? regionId)
+        public async Task<IActionResult> Index(VendorsPagination FormData)
         {
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
-            List<Healthprofessional> data = await _IPartnersRepository.GetPartnersByProfession(regionId);
+            ViewBag.ProfessionType = await _combobox.healthprofessionaltype();
+            VendorsPagination data = _IPartnersRepository.PartnersByProfession(FormData);
             return View("../Admin/Partners/Index", data);
         }
         #region AddEditBusiness

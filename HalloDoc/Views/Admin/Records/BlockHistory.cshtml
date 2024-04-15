@@ -72,7 +72,7 @@
                             <td scope="col" class="table-text">
                                 @{
                                     var check = false;
-                                    if (item.IsActive != null)
+                                    if (item.IsActive !=new System.Collections.BitArray(1))
                                     {
                                         check = item.IsActive[0];
                                     }
@@ -80,9 +80,26 @@
                                 }
                             </td>
                             <td scope="col" class="table-text">
-                                <a class="btn btn-sm btn-outline-info" asp-controller="Records" asp-action="Unblock" asp-route-RequestId="@item.RequestId">
-                                    Unblock
-                                </a>
+
+                                @{
+                                    var active = false;
+                                    if (item.IsActive != new System.Collections.BitArray(1))
+                                    {
+                                        active = item.IsActive[0];
+                                    }
+                                    if (active)
+                                    {
+                                        <a class="btn btn-sm btn-outline-info" asp-controller="Records" asp-action="Unblock" asp-route-RequestId="@item.RequestId">
+                                            UnBlock
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-sm btn-outline-info" asp-controller="Records" asp-action="block" asp-route-RequestId="@item.RequestId">
+                                            Block
+                                        </a>
+                                    }
+                                }
                             </td>
                         </tr>
                     }

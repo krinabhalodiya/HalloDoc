@@ -55,6 +55,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                                          where r.Isdeleted == new BitArray(1)
                                          select new PhysiciansData
                                          {
+                                             Mobile = r.Mobile,
                                              notificationid = nof.Id,
                                              Createddate = r.Createddate,
                                              Physicianid = r.Physicianid,
@@ -95,6 +96,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                                         where pr.Regionid == region
                                         select new PhysiciansData
                                         {
+                                            Mobile = r.Mobile,
                                             Createddate = r.Createddate,
                                             Physicianid = r.Physicianid,
                                             Address1 = r.Address1,
@@ -306,8 +308,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                                        Npinumber = r.Npinumber,
                                        Syncemailaddress = r.Syncemailaddress,
                                        Zipcode = r.Zip,
-                                       Regionid = r.Regionid
-
+                                       Regionid = r.Regionid,
+                                       Mobile = r.Mobile
                                    })
                                    .FirstOrDefaultAsync();
 
@@ -368,23 +370,30 @@ namespace HallodocMVC.Repository.Admin.Repository
         #region Change_Password
         public async Task<bool> ChangePasswordAsync(string password, int Physicianid)
         {
-            var hasher = new PasswordHasher<string>();
-            var req = await _context.Physicians
-                .Where(W => W.Physicianid == Physicianid)
-                    .FirstOrDefaultAsync();
-            if (req != null)
+            if(password == null)
             {
-                var User = await _context.Aspnetusers.Where(m => m.Id == req.Aspnetuserid).FirstOrDefaultAsync();
-                if(User != null)
+                return false;
+            }
+            else
+            {
+                var hasher = new PasswordHasher<string>();
+                var req = await _context.Physicians
+                    .Where(W => W.Physicianid == Physicianid)
+                        .FirstOrDefaultAsync();
+                if (req != null)
                 {
-                    User.Passwordhash = hasher.HashPassword(null, password);
-                    _context.Aspnetusers.Update(User);
-                    _context.SaveChanges();
-                    return true;
+                    var User = await _context.Aspnetusers.Where(m => m.Id == req.Aspnetuserid).FirstOrDefaultAsync();
+                    if (User != null)
+                    {
+                        User.Passwordhash = hasher.HashPassword(null, password);
+                        _context.Aspnetusers.Update(User);
+                        _context.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
                 return false;
             }
-            return false;
         }
         #endregion
 

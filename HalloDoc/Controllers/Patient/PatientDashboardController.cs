@@ -1,4 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using AspNetCoreHero.ToastNotification.Notyf;
 using HalloDoc.Controllers.Admin;
 using HalloDoc.Entity.Models;
 using HalloDoc.Entity.Models.PatientModels;
@@ -51,5 +52,49 @@ namespace HalloDoc.Controllers.Patient
             }
             return RedirectToAction("ViewUploads", "PatientDashboard", new { id = Requestid });
         }
+        #region RequestForMe
+        public IActionResult RequestForMe()
+        {
+            CreatePatientRequestModel model = _IPatientDashboard.RequestForMe(CV.UserID());
+            return View("../Patient/PatientDashboard/RequestForMe", model);
+        }
+        #endregion RequestForMe
+
+        #region CreateRequestForMe
+        public async Task<IActionResult> CreateRequestForMe(CreatePatientRequestModel model)
+        {
+            if (await _IPatientDashboard.CreateRequestForMe(model))
+            {
+                _notyf.Success("Request has been created successfully");
+            }
+            else
+            {
+                _notyf.Error("Request has not been created successfully");
+            }
+            return RedirectToAction("Index", "PatientDashboard");
+        }
+        #endregion CreateRequestForMe
+
+        #region RequestForSomeoneElse
+        public IActionResult RequestForSomeoneElse()
+        {
+            return View("../Patient/PatientDashboard/RequestForSomeoneElse");
+        }
+        #endregion RequestForSomeoneElse
+
+        #region CreateRequestForSomeoneElse
+        public async Task<IActionResult> CreateRequestForSomeoneElse(CreatePatientRequestModel model)
+        {
+            if (await _IPatientDashboard.CreateRequestForSomeoneElse(model,CV.UserID()))
+            {
+                _notyf.Success("Request has been created successfully");
+            }
+            else
+            {
+                _notyf.Error("Request has not been created successfully");
+            }
+            return RedirectToAction("Index", "PatientDashboard");
+        }
+        #endregion CreateRequestForSomeoneElse
     }
 }

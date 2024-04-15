@@ -26,63 +26,73 @@
                         <div class="form-floating mb-3">
                             <input asp-for="VendorName" type="text" class="form-control shadow-none input" id="BusinessName" placeholder="Enter Business Name">
                             <label for="BusinessName">Business Name</label>
+                            <span asp-validation-for="VendorName" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
                             <select asp-for="ProfessionId" class="form-select form-control shadow-none input" id="ProfessionType" required
                                     asp-items="@(new SelectList(ViewBag.ProfessionType, "HealthprofessionalID", "ProfessionName"))" onchange="GetProfession()">
-                                <option value="-1">Profession</option>
+                                <option value="">Profession</option>
                             </select>
                             <label for="ProfessionType">Profession</label>
+                            <span asp-validation-for="ProfessionId" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
                             <input asp-for="FaxNumber" type="tel" class="form-control shadow-none input" id="FaxNumber" placeholder="Enter Fax Number">
                             <label for="FaxNumber">Fax Number</label>
+                            <span asp-validation-for="FaxNumber" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6 phone">
                         <div class="form-floating mb-3 h-100">
                             <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none input" id="phone" autocomplete="off" placeholder="Enter phone Number">
                             <label for="phone">Phone Number</label>
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
                             <input asp-for="Email" type="email" class="form-control shadow-none input" id="Email" placeholder="Enter Email">
                             <label for="Email">Email</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
                             <input asp-for="BusinessContact" type="text" class="form-control shadow-none input" id="BusinessContact" placeholder="Enter Business Contact">
                             <label for="BusinessContact">Business Contact</label>
+                            <span asp-validation-for="BusinessContact" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
                             <input asp-for="Address" type="text" class="form-control shadow-none input" id="Street" placeholder="Enter Street" autocomplete="off">
                             <label for="Street">Street</label>
+                            <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
                             <input asp-for="City" type="text" class="form-control shadow-none input" id="City" placeholder="Enter City" autocomplete="off">
                             <label for="City">City</label>
+                            <span asp-validation-for="City" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
                             <input asp-for="State" type="text" class="form-control shadow-none input" id="State" placeholder="Enter State" autocomplete="off">
                             <label for="State">State</label>
+                            <span asp-validation-for="State" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
                             <input asp-for="ZipCode" type="text" class="form-control shadow-none input" id="ZipCode" placeholder="Enter Zip Code" autocomplete="off">
                             <label for="ZipCode">Zip / Postal</label>
+                            <span asp-validation-for="ZipCode" class="text-danger"></span>
                         </div>
                     </div>
                 </div>

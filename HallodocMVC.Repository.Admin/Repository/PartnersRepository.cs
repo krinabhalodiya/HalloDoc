@@ -20,16 +20,44 @@ namespace HallodocMVC.Repository.Admin.Repository
         {
             _context = context;
         }
-        #region GetPartnersByProfession
-        public async Task<List<Healthprofessional>> GetPartnersByProfession(int? regionId)
+        #region PartnersByProfession
+        public VendorsPagination PartnersByProfession(VendorsPagination model)
         {
-            List<Healthprofessional> pl = await (from r in _context.Healthprofessionals
-                                                 where r.Isdeleted == new BitArray(1) && (!regionId.HasValue || r.Regionid == regionId)
-                                                 select r)
-                                        .ToListAsync();
-            return pl;
+            List<VendorsData> data =  (from v in _context.Healthprofessionals
+                                            join type in _context.Healthprofessionaltypes
+                                            on v.Profession equals type.Healthprofessionalid into VendorGroup
+                                            from vg in VendorGroup.DefaultIfEmpty()
+                                            where v.Isdeleted == new BitArray(1) && (!model.searchprofessions.HasValue || v.Profession == model.searchprofessions) &&
+                                            (model.searchvendors == null || v.Vendorname.Contains(model.searchvendors) || vg.Professionname.Contains(model.searchvendors) || v.Email.Contains(model.searchvendors) || v.Faxnumber.Contains(model.searchvendors) || v.Businesscontact.Contains(model.searchvendors))
+                                            select new VendorsData
+                                            {
+                                                VendorId = v.Vendorid,
+                                                VendorName = v.Vendorname,
+                                                FaxNumber = v.Faxnumber,
+                                                Address = v.Address,
+                                                City = v.City,
+                                                State = v.State,
+                                                ZipCode = v.Zip,
+                                                CreatedDate = v.Createddate,
+                                                Email = v.Email,
+                                                BusinessContact = v.Businesscontact,
+                                                BusinessName = vg.Professionname
+                                            }).ToList();
+            int totalItemCount = data.Count;
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)model.PageSize);
+            List<VendorsData> list = data.Skip((model.CurrentPage - 1) * model.PageSize).Take(model.PageSize).ToList();
+
+            VendorsPagination pagination = new()
+            {
+                Vendors = list,
+                CurrentPage = model.CurrentPage,
+                PageSize = 5,
+                TotalPages = totalPages
+            };
+            return pagination;
         }
-        #endregion
+        #endregion PartnersByProfession
+
         #region BusinessById
         public async Task<VendorsData> BusinessById(int? VendorId)
         {

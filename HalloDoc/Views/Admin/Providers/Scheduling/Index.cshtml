@@ -131,33 +131,49 @@
                 <h1 class="modal-title fs-5" id="addShiftModal1Label">Create Shift</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form asp-action="AddShift" asp-controller="Scheduling">
+            <form asp-action="AddShift" asp-controller="Scheduling" class="needs-validation" novalidate>
                 <div class="modal-body">
                     <div class="form-floating">
                         <select class="form-select form-select-sm mt-3 p-2" required data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="addshiftregion" asp-for="regionid" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
-                        
                         </select>
+                       
+                        <div class="invalid-feedback">
+                            Please Select At Least One Region
+                        </div>
                     </div>
                     <div class="form-floating">
                         <select class="form-select form-select-sm mt-3 p-2" required asp-for="physicianid" data-allow-clear="true" tabindex="-1" id="Physician" data-control="select2" data-placeholder="Select Level">
                             @* <option>Select Physician</option> *@
                         </select>
+                        
+                        <div class="invalid-feedback">
+                            Please Select At Least One Physician
+                        </div>
                     </div>
                     <div class="form-floating mt-3">
-                        <input asp-for="shiftdate" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" placeholder="Date">
+                        <input asp-for="shiftdate" required type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" placeholder="Date">
                         <label for="floatingInput">Shift Date</label>
+                        <div class="invalid-feedback">
+                            Please Select Shift Date
+                        </div>
                     </div>
                     <div class="row row-cols-md-2 row-cols-sm-1 row-cols-1 mt-3">
                         <div class="col mb-3 mb-md-0">
                             <div class="form-floating">
-                                <input asp-for="starttime" type="time" class="form-control" placeholder="Date" />
+                                <input asp-for="starttime" required type="time" class="form-control" placeholder="Date" />
                                 <label for="floatingInput">Start</label>
+                                <div class="invalid-feedback">
+                                    Please Enter Start time
+                                </div>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-floating">
-                                <input asp-for="endtime" type="time" class="form-control" placeholder="Date" />
+                                <input asp-for="endtime" required type="time" class="form-control" placeholder="Date" />
                                 <label for="floatingInput">End</label>
+                                <div class="invalid-feedback">
+                                    Please Enter End Time
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -206,35 +222,50 @@
                 <h1 class="modal-title fs-5" id="viewShiftModalLabel">View Shift</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form asp-action="ViewShiftreturn" asp-controller="Scheduling" id="ViewShiftForm">
+            <form asp-action="ViewShiftreturn" asp-controller="Scheduling" id="ViewShiftForm" class="needs-validation" novalidate>
                 <input asp-for="shiftdetailid" type="hidden" id="shiftmodalid"/>
                 <div class="modal-body">
                     <div class="form-floating">
-                        <select class="form-select" data-allow-clear="true" tabindex="-1" asp-for="regionid" id="shiftmodalRegion" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" disabled>
-                            <option value="">Select Region</option>
+                        <select class="form-select" required data-allow-clear="true" tabindex="-1" asp-for="regionid" id="shiftmodalRegion" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" disabled>
+                           
                         </select>
                         <label for="floatingSelect" class="text-info">
                             Region
                         </label>
+                        <div class="invalid-feedback">
+                            Please Select At Least One Region
+                        </div>
                     </div>
-                    <select asp-for="physicianid" class="form-select mt-4" id="physelect2" aria-label="Floating label select example" style="height:58px" disabled>
+                    <select asp-for="physicianid" required class="form-select mt-4" id="physelect2" aria-label="Floating label select example" style="height:58px" disabled>
                         <option id="shiftmodalPhysician" selected>Select Physician</option>
                     </select>
+                    <div class="invalid-feedback">
+                        Please Select At Least One Physician
+                    </div>
                     <div class="form-floating mt-3">
-                        <input asp-for="shiftdate" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" id="shiftmodalDate" class="form-control disable" placeholder="Date" readonly>
+                        <input asp-for="shiftdate" required type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" id="shiftmodalDate" class="form-control disable" placeholder="Date" readonly>
                         <label for="floatingInput">Shift Date</label>
+                        <div class="invalid-feedback">
+                            Please Enter Date
+                        </div>
                     </div>
                     <div class="row row-cols-md-2 row-cols-sm-1 row-cols-1 mt-3">
                         <div class="col mb-3 mb-md-0">
                             <div class="form-floating">
-                                <input asp-for="starttime" type="time" class="form-control disable" id="shiftmodalStart" placeholder="Date" readonly />
+                                <input required asp-for="starttime" type="time" class="form-control disable" id="shiftmodalStart" placeholder="Date" readonly />
                                 <label for="floatingInput">Start</label>
+                                <div class="invalid-feedback">
+                                    Please Enter Start Date
+                                </div>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-floating">
-                                <input asp-for="endtime" type="time" class="form-control disable" id="shiftmodalEnd" placeholder="Date" readonly />
+                                <input required asp-for="endtime" type="time" class="form-control disable" id="shiftmodalEnd" placeholder="Date" readonly />
                                 <label for="floatingInput">End</label>
+                                <div class="invalid-feedback">
+                                    Please Enter End Date
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -354,8 +385,6 @@
                     loadSchedulingPartial(currentPartial);
                 }
             });
-
-
             $('.repeatchk').on('change', function () {
                 if ($(this).prop('checked')) {
                     $('.disable').each(function () {
@@ -367,10 +396,8 @@
                         $(this).prop('disabled', true);
                     });
                 }
-
             });
         });
-
         function editclick() {
             $('.cancel').removeClass('d-none').addClass('d-inline-block');
             $('.edit').removeClass('d-inline-block').addClass('d-none');
@@ -387,7 +414,6 @@
                 $(this).prop('readonly', true);
             });
         }
-
         $('.cancel').on('click', function () {
             var shiftdetailid = $('#shiftmodalid').val();
             $.ajax({
@@ -406,7 +432,6 @@
                 }
             });
         });
-
         function SaveShift() {
             var modal = $('#ViewShiftForm').serialize();
             $.ajax({
@@ -421,7 +446,6 @@
                     alert("Error .");
                 }
             });
-
             $('.cancel').removeClass('d-inline-block').addClass('d-none');
             $('.edit').removeClass('d-none').addClass('d-inline-block');
             $('.save').removeClass('d-inline-block').addClass('d-none');
@@ -445,7 +469,5 @@
                 }
             });
         }
-
     </script>
-
 }
