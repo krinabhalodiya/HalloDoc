@@ -4,7 +4,8 @@
 }
 @using static HalloDoc.Entity.Models.Constant;
 @model HalloDoc.Entity.Models.ViewAdminProfile;
-
+@using HallodocMVC.Repository.Admin.Repository.Interface
+@inject ILoginRepository loginRepository
 @{
     var enumData = from AdminStatus e in Enum.GetValues(typeof(AdminStatus))
                    select new
@@ -12,195 +13,196 @@
                        ID = (int)e,
                        Name = e.ToString()
                    };
- }
-<div class="container">
-    <div class="d-flex justify-content-between">
-        <div class="d-flex align-self-center">
-            <h4><strong>Profile</strong></h4>
+}
+@if (loginRepository.isAccessGranted((int)CV.RoleID(), "MyProfile"))
+{
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <div class="d-flex align-self-center">
+                <h4><strong>Profile</strong></h4>
+            </div>
+            <a asp-controller="@(path.StartsWith("/Profile") ? "AdminDashBoard" : "Access")" asp-action="@(path.StartsWith("/Profile") ? "Index" : "UserAccess")" class="btn border border-info bg-light rounded mt-3 mb-1">
+                <span class="text-info">
+                    <i class="fa fa-angle-left align-middle"></i>
+                    <b>&nbsp;&nbsp;Back</b>
+                </span>
+            </a>
         </div>
-        <a asp-controller="@(path.StartsWith("/Profile") ? "AdminDashBoard" : "Access")" asp-action="@(path.StartsWith("/Profile") ? "Index" : "UserAccess")" class="btn border border-info bg-light rounded mt-3 mb-1">
-            <span class="text-info">
-                <i class="fa fa-angle-left align-middle"></i>
-                <b>&nbsp;&nbsp;Back</b>
-            </span>
-		</a>
-	</div>
         @* Profile Information *@
-    <div class="bg-white rounded shadow mt-3">
-        <div class="p-4">
-            @* Account Information *@
-            <form method="post" asp-controller="@(path.StartsWith("/Profile") ? "Profile" : "Access")" asp-action="EditPassword" id="resetpassform">
-			<h5><strong>Account Information</strong></h5>
-                <input type="hidden" asp-for="AdminId" />
-                <div class="col-xl-12">
-                    <div class="row pb-4">
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="UserName" class="form-control shadow-none input0" id="uname" placeholder="First Name"/>
-                                <label for="uname">User Name</label>
+        <div class="bg-white rounded shadow mt-3">
+            <div class="p-4">
+                @* Account Information *@
+                <form method="post" asp-controller="@(path.StartsWith("/Profile") ? "Profile" : "Access")" asp-action="EditPassword" id="resetpassform">
+                    <h5><strong>Account Information</strong></h5>
+                    <input type="hidden" asp-for="AdminId" />
+                    <div class="col-xl-12">
+                        <div class="row pb-4">
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="UserName" class="form-control shadow-none input0" id="uname" placeholder="First Name"/>
+                                    <label for="uname">User Name</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Password" class="form-control shadow-none" id="pass" placeholder="Last Name" />
-                                <label for="pass">PassWord</label>
-                                <span asp-validation-for="Password" class="text-danger"></span>
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="Password" class="form-control shadow-none" id="pass" placeholder="Last Name" />
+                                    <label for="pass">PassWord</label>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <select class="form-select input0" required asp-for="Status" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
-                                </select>
-                                <label for="Status">Status</label>
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating">
+                                    <select class="form-select input0" required asp-for="Status" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
+                                    </select>
+                                    <label for="Status">Status</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <select class="form-select input0" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.userrolecombobox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level">
-                                </select>
-							    <label for="role">Role</label>
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating">
+                                    <select class="form-select input0" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.userrolecombobox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level">
+                                    </select>
+                                    <label for="role">Role</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <input type="button" value="Edit" id="edit0" class="btn btn-info text-white me-2" onclick="toggleFormElements0()" />
-                            <button type="submit" id="save0" class="btn btn-info text-white me-2" asp-action="SaveAdminInfo" asp-controller="Access">Save</button>
-                            <input type="submit" value="Reset Password" id="resetpassbtn" class="btn border border-info text-info" />
+                            <div class="d-flex justify-content-end">
+                                <input type="button" value="Edit" id="edit0" class="btn btn-info text-white me-2" onclick="toggleFormElements0()" />
+                                <button type="submit" id="save0" class="btn btn-info text-white me-2" asp-action="SaveAdminInfo" asp-controller="Access">Save</button>
+                                <input type="submit" value="Reset Password" id="resetpassbtn" class="btn border border-info text-info" />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
-            @* Administrator Information *@
-            <form method="post" asp-controller="@(path.StartsWith("/Profile") ? "Profile" : "Access")" asp-action="EditAdministratorInfo" id="AdministratorInfoForm">
-                <h5><strong>Administrator Information</strong></h5>
-                <input type="hidden" asp-for="AdminId" />
-                <div class="col-xl-12">
-                    <div class="row pb-4">
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="fname1" placeholder="First Name">
-                                <label for="fname1">First Name</label>
-                                <span asp-validation-for="Firstname" class="text-danger"></span>
+                </form>
+                @* Administrator Information *@
+                <form method="post" asp-controller="@(path.StartsWith("/Profile") ? "Profile" : "Access")" asp-action="EditAdministratorInfo" id="AdministratorInfoForm">
+                    <h5><strong>Administrator Information</strong></h5>
+                    <input type="hidden" asp-for="AdminId" />
+                    <div class="col-xl-12">
+                        <div class="row pb-4">
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="fname1" placeholder="First Name">
+                                    <label for="fname1">First Name</label>
+                                    <span asp-validation-for="Firstname" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Lastname" class="form-control shadow-none input1" id="lname1" placeholder="Last Name">
-                                <label for="lname1">Last Name</label>
-                                <span asp-validation-for="Lastname" class="text-danger"></span>
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="Lastname" class="form-control shadow-none input1" id="lname1" placeholder="Last Name">
+                                    <label for="lname1">Last Name</label>
+                                    <span asp-validation-for="Lastname" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Email" class="form-control shadow-none input1" id="dob1" placeholder="Date Of Birth">
-                                <label for="dob1">Email</label>
-                                <span asp-validation-for="Email" class="text-danger"></span>
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="Email" class="form-control shadow-none input1" id="dob1" placeholder="Date Of Birth">
+                                    <label for="dob1">Email</label>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Email" class="form-control shadow-none input1" id="email1" placeholder="Date Of Birth">
-                                <label for="email1">Confirm Email</label>
-                                <span asp-validation-for="Email" class="text-danger"></span>
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="Email" class="form-control shadow-none input1" id="email1" placeholder="Date Of Birth">
+                                    <label for="email1">Confirm Email</label>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating h-100 w-100">
-                                <input type="tel" asp-for="Mobile" class="form-control shadow-none input1" id="phone1" autocomplete="off" placeholder="Phone Number">
-                                <label for="phone1">Phone Number</label>
-                                <span asp-validation-for="Mobile" class="text-danger"></span>
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating h-100 w-100">
+                                    <input type="tel" asp-for="Mobile" class="form-control shadow-none input1" id="phone1" autocomplete="off" placeholder="Phone Number">
+                                    <label for="phone1">Phone Number</label>
+                                    <span asp-validation-for="Mobile" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <input asp-for="Regionsid" type="hidden" id="regionids" />
-                        <div class="col-md-6 d-flex pb-3">
-                            @foreach (var cb in ViewBag.RegionComboBox)
-                            {
-                                @if (Model != null && Model.Regionids.Count > 0 && Model.Regionids.Exists(id => id.regionid == cb.RegionId))
+                            <input asp-for="Regionsid" type="hidden" id="regionids" />
+                            <div class="col-md-6 d-flex pb-3">
+                                @foreach (var cb in ViewBag.RegionComboBox)
                                 {
-                                    <div class="form-check mx-2">
-                                        <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region" checked>
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            @cb.RegionName
-                                        </label>
-                                    </div>
+                                    @if (Model != null && Model.Regionids.Count > 0 && Model.Regionids.Exists(id => id.regionid == cb.RegionId))
+                                    {
+                                        <div class="form-check mx-2">
+                                            <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region" checked>
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                @cb.RegionName
+                                            </label>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-check mx-2">
+                                            <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region">
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                @cb.RegionName
+                                            </label>
+                                        </div>
+                                    }
                                 }
-                                else
-                                {
-                                    <div class="form-check mx-2">
-                                        <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            @cb.RegionName
-                                        </label>
-                                    </div>
-                                }
-                            }
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <input type="button" value="Edit" id="edit1" class="btn btn-info text-white" onclick="toggleFormElements1()" />
-                            <input type="submit" value="Save" id="save1" class="btn btn-info text-white"  />
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <input type="button" value="Edit" id="edit1" class="btn btn-info text-white" onclick="toggleFormElements1()" />
+                                <input type="submit" value="Save" id="save1" class="btn btn-info text-white"  />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
-            @* Mailing/Billing Information *@
-            <form method="post" asp-controller="@(path.StartsWith("/Profile") ? "Profile" : "Access")" asp-action="BillingInfoEdit" id="BillingInfoForm">
-                <h5><strong>Mailing/Billing Information</strong></h5>
-                <input type="hidden" asp-for="AdminId" />
-                <div class="col-xl-12">
-                    <div class="row pb-4">
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Address1" class="form-control shadow-none input2" id="Address1">
-                                <label for="Address1">Address 1</label>
-                                <span asp-validation-for="Address1" class="text-danger"></span>
+                </form>
+                @* Mailing/Billing Information *@
+                <form method="post" asp-controller="@(path.StartsWith("/Profile") ? "Profile" : "Access")" asp-action="BillingInfoEdit" id="BillingInfoForm">
+                    <h5><strong>Mailing/Billing Information</strong></h5>
+                    <input type="hidden" asp-for="AdminId" />
+                    <div class="col-xl-12">
+                        <div class="row pb-4">
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="Address1" class="form-control shadow-none input2" id="Address1">
+                                    <label for="Address1">Address 1</label>
+                                    <span asp-validation-for="Address1" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Address2" class="form-control shadow-none input2" id="Address2">
-                                <label for="Address2">Address 2</label>
-                                <span asp-validation-for="Address2" class="text-danger"></span>
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="Address2" class="form-control shadow-none input2" id="Address2">
+                                    <label for="Address2">Address 2</label>
+                                    <span asp-validation-for="Address2" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="City" class="form-control shadow-none input2" id="City">
-                                <label for="City">City</label>
-                                <span asp-validation-for="City" class="text-danger"></span>
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="City" class="form-control shadow-none input2" id="City">
+                                    <label for="City">City</label>
+                                    <span asp-validation-for="City" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="State" class="form-control shadow-none input2" id="State" placeholder=Suchtext autocomplete=off>
-                                <label for="State">State</label>
-                                <span asp-validation-for="State" class="text-danger"></span>
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="State" class="form-control shadow-none input2" id="State" placeholder=Suchtext autocomplete=off>
+                                    <label for="State">State</label>
+                                    <span asp-validation-for="State" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Zipcode" class="form-control shadow-none input2" id="Zip">
-                                <label for="Zip">Zip</label>
-                                <span asp-validation-for="Zipcode" class="text-danger"></span>
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating">
+                                    <input type="text" asp-for="Zipcode" class="form-control shadow-none input2" id="Zip">
+                                    <label for="Zip">Zip</label>
+                                    <span asp-validation-for="Zipcode" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating h-100 w-100">
-                                <input type="tel" asp-for="AltMobile" class="form-control shadow-none input2" id="phone" autocomplete="off">
-                                <label for="phone">Phone Number</label>
-                                <span asp-validation-for="AltMobile" class="text-danger"></span>
+                            <div class="col-md-6 pb-3">
+                                <div class="form-floating h-100 w-100">
+                                    <input type="tel" asp-for="AltMobile" class="form-control shadow-none input2" id="phone" autocomplete="off">
+                                    <label for="phone">Phone Number</label>
+                                    <span asp-validation-for="AltMobile" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <input type="button" value="Edit" id="edit2" class="btn btn-info text-white" onclick="toggleFormElements2()" />
-                            <input type="submit" value="Save" id="save2" class="btn btn-info text-white" />
+                            <div class="d-flex justify-content-end">
+                                <input type="button" value="Edit" id="edit2" class="btn btn-info text-white" onclick="toggleFormElements2()" />
+                                <input type="submit" value="Save" id="save2" class="btn btn-info text-white" />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-
-
+}
 <script>
 	window.onload = function (e) {
         toggleFormElements0('true')

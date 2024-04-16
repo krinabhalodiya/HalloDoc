@@ -112,16 +112,7 @@ namespace HalloDoc.Controllers.Admin
         {
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             ViewBag.userrolecombobox = await _combobox.PhysicianRoleComboBox();
-            // bool b = physicians.Isagreementdoc[0];
-
-            /*if (ModelState.IsValid)
-            {*/
-                
-			/*}
-            else
-            {
-                return View("../Admin/Providers/AddEditProvider", physicians);
-            }*/
+            
 			if (await _IProviderRepository.PhysicianAddEdit(physicians, CV.ID()))
 			{
 				_notyf.Success("Physician added Successfully..!");

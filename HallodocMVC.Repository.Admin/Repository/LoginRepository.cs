@@ -56,7 +56,6 @@ namespace HallodocMVC.Repository.Admin.Repository
                         var admindata = _context.Admins.FirstOrDefault(u => u.Aspnetuserid == user.Id);
                         admin.UserId = admindata.Adminid;
                         admin.RoleID = (int)admindata.Roleid;
-
                     }
                     else if (admin.Role == "Patient")
                     {

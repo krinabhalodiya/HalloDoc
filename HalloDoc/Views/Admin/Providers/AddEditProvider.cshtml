@@ -31,24 +31,32 @@
         <form method="post" asp-controller="Providers" asp-action="PhysicianAdd" id="addedit" enctype="multipart/form-data">
         <div class="p-4 border border-bottom">
             @* Account Information *@
+            <div class="w-100 d-flex justify-content-between">
                 <h5><strong>Account Information</strong></h5>
-                <div class="col-xl-12">
-                    <div class="row pb-4">
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="UserName" class="form-control shadow-none" id="UserName" placeholder=Suchtext disabled/>
-                                <label for="UserName">User Name</label>
-                            </div>
+                @if (CV.role() == "Provider")
+                {
+                 <a class="btn border-info text-info" data-bs-toggle="modal" data-bs-target="#Cancelcase">Contact To Admin</a>
+                }
+            </div>
+                <div class="col-xl-12 mt-3"  >
+                <div class="row pb-4">
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input type="text" asp-for="UserName" class="form-control shadow-none" id="UserName" placeholder=Suchtext disabled/>
+                            <label for="UserName">User Name</label>
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="PassWord" class="form-control shadow-none" id="PassWord" placeholder="Last Name" />
-                                <label for="PassWord">PassWord</label>
-                            </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input type="text" asp-for="PassWord" class="form-control shadow-none" id="PassWord" placeholder="Last Name" />
+                            <label for="PassWord">PassWord</label>
                         </div>
+                    </div>
+                    @if (CV.role() == "Admin")
+                    {
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <select class="form-select input0" required asp-for="Status" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
+                                <select class="form-select input0" required asp-for="Status" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level" >
                                 </select>
                                 <label for="Status">Status</label>
                                 <span asp-validation-for="Status" class="text-danger"></span>
@@ -56,255 +64,267 @@
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <select class="form-select input0" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.userrolecombobox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level" >
+                                <select class="form-select input0" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.userrolecombobox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level">
                                 </select>
                                 <label for="Roleid">Role</label>
                                 <span asp-validation-for="Roleid" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-end">
-                            <input type="button" value="Edit" id="edit0" class="btn btn-info text-white me-2" onclick="toggleFormElements0()" />
-                            <button type="submit" id="save0" class="btn btn-info text-white me-2" asp-action="EditAccountInfo" asp-controller="Providers">Save</button>
-                            <button class="btn border border-info text-info " asp-action="ResetPassAdmin" asp-controller="Providers" id="resetpassbtn">Reset Password</button>
-                        </div>
+                    }
+                    <div class="d-flex justify-content-end">
+                    @if (CV.role() == "Admin")
+                    {
+                        <input type="button" value="Edit" id="edit0" class="btn btn-info text-white me-2" onclick="toggleFormElements0()" />
+                        <button type="submit" id="save0" class="btn btn-info text-white me-2" asp-action="EditAccountInfo" asp-controller="Providers">Save</button>
+                    }
+                        <button class="btn border border-info text-info " asp-action="ResetPassAdmin" asp-controller="Providers" id="resetpassbtn">Reset Password</button>
                     </div>
                 </div>
-
-
-                @* Physician Information *@
+            </div>
+            @* Physician Information *@
             
-                <h5><strong>Physician Information</strong></h5>
-                <input type="hidden" asp-for="Physicianid" />
-                <div class="col-xl-12">
-                    <div class="row pb-4">
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="Firstname" placeholder="First Name">
-                                <label for="Firstname">First Name</label>
-                                <span asp-validation-for="Firstname" class="text-danger"></span> 
-                            </div>
+            <h5><strong>Physician Information</strong></h5>
+            <input type="hidden" asp-for="Physicianid" />
+            <div class="col-xl-12">
+                <div class="row pb-4">
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="Firstname" placeholder="First Name" >
+                            <label for="Firstname">First Name</label>
+                            <span asp-validation-for="Firstname" class="text-danger"></span> 
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Lastname" class="form-control shadow-none input1" id="lname1" placeholder="Last Name">
-                                <label for="lname1">Last Name</label>
-                                <span asp-validation-for="Lastname" class="text-danger"></span> 
-                            </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input type="text" asp-for="Lastname" class="form-control shadow-none input1" id="lname1" placeholder="Last Name">
+                            <label for="lname1">Last Name</label>
+                            <span asp-validation-for="Lastname" class="text-danger"></span> 
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Email" class="form-control shadow-none input1" id="Email" placeholder="Date Of Birth">
-                                <label for="Email">Email</label>
-                                 <span asp-validation-for="Email" class="text-danger"></span>
-                            </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input type="text" asp-for="Email" class="form-control shadow-none input1" id="Email" placeholder="Date Of Birth">
+                            <label for="Email">Email</label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating h-100 w-100">
-                                <input type="text" asp-for="Mobile" class="form-control shadow-none input1" id="Mobile" autocomplete="off" placeholder="Phone Number">
-                                <label for="Mobile">Phone Number</label>
-                                <span asp-validation-for="Mobile" class="text-danger"></span> 
-                            </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating h-100 w-100">
+                            <input type="text" asp-for="Mobile" class="form-control shadow-none input1" id="Mobile" autocomplete="off" placeholder="Phone Number">
+                            <label for="Mobile">Phone Number</label>
+                            <span asp-validation-for="Mobile" class="text-danger"></span> 
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating h-100 w-100">
-                                <input type="tel" asp-for="Medicallicense" class="form-control shadow-none input1" id="Medicallicense" autocomplete="off" placeholder="Phone Number">
-                                <label for="Medicallicense">Medical License#</label>
-                                <span asp-validation-for="Medicallicense" class="text-danger"></span>
-                            </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating h-100 w-100">
+                            <input type="tel" asp-for="Medicallicense" class="form-control shadow-none input1" id="Medicallicense" autocomplete="off" placeholder="Phone Number">
+                            <label for="Medicallicense">Medical License#</label>
+                            <span asp-validation-for="Medicallicense" class="text-danger"></span>
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating h-100 w-100">
-                                <input type="tel" asp-for="Npinumber" class="form-control shadow-none input1" id="Npinumber" autocomplete="off" placeholder="Phone Number">
-                                <label for="Npinumber">NPI Number</label>
-                                <span asp-validation-for="Npinumber" class="text-danger"></span>
-                            </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating h-100 w-100">
+                            <input type="tel" asp-for="Npinumber" class="form-control shadow-none input1" id="Npinumber" autocomplete="off" placeholder="Phone Number">
+                            <label for="Npinumber">NPI Number</label>
+                            <span asp-validation-for="Npinumber" class="text-danger"></span>
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating h-100 w-100">
-                                <input type="tel" asp-for="Syncemailaddress" class="form-control shadow-none input1" id="Syncemailaddress" autocomplete="off" placeholder="Phone Number">
-                                <label for="Syncemailaddress">Synchronization Email Address</label>
-                                <span asp-validation-for="Syncemailaddress" class="text-danger"></span>
-                            </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating h-100 w-100">
+                            <input type="tel" asp-for="Syncemailaddress" class="form-control shadow-none input1" id="Syncemailaddress" autocomplete="off" placeholder="Phone Number">
+                            <label for="Syncemailaddress">Synchronization Email Address</label>
+                            <span asp-validation-for="Syncemailaddress" class="text-danger"></span>
                         </div>
-                        <input asp-for="Regionsid" type="hidden" id="regionids" />
-                        <div class="col-md-6 d-flex pb-3" style="flex-wrap: wrap;">
-                            @foreach (var cb in ViewBag.RegionComboBox)
+                    </div>
+                    <input asp-for="Regionsid" type="hidden" id="regionids" />
+                    <div class="col-md-6 d-flex pb-3" style="flex-wrap: wrap;">
+                        @foreach (var cb in ViewBag.RegionComboBox)
+                        {
+                            @if (Model != null && Model.Regionids.Count > 0 && Model.Regionids.Exists(id => id.regionid == cb.RegionId))
                             {
-                                @if (Model != null && Model.Regionids.Count > 0 && Model.Regionids.Exists(id => id.regionid == cb.RegionId))
-                                {
-                                    <div class="form-check mx-2">
-                                        <input class="form-check-input region-check" value="@cb.RegionId" type="checkbox" name="Region" checked>
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            @cb.RegionName
-                                        </label>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="form-check mx-2">
-                                        <input class="form-check-input region-check" value="@cb.RegionId" type="checkbox" name="Region">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            @cb.RegionName
-                                        </label>
-                                    </div>
-                                }
+                                <div class="form-check mx-2">
+                                    <input class="form-check-input region-check" value="@cb.RegionId" type="checkbox" name="Region" checked>
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        @cb.RegionName
+                                    </label>
+                                </div>
                             }
-                        </div>
+                            else
+                            {
+                                <div class="form-check mx-2">
+                                    <input class="form-check-input region-check" value="@cb.RegionId" type="checkbox" name="Region">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        @cb.RegionName
+                                    </label>
+                                </div>
+                            }
+                        }
+                    </div>
+                    @if (CV.role() == "Admin")
+                    {
                         <div class="d-flex justify-content-end">
                             <input type="button" value="Edit" id="edit1" class="btn btn-info text-white" onclick="toggleFormElements1()" />
                             <button type="submit" id="save1" class="btn btn-info text-white" asp-action="EditPhysicianInfo" asp-controller="Providers">Save</button>
                         </div>
-                    </div>
+                    }
                 </div>
+            </div>
+        @* Mailing/Billing Information *@
             
-
-            @* Mailing/Billing Information *@
-            
-                <h5><strong>Mailing/Billing Information</strong></h5>
-                <input type="hidden" asp-for="Physicianid" />
-                <div class="col-xl-12">
-                    <div class="row pb-4">
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating h-100 w-100">
-                                <input type="text" asp-for="Address1" class="form-control shadow-none input2" id="Address1" autocomplete="off" placeholder="Phone Number">
-                                <label for="Address1">Address 1</label>
-                                <span asp-validation-for="Npinumber" class="text-danger"></span>
-                            </div>
+            <h5><strong>Mailing/Billing Information</strong></h5>
+            <input type="hidden" asp-for="Physicianid" />
+            <div class="col-xl-12">
+                <div class="row pb-4">
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating h-100 w-100">
+                            <input type="text" asp-for="Address1" class="form-control shadow-none input2" id="Address1" autocomplete="off" placeholder="Phone Number">
+                            <label for="Address1">Address 1</label>
+                            <span asp-validation-for="Npinumber" class="text-danger"></span>
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating h-100 w-100">
-                                <input type="text" asp-for="Address2" class="form-control shadow-none input2" id="Address2" autocomplete="off" placeholder="Phone Number">
-                                <label for="Address2">Address 2</label>
-                                <span asp-validation-for="Npinumber" class="text-danger"></span>
-                            </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating h-100 w-100">
+                            <input type="text" asp-for="Address2" class="form-control shadow-none input2" id="Address2" autocomplete="off" placeholder="Phone Number">
+                            <label for="Address2">Address 2</label>
+                            <span asp-validation-for="Npinumber" class="text-danger"></span>
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating h-100 w-100">
-                                <input type="text" asp-for="City" class="form-control shadow-none input2" id="City" autocomplete="off" placeholder="Phone Number">
-                                <label for="City">City</label>
-                                <span asp-validation-for="Npinumber" class="text-danger"></span>
-                            </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating h-100 w-100">
+                            <input type="text" asp-for="City" class="form-control shadow-none input2" id="City" autocomplete="off" placeholder="Phone Number">
+                            <label for="City">City</label>
+                            <span asp-validation-for="Npinumber" class="text-danger"></span>
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="State" class="form-control shadow-none input2" id="State" placeholder=Suchtext autocomplete=off>
-                                <label for="State">State</label>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input type="text" asp-for="State" class="form-control shadow-none input2" id="State" placeholder=Suchtext autocomplete=off>
+                            <label for="State">State</label>
+                            <span asp-validation-for="State" class="text-danger"></span> 
+                        </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input type="text" asp-for="Zipcode" class="form-control shadow-none input2" id="Zipcode" placeholder=Suchtext autocomplete=off>
+                            <label for="Zipcode">Zip</label>
                                 <span asp-validation-for="State" class="text-danger"></span> 
-                            </div>
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Zipcode" class="form-control shadow-none input2" id="Zipcode" placeholder=Suchtext autocomplete=off>
-                                <label for="Zipcode">Zip</label>
-                                 <span asp-validation-for="State" class="text-danger"></span> 
-                            </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating h-100 w-100">
+                            <input type="tel" asp-for="Altphone" class="form-control shadow-none input2" id="phone" placeholder=Suchtext autocomplete ="off">
+                            <label for="phone">Phone Number</label>
+                                <span asp-validation-for="Altphone" class="text-danger"></span> 
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating h-100 w-100">
-                                <input type="tel" asp-for="Altphone" class="form-control shadow-none input2" id="phone" placeholder=Suchtext autocomplete ="off">
-                                <label for="phone">Phone Number</label>
-                                 <span asp-validation-for="Altphone" class="text-danger"></span> 
-                            </div>
-                        </div>
+                    </div>
+                    @if (CV.role() == "Admin")
+                    {
                         <div class="d-flex justify-content-end">
                             <input type="button" value="Edit" id="edit2" class="btn btn-info text-white" onclick="toggleFormElements2()" />
                             <button type="submit" id="save2" class="btn btn-info text-white" asp-action="EditMailBillingInfo" asp-controller="Providers">Save</button>
                         </div>
-                    </div>
+                    }
                 </div>
+            </div>
             
 
-            @* Provider Profile *@
+        @* Provider Profile *@
             
-                <h5><strong>Provider Profile</strong></h5>
-                <input type="hidden" asp-for="Physicianid" />
-                <div class="col-xl-12">
-                    <div class="row pb-4">
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Businessname" class="form-control shadow-none input3" id="Businessname" placeholder=Suchtext>
-                                <label for="Businessname">Business Name</label>
-                                 <span asp-validation-for="Address1" class="text-danger"></span> 
+            <h5><strong>Provider Profile</strong></h5>
+            <input type="hidden" asp-for="Physicianid" />
+            <div class="col-xl-12">
+                <div class="row pb-4">
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input type="text" asp-for="Businessname" class="form-control shadow-none input3" id="Businessname" placeholder=Suchtext>
+                            <label for="Businessname">Business Name</label>
+                                <span asp-validation-for="Address1" class="text-danger"></span> 
+                        </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="form-floating">
+                            <input type="text" asp-for="Businesswebsite" class="form-control shadow-none input3" id="Businesswebsite" placeholder=Suchtext>
+                            <label for="Businesswebsite">Business Website</label>
+                            <span asp-validation-for="Address2" class="text-danger"></span> 
+                        </div>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        <div class="d-flex justify-content-between bg-light border border-secondary rounded">
+                            <button type="button" id="choosenfile" class="col btn text-start text-secondary input3" >
+                                Select Photo
+                            </button>
+                            <input id="file" type="file" class="d-none form-control doc_uploder input3" asp-for="PhotoFile">
+							<div class="btn btn-info text-white py-2 input3" value="Upload" onclick="document.getElementById('file').click()">
+                                <i class="fa fa-cloud-upload"></i>
+                                <span class="d-none d-sm-inline">Upload</span>
                             </div>
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="form-floating">
-                                <input type="text" asp-for="Businesswebsite" class="form-control shadow-none input3" id="Businesswebsite" placeholder=Suchtext>
-                                <label for="Businesswebsite">Business Website</label>
-                                <span asp-validation-for="Address2" class="text-danger"></span> 
+                    </div>
+                    <div class="col-md-5 pb-3">
+                        <div class="d-flex justify-content-between bg-light border border-secondary rounded">
+                            <button type="button" id="choosenfile1" class="col btn text-start text-secondary input3">
+								Select Signature
+							</button>
+                            <input id="file2" type="file" class="d-none file2 file-uplode  form-control doc_uploder input3" asp-for="SignatureFile">
+                            <div class="btn btn-info text-white py-2 input3" value="Upload" onclick="document.getElementById('file2').click()">
+                                <i class="fa fa-cloud-upload"></i>
+                                <span class="d-none d-sm-inline">Upload</span>
                             </div>
                         </div>
-                        <div class="col-md-6 pb-3">
-                            <div class="d-flex justify-content-between bg-light border border-secondary rounded">
-                                <button type="button" id="choosenfile" class="col btn text-start text-secondary input3" >
-                                    Select Photo
-                                </button>
-                                <input id="file" type="file" class="d-none form-control doc_uploder input3" asp-for="PhotoFile">
-								<div class="btn btn-info text-white py-2 input3" value="Upload" onclick="document.getElementById('file').click()">
-                                    <i class="fa fa-cloud-upload"></i>
-                                    <span class="d-none d-sm-inline">Upload</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5 pb-3">
-                            <div class="d-flex justify-content-between bg-light border border-secondary rounded">
-                                <button type="button" id="choosenfile1" class="col btn text-start text-secondary input3">
-									Select Signature
-								</button>
-                                <input id="file2" type="file" class="d-none file2 file-uplode  form-control doc_uploder input3" asp-for="SignatureFile">
-                                <div class="btn btn-info text-white py-2 input3" value="Upload" onclick="document.getElementById('file2').click()">
-                                    <i class="fa fa-cloud-upload"></i>
-                                    <span class="d-none d-sm-inline">Upload</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-1 pb-3 p-0">
-                            <button type="button" class="btn btn-info mx-2 text-white provider-prof input3" id="create-signature-button"><i class="fa fa-pen"></i>Create</button>
-                        </div>
-                        <div class="col-md-6 pb-3">
-                            @if (Model != null && Model.Photo != null)
-                            {
-                                <span> Photo  </span>
-                                <img class="img-fluid border border-1 h-100 w-25 mx-2" src="~/Upload/Physician/@Model.Physicianid/@Model.Photo" alt="Photo" />
-                            }
-                        </div>
+                    </div>
+                    <div class="col-md-1 pb-3 p-0">
+                        <button type="button" class="btn btn-info mx-2 text-white provider-prof input3" id="create-signature-button"><i class="fa fa-pen"></i>Create</button>
+                    </div>
+                    <div class="col-md-6 pb-3">
+                        @if (Model != null && Model.Photo != null)
+                        {
+                            <span> Photo  </span>
+                            <img class="img-fluid border border-1 h-100 w-25 mx-2" src="~/Upload/Physician/@Model.Physicianid/@Model.Photo" alt="Photo" />
+                        }
+                    </div>
                    
-                        <div class="col-md-6">
-                            <div>
-                                @if (Model != null && Model.Signature != null)
-                                {
-                                    <span> Signature  </span>
+                    <div class="col-md-6">
+                        <div>
+                            @if (Model != null && Model.Signature != null)
+                            {
+                                <span> Signature  </span>
 
-                                    <br />
-                                    <img class="img-fluid border border-1 " src="~/Upload/Physician/@Model.Physicianid/@Model.Signature" alt="Signature" />
-                                }
-                                <input type="hidden" id="signature-data" name="signatureData">
-                            </div>
-                            <div class=" d-flex">
-                                <img id="saved" alt="Signature" class="border border-1 border-success-subtle mx-3" style="display:none;" />
-                                <canvas id="signature-pad" width="300" height="200" style="display:none;"></canvas>
+                                <br />
+                                <img class="img-fluid border border-1 " src="~/Upload/Physician/@Model.Physicianid/@Model.Signature" alt="Signature" />
+                            }
+                            <input type="hidden" id="signature-data" name="signatureData">
+                        </div>
+                        <div class=" d-flex">
+                            <img id="saved" alt="Signature" class="border border-1 border-success-subtle mx-3" style="display:none;" />
+                            <canvas id="signature-pad" width="300" height="200" style="display:none;"></canvas>
 
-                            </div>
+                        </div>
+                        @if (CV.role() == "Admin")
+                        {
                             <div class="text-end mt-2 ">
                                 <div id="clear-button" class="btn btn-danger mt-0" style="display:none;">Clear</div>
                                 <div id="save-button" class="btn btn-success" style="display:none;" disabled>Save</div>
                             </div>
+                        }
 
-                        </div>
-                        <div class="col-md-12 pb-3">
+                    </div>
+                    <div class="col-md-12 pb-3">
                             
-                                <div class="form-floating">
-                                <textarea id="Adminnotes" asp-for="Adminnotes" required class="input-outline w-100 fs-6 form-control shadow-none input3" type="text" style=" height:100px;"></textarea>
-                                    <label class="inputs-lable inputs-lable-textarea fs-6" for="Adminnotes">Admin Notes</label>
-                                </div>
+                            <div class="form-floating">
+                            <textarea id="Adminnotes" asp-for="Adminnotes" required class="input-outline w-100 fs-6 form-control shadow-none input3" type="text" style=" height:100px;"></textarea>
+                                <label class="inputs-lable inputs-lable-textarea fs-6" for="Adminnotes">Admin Notes</label>
+                            </div>
                             
-                        </div>
+                    </div>
+                    @if (CV.role() == "Admin")
+                    {
                         <div class="d-flex justify-content-end">
                             <input type="button" value="Edit" id="edit3" class="btn btn-info text-white" onclick="toggleFormElements3()" />
                             <button type="submit" id="save3" class="btn btn-info text-white" asp-action="EditProviderProfile" asp-controller="Providers">Save</button>
                         </div>
-                    </div>
+                    }
                 </div>
+            </div>
             
         </div>
         <div class="p-4">
@@ -479,26 +499,29 @@
                                     {
                                         <a href="~/Upload/Physician/@Model.Physicianid/Agreementdoc.pdf" target="_blank" class="btn btn-info text-white viewbtn" style="display:none;">View</a>
                                     }
-							}
-						</div>
+                                }
+                        </div>
                         <!-- Display uploaded file details -->
                         <div class="file-details" style="display:none;">
                             <p><span class="file-name"></span></p>
                         </div>
                     </div>
                 </div>
+                <hr/> 
+                @if (CV.role() == "Admin")
+                {
+                    <div class="text-end mt-2 edits" >
+                        <button type="submit" asp-action="EditProviderOnbording" asp-controller="Providers" id="formsave" class="btn text-white btn-info btn-submit mx-2 ">
+                            save
+                        </button>
+                        <a asp-action="DeletePhysician" asp-controller="Providers" asp-route-PhysicianID="@(Model!= null?Model.Physicianid:null)" id="deleteaccount" class="btn  btn-danger ">
+                            Delete Account
+                        </a>
+                        <input type="button" class="btn btn-success text-white" id="add" value="Create Physician" />
+                    </div>
+                }
             </div>
-        <hr/> 
-            <div class="text-end mt-2 edits" >
-                <button type="submit" asp-action="EditProviderOnbording" asp-controller="Providers" id="formsave" class="btn text-white btn-info btn-submit mx-2 ">
-                    save
-                </button>
-                <a asp-action="DeletePhysician" asp-controller="Providers" asp-route-PhysicianID="@(Model!= null?Model.Physicianid:null)" id="deleteaccount" class="btn  btn-danger ">
-                    Delete Account
-				</a>
-                <input type="button" class="btn btn-success text-white" id="add" value="Create Physician" />
-				</div>
-			</div>
+        </div>
         </form>
     </div>
 </div>
@@ -531,9 +554,11 @@
 
     function toggleFormElements0(bDisabled) {
         var inputs0 = document.getElementsByClassName("input0");
+        
         var submit0 = document.getElementById("save0");
         var editprofile0 = document.getElementById("edit0");
-        for (var i = 0; i < inputs0.length; i++) {
+    
+    for (var i = 0; i < inputs0.length; i++) {
             inputs0[i].disabled = !inputs0[i].disabled;
         }
         if (inputs0[0].disabled) {

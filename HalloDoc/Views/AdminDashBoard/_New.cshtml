@@ -45,9 +45,6 @@
                         </th>
                     }
                     <th scope="col">
-                        <small>Chat With</small>
-                    </th>
-                    <th scope="col">
                         <small>Actions</small>
                     </th>
                 }
@@ -98,23 +95,6 @@
                     {
                         <td><small>@item.Notes</small></td>
                     }
-                    <td>
-                        @if (CV.role() == "Admin")
-                        {
-                            <button class="btn border border-white text-white my-2">
-                                <small>Patient</small>
-                            </button>
-                            <button class="btn border border-white text-white my-2">
-                                <small>Provider</small>
-                            </button>
-                        }
-                        @if (CV.role() == "Provider")
-                        {
-                            <button class="btn border border-white text-white my-2">
-                                <small>Admin</small>
-                            </button>
-                        }
-                    </td>
                     <td>
                         <button class="btn border border-white text-white my-2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <small>Actions</small>
@@ -297,6 +277,7 @@
             document.getElementById('RequestID_Input_ModelAssignCase').value = modeldata[id].requestID;
             document.getElementById('RequestID_Input_ModelBlockCase').value = modeldata[id].requestID;
             document.getElementById('PatientName_ModelBlockCase').innerText = modeldata[id].patientName;
+            document.getElementById('RequestID_Input_ModelAcceptCase').value = modeldata[id].requestID;
         }
 
      function SetColumValue(e) {

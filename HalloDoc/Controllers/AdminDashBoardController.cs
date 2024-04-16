@@ -64,7 +64,7 @@ namespace HalloDoc.Controllers
             {
                 contacts = _IAdminDashBoardRepository.GetRequests(Status, data, Convert.ToInt32(CV.UserID()));
             }
-                switch (Status)
+            switch (Status)
             {
                 case "1":
                     return PartialView("../AdminDashBoard/_New", contacts);

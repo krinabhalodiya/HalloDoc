@@ -18,12 +18,25 @@
                 <a class="nav-link text-dark @(path.StartsWith("/ProviderLocation") ? "activesbnav" : "")" asp-action="Index" asp-controller="ProviderLocation">Provider Location</a>
 			</li>
  }
-            @if (loginRepository.isAccessGranted((int)CV.RoleID(), "MyProfile"))
-                    {
-			<li class="nav-item me-3">
-				<a class="nav-link text-dark @(path.StartsWith("/Profile") ? "activesbnav" : "")" asp-action="Index" asp-controller="Profile">My Profile</a>
-			</li>
-                    }
+            @if (CV.role() == "Admin")
+            {
+                @if (loginRepository.isAccessGranted((int)CV.RoleID(), "MyProfile"))
+                {
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-dark @(path.StartsWith("/Profile") ? "activesbnav" : "")" asp-action="Index" asp-controller="Profile">My Profile</a>
+                    </li>
+                }
+            }
+            @if (CV.role() == "Provider")
+            {
+                @if (loginRepository.isAccessGranted((int)CV.RoleID(), "MyProfile"))
+                {
+                    var a = Int32.Parse(CV.UserID());
+                    <li class="nav-item me-3">
+                        <a class="nav-link text-dark @(path.StartsWith("/Profile") ? "activesbnav" : "")" asp-action="PhysicianProfile" asp-controller="Providers" asp-route-id="@a">My Profile</a>
+                    </li>
+                }
+            }
             @if (CV.role() == "Admin")
             {
                 <li class="nav-item dropdown me-3">

@@ -365,9 +365,39 @@ namespace HalloDoc.Controllers
             }
             else
             {
-                _notyf.Success("Encounter Changes Not Saved...");
+                _notyf.Error("Encounter Changes Not Saved...");
             }
             return RedirectToAction("Encounter", new { id = data.Requesid });
+        }
+        #endregion
+
+        #region _Accept RequestProviderPost
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _AcceptRequestPost(int RequestId , string Note)
+        {
+            if (await _IAdminDashBoardActionsRepository.AcceptPhysician(RequestId, Note, Convert.ToInt32(CV.UserID())))
+            {
+                _notyf.Success("Case Accepted...");
+            }
+            else
+            {
+                _notyf.Success("Case Not Accepted...");
+            }
+            return Redirect("~/Physician/DashBoard");
+        }
+        #endregion
+        #region __TransfertoAdminPost
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _TransfertoAdminPost(int RequestID, string Note)
+        {
+            if (await _IAdminDashBoardActionsRepository.TransfertoAdmin(RequestID, Note,Convert.ToInt32(CV.UserID())))
+            {
+                _notyf.Success("Request Successfully transfered to admin...");
+            }
+
+            return Redirect("~/Physician/DashBoard");
         }
         #endregion
     }

@@ -507,7 +507,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         }
         #endregion
 
-        #region SendFilEmail
+        #region SendFileEmail
         public async Task<bool> SendFileEmail(string ids, int Requestid, string email)
         {
             var v = await GetRequestDetails(Requestid);
@@ -934,6 +934,52 @@ namespace HallodocMVC.Repository.Admin.Repository
                               Email = rc.Email
 
                           }).FirstAsync();
+        }
+        #endregion
+
+        #region Accept_Physician
+        public async Task<bool> AcceptPhysician(int requestid,string note, int ProviderId)
+        {
+
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == requestid);
+            request.Status = 2;
+            request.Accepteddate = DateTime.Now;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            Requeststatuslog rsl = new Requeststatuslog();
+            rsl.Requestid = requestid;
+            rsl.Createddate = DateTime.Now;
+            rsl.Status = 2;
+            rsl.Notes = note;
+            rsl.Transtophysicianid = ProviderId;
+            _context.Requeststatuslogs.Update(rsl);
+            _context.SaveChanges();
+            return true;
+        }
+        #endregion
+        #region TransfertoAdmin
+        public async Task<bool> TransfertoAdmin(int RequestID, string Note, int ProviderId)
+        {
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == RequestID);
+            request.Status = 1;
+            request.Physicianid = null;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            Requeststatuslog rsl = new Requeststatuslog();
+            rsl.Requestid = RequestID;
+            rsl.Notes = Note;
+            rsl.Createddate = DateTime.Now;
+            rsl.Status = 1;
+
+            rsl.Physicianid = ProviderId;
+            rsl.Transtoadmin = new BitArray(1);
+            rsl.Transtoadmin[0] = true;
+            _context.Requeststatuslogs.Update(rsl);
+            _context.SaveChanges();
+
+            return true;
         }
         #endregion
     }
