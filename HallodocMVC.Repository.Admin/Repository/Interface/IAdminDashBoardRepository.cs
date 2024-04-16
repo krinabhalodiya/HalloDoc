@@ -10,8 +10,9 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
 {
     public interface IAdminDashBoardRepository
     {
-        PaginatedViewModel Indexdata();
+        public PaginatedViewModel Indexdata(int ProviderId);
         PaginatedViewModel GetRequests(string Status, PaginatedViewModel data);
+        public PaginatedViewModel GetRequests(string Status, PaginatedViewModel data, int ProviderId);
         public List<AdminDashboardList> Export(string status);
         public bool SendLink(String Email);
         public bool SendSMS(String mobile);

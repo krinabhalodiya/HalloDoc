@@ -64,7 +64,11 @@ namespace HalloDoc.Controllers.Admin
                 {
                     return RedirectToAction("Index", "PatientDashboard");
                 }
-                return RedirectToAction("Index", "AdminDashBoard");
+                else if(u.Role == "Provider")
+                {
+                    return Redirect("~/Physician/DashBoard");
+                }
+                return Redirect("~/Admin/DashBoard");
             }
             else
             {

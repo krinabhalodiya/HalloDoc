@@ -1,4 +1,6 @@
 ﻿@model HalloDoc.Entity.Models.PaginatedViewModel;
+@using HallodocMVC.Repository.Admin.Repository.Interface
+@inject ILoginRepository loginRepository
 <form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
       asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate">
 
@@ -68,8 +70,9 @@
                 </div>
             </div>
         </button>
-
-        <button class="btn col-4 col-md-2 text-start shadow-none position-relative" onclick="changeStatus('3,7,8')">
+        @if (CV.role() == "Admin")
+        {
+             <button class="btn col-4 col-md-2 text-start shadow-none position-relative" onclick="changeStatus('3,7,8')">
             <div class="p-1 rounded toClose ps-2 pt-3 a-toClose  @{
                     if(CV.CurrentStatus()=="3,7,8"){
                             @Html.Raw("active")
@@ -100,6 +103,8 @@
                 </div>
             </div>
         </button>
+        }
+       
     </div>
     @* end upper 6 buttons *@
 
@@ -121,24 +126,27 @@
                     <span class="adminIcon">Create Requests</span>
                 </small>
             </a>
-            <button class="btn btn-info text-white shadow-none mb-2" onclick="Export(@CV.CurrentStatus())">
-                <small>
-                    <i class="fa-solid fa-share"></i>
-                    <span class="adminIcon">Export</span>
-                </small>
-            </button>
-            <button class="btn btn-info text-white shadow-none mb-2" onclick="Export('1,2,3,4,5,6,7,8,9,10,11')">
-                <small>
-                    <i class="fa-solid fa-share-from-square"></i>
-                    <span class="adminIcon">Export All</span>
-                </small>
-            </button>
-            <button class="btn btn-info text-white shadow-none mb-2" data-bs-toggle="modal" data-bs-target="#requestSupport">
-                <small>
-                    <i class="fa-solid fa-user-nurse"></i>
-                    <span class="adminIcon">Request DIY Support</span>
-                </small>
-            </button>
+            @if (CV.role() == "Admin")
+            {
+                <button class="btn btn-info text-white shadow-none mb-2" onclick="Export(@CV.CurrentStatus())">
+                    <small>
+                        <i class="fa-solid fa-share"></i>
+                        <span class="adminIcon">Export</span>
+                    </small>
+                </button>
+                <button class="btn btn-info text-white shadow-none mb-2" onclick="Export('1,2,3,4,5,6,7,8,9,10,11')">
+                    <small>
+                        <i class="fa-solid fa-share-from-square"></i>
+                        <span class="adminIcon">Export All</span>
+                    </small>
+                </button>
+                <button class="btn btn-info text-white shadow-none mb-2" data-bs-toggle="modal" data-bs-target="#requestSupport">
+                    <small>
+                        <i class="fa-solid fa-user-nurse"></i>
+                        <span class="adminIcon">Request DIY Support</span>
+                    </small>
+                </button>
+            }
         </div>
     </div>
     @* end quick links *@
@@ -157,10 +165,12 @@
                     <a id="regionicon">
 						<i class="fa fa-search"></i>
                     </a>
-                    
+                    @if (loginRepository.isAccessGranted((int)CV.RoleID(), "Scheduling"))
+                    {
                     <select class="form-select" asp-for="RegionId" data-allow-clear="true" tabindex="-1" id="regiondropdown" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                         <option>All Region</option>
                     </select>
+                        }
                 </div>
 
                 <div class="search m-1 d-flex justify-content-between">

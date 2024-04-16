@@ -1,5 +1,7 @@
 ﻿@model HalloDoc.Entity.Models.PaginatedViewModel
 @using static HalloDoc.Entity.Models.Constant
+@using HallodocMVC.Repository.Admin.Repository.Interface
+@inject ILoginRepository loginRepository
 <!--Mobile Screen View of table-->
 <!--Desktop Screen View of table-->
 <div class="table-responsive m-2 mb-5 d-none d-sm-block">
@@ -14,22 +16,25 @@
                         <span class="dt-column-order"></span>
                     </th>
                     <th></th>
-                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "Dob" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Dob')">
-                        <small>Date Of Birth</small>
-                        <span class="dt-column-order"></span>
-                    </th>
-                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "Requestor" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Requestor')">
-                        <small>Requestor</small>
-                        <span class="dt-column-order"></span>
-                    </th>
-                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "ProviderName" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('ProviderName')">
-                        <small>Physician Name</small>
-                        <span class="dt-column-order"></span>
-                    </th>
-                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "RequestedDate" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('RequestedDate')">
-                        <small>Date Of Service</small>
-                        <span class="dt-column-order"></span>
-                    </th>
+                    @if (CV.role() == "Admin")
+                    {
+                        <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "Dob" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Dob')">
+                            <small>Date Of Birth</small>
+                            <span class="dt-column-order"></span>
+                        </th>
+                        <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "Requestor" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Requestor')">
+                            <small>Requestor</small>
+                            <span class="dt-column-order"></span>
+                        </th>
+                        <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "ProviderName" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('ProviderName')">
+                            <small>Physician Name</small>
+                            <span class="dt-column-order"></span>
+                        </th>
+                        <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "RequestedDate" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('RequestedDate')">
+                            <small>Date Of Service</small>
+                            <span class="dt-column-order"></span>
+                        </th>
+                    }
                     <th scope="col">
                         <small>Phone</small>
                     </th>
@@ -37,12 +42,12 @@
                         <small>Address</small>
                         <span class="dt-column-order"></span>
                     </th>
-                    <th scope="col">
-                        <small>Notes</small>
-                    </th>
-                    <th scope="col">
-                        <small>Chat With</small>
-                    </th>
+                    @if (CV.role() == "Admin")
+                    {
+                        <th scope="col">
+                            <small>Notes</small>
+                        </th>
+                    }
                     <th scope="col">
                         <small>Actions</small>
                     </th>
@@ -60,11 +65,15 @@
                             <i class="fa-regular fa-envelope"></i>
                         </button>
                     </td>
-                    <td>
-                        <small>@item.Dob</small>
-                    </td>
-                    <td><small>@item.ProviderName</small></td>
-                    <td><small>@item.RequestedDate.ToString("MMM d , yyyy")</small></td>
+                    @if (CV.role() == "Admin")
+                    {
+                        <td>
+                            <small>@item.Dob</small>
+                        </td>
+                        <td><small>@item.Requestor</small></td>
+                        <td><small>@item.ProviderName</small></td>
+                        <td><small>@item.RequestedDate.ToString("MMM d , yyyy")</small></td>
+                    }
                     <td>
                         <button class="btn border border-white text-white mt-2">
                             <i class="fa-solid fa-phone pe-2"></i>
@@ -88,24 +97,30 @@
                         }
                     </td>
                     <td><small>@item.Address</small></td>
-                    <td>
-                        <button class="btn border border-white text-white my-2">
-                            <small>Patient</small>
-                        </button>
-                        <button class="btn border border-white text-white my-2">
-                            <small>Provider</small>
-                        </button>
-                    </td>
+                    @if (CV.role() == "Admin")
+                    {
+                        <td><small>@item.Notes</small></td>
+                    }
                     <td>
                         <button class="btn border border-white text-white my-2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <small>Actions</small>
                         </button>
                         <ul class="dropdown-menu">
                             <li><a asp-action="ViewCase" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>View Case</a></li>
-                            <li><a asp-action="ViewUpload" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-file-earmark-zip me-1"></i>View Uploads</a></li>
                             <li><a asp-action="ViewNotes" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-card-text me-1"></i>View Notes</a></li>
-                            <li><a asp-action="Order" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-check me-1"></i>Orders</a></li>
-                            <li><a asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
+                            <li><a asp-action="Encounter" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
+                            @if (CV.role() == "Admin")
+                            {
+                                <li><a asp-action="ViewUpload" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-file-earmark-zip me-1"></i>View Uploads</a></li>
+                            }
+                            @if (CV.role() == "Provider")
+                            {
+                                <li><a asp-action="ConcludeCare" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>Conclude Care</a></li>
+                            }
+                            @if (loginRepository.isAccessGranted((int)CV.RoleID(), "SendOrder"))
+                            {
+                                <li><a asp-action="Order" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-check me-1"></i>Orders</a></li>
+                            }
                         </ul>
                     </td>
                 </tr>

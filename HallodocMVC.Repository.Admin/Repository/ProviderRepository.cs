@@ -24,6 +24,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             _context = context;
             _emailConfig = emailConfig;
         }
+
         #region Find_Location_Physician
         public async Task<List<PhysicianLocation>> FindPhysicianLocation()
         {
@@ -466,6 +467,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             }
         }
         #endregion
+
         #region EditMailBillingInfo
         public async Task<bool> EditMailBillingInfo(PhysiciansData vm, string AdminId)
         {
@@ -506,6 +508,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             }
         }
         #endregion
+
         #region EditProviderProfile
         public async Task<bool> EditProviderProfile(PhysiciansData vm, string AdminId)
         {
@@ -554,6 +557,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             }
         }
         #endregion
+
         #region EditProviderOnbording
         public async Task<bool> EditProviderOnbording(PhysiciansData vm, string AdminId)
         {
@@ -606,6 +610,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             }
         }
         #endregion
+
         #region DeletePhysician
         public async Task<bool> DeletePhysician(int PhysicianID, string AdminID)
         {

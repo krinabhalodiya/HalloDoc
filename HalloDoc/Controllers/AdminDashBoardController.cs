@@ -34,12 +34,18 @@ namespace HalloDoc.Controllers
             _logger = logger;
             _ICreateRequest = iCreateRequest;
         }
-        [CheckProviderAccess("Admin")]
+        [CheckProviderAccess("Admin,Provider")]
+        [Route("Physician/DashBoard")]
+        [Route("Admin/DashBoard")]
         public async Task<IActionResult> IndexAsync()
         {
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             ViewBag.CaseReasonComboBox = await _combobox.CaseReasonComboBox();
-            PaginatedViewModel sm = _IAdminDashBoardRepository.Indexdata();
+            PaginatedViewModel sm = _IAdminDashBoardRepository.Indexdata(-1);
+            if (CV.role() == "Provider")
+            {
+                sm = _IAdminDashBoardRepository.Indexdata(Convert.ToInt32(CV.UserID()));
+            }
             return View(sm);
         }
 
@@ -53,10 +59,12 @@ namespace HalloDoc.Controllers
             }
             Response.Cookies.Delete("Status");
             Response.Cookies.Append("Status", Status);
-
-            
             PaginatedViewModel contacts = _IAdminDashBoardRepository.GetRequests(Status, data);
-            switch (Status)
+            if (CV.role() == "Provider")
+            {
+                contacts = _IAdminDashBoardRepository.GetRequests(Status, data, Convert.ToInt32(CV.UserID()));
+            }
+                switch (Status)
             {
                 case "1":
                     return PartialView("../AdminDashBoard/_New", contacts);

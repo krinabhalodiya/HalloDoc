@@ -101,7 +101,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         {
             var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == RequestId);
             request.Physicianid = ProviderId;
-            request.Status = 2;
+            request.Status = 1;
             _context.Requests.Update(request);
             _context.SaveChanges();
             Requeststatuslog rsl = new Requeststatuslog();
@@ -109,7 +109,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             rsl.Physicianid = ProviderId;
             rsl.Notes = notes;
             rsl.Createddate = DateTime.Now;
-            rsl.Status = 2;
+            rsl.Status = 1;
             _context.Requeststatuslogs.Update(rsl);
             _context.SaveChanges();
             return true;

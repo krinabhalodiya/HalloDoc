@@ -180,7 +180,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                           Requestor = req.Firstname + " " + req.Lastname,
                                                           PatientName = rc.Firstname + " " + rc.Lastname,
                                                           RequestedDate = req.Createddate,
-                                                          Dob = new DateOnly((int)rc.Intyear, DateTime.ParseExact(rc.Strmonth, "MMMM", new CultureInfo("en-US")).Month, (int)rc.Intdate),
+                                                          //Dob = new DateOnly((int)rc.Intyear, DateTime.ParseExact(rc.Strmonth, "MMMM", new CultureInfo("en-US")).Month, (int)rc.Intdate),
                                                           PhoneNumber = rc.Phonenumber,
                                                           Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.Zipcode,
                                                           Notes = rc.Notes,

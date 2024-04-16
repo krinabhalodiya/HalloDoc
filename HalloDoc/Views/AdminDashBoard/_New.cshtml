@@ -16,18 +16,21 @@
                         <span class="dt-column-order"></span>
                     </th>
                     <th></th>
-                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "Dob" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Dob')">
-                        <small>Date Of Birth</small>
-                        <span class="dt-column-order"></span>
-                    </th>
-                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "Requestor" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Requestor')">
-                        <small>Requestor</small>
-                        <span class="dt-column-order"></span>
-                    </th>
-                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "RequestedDate" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('RequestedDate')">
-                        <small>Requested Date</small>
-                        <span class="dt-column-order"></span>
-                    </th>
+                    @if(CV.role() == "Admin")
+                    {
+                        <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "Dob" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Dob')">
+                            <small>Date Of Birth</small>
+                            <span class="dt-column-order"></span>
+                        </th>
+                        <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "Requestor" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Requestor')">
+                            <small>Requestor</small>
+                            <span class="dt-column-order"></span>
+                        </th>
+                        <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "RequestedDate" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('RequestedDate')">
+                            <small>Requested Date</small>
+                            <span class="dt-column-order"></span>
+                        </th>
+                    }
                     <th scope="col">
                         <small>Phone</small>
                     </th>
@@ -35,9 +38,12 @@
                         <small>Address</small>
                         <span class="dt-column-order"></span>
                     </th>
-                    <th scope="col">
-                        <small>Notes</small>
-                    </th>
+                    @if (CV.role() == "Admin")
+                    {
+                        <th scope="col">
+                            <small>Notes</small>
+                        </th>
+                    }
                     <th scope="col">
                         <small>Chat With</small>
                     </th>
@@ -57,11 +63,14 @@
                             <i class="fa-regular fa-envelope"></i>
                         </button>
                     </td>
-                    <td>
-                        <small>@item.Dob</small>
-                    </td>
-                    <td><small>@item.Requestor</small></td>
-                    <td><small>@item.RequestedDate.ToString("MMM d , yyyy")</small></td>
+                    @if (CV.role() == "Admin")
+                    {
+                        <td>
+                            <small>@item.Dob</small>
+                        </td>
+                        <td><small>@item.Requestor</small></td>
+                        <td><small>@item.RequestedDate.ToString("MMM d , yyyy")</small></td>
+                    }
                     <td>
                         <button class="btn border border-white text-white mt-2">
                             <i class="fa-solid fa-phone pe-2"></i>
@@ -85,28 +94,45 @@
                         }
                     </td>
                     <td><small>@item.Address</small></td>
-                    <td><small>@item.Notes</small></td>
+					@if (CV.role() == "Admin")
+                    {
+                        <td><small>@item.Notes</small></td>
+                    }
                     <td>
-                        <button class="btn border border-white text-white my-2">
-                            <small>Patient</small>
-                        </button>
-                        <button class="btn border border-white text-white my-2">
-                            <small>Provider</small>
-                        </button>
+                        @if (CV.role() == "Admin")
+                        {
+                            <button class="btn border border-white text-white my-2">
+                                <small>Patient</small>
+                            </button>
+                            <button class="btn border border-white text-white my-2">
+                                <small>Provider</small>
+                            </button>
+                        }
+                        @if (CV.role() == "Provider")
+                        {
+                            <button class="btn border border-white text-white my-2">
+                                <small>Admin</small>
+                            </button>
+                        }
                     </td>
                     <td>
                         <button class="btn border border-white text-white my-2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <small>Actions</small>
                         </button>
                         <ul class="dropdown-menu" id="inline-popups">
-
-                            <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#assigncase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName"><i class="bi bi-card-checklist me-1"></i>Assign Case</a></li>
-                            <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#Cancelcase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName"><i class="bi bi-x-circle me-1"></i>Cancel Case</a></li>
                             <li><a asp-controller="AdminActions" asp-action="ViewCase" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>View Case</a></li>
                             <li><a asp-controller="AdminActions" asp-action="ViewNotes" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journals me-1"></i>View Notes</a></li>
-                            <li><a class="dropdown-item" onclick="model_Case(@index)" id="CancelCase_@item.RequestID" data-bs-toggle="modal" data-bs-target="#Blockcase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName"><i class="bi bi-ban me-1"></i>Block Patient</a></li>
+                            @if (CV.role() == "Admin")
+                            {
+                                <li><a class="dropdown-item" onclick="model_Case(@index)" id="CancelCase_@item.RequestID" data-bs-toggle="modal" data-bs-target="#Blockcase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName"><i class="bi bi-ban me-1"></i>Block Patient</a></li>
+                                <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#assigncase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName"><i class="bi bi-card-checklist me-1"></i>Assign Case</a></li>
+                                <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#Cancelcase" data-bs-requestid="@item.RequestID" data-bs-patientname="@item.PatientName"><i class="bi bi-x-circle me-1"></i>Cancel Case</a></li>
+                            }
+                            @if (CV.role() == "Provider")
+                            {
+                                <li><a class="dropdown-item" onclick="model_Case(@index)" id="AcceptCase_@item.RequestID" data-bs-toggle="modal" data-bs-target="#AcceptCase" data-bs-requestid="@item.RequestID"><i class="bi bi-ban me-1"></i>Accept</a></li>                                
+                            }
                         </ul>
-
                     </td>
                 </tr>
             }
