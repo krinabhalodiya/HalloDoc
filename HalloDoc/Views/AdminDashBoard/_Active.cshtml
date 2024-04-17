@@ -104,7 +104,13 @@
                     <td><small>@item.Address</small></td>
                     @if (CV.role() == "Provider")
                     {
-                        <td><small>@item.providerencounterstatus</small></td>
+                        <td>@if(item.providerencounterstatus == 5)
+                            {
+                                <a class="btn btn-info text-white mt-2" asp-action="Consult" asp-controller="AdminActions" asp-route-RequestId="@item.RequestID">
+                                    Housecall
+                                </a>
+                            }
+                        </td>
                     }
                     @if (CV.role() == "Admin")
                     {
