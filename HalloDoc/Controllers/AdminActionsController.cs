@@ -387,6 +387,7 @@ namespace HalloDoc.Controllers
             return Redirect("~/Physician/DashBoard");
         }
         #endregion
+
         #region __TransfertoAdminPost
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -398,6 +399,22 @@ namespace HalloDoc.Controllers
             }
 
             return Redirect("~/Physician/DashBoard");
+        }
+        #endregion
+
+        #region ContactAdmin
+        public IActionResult ContactAdmin(string Note)
+        {
+            bool Contact = _IAdminDashBoardActionsRepository.ContactAdmin(Convert.ToInt32(CV.UserID()), Note);
+            if (Contact)
+            {
+                _notyf.Success("Mail Send Succesfully Successfully");
+            }
+            else
+            {
+                _notyf.Error("Mail Not Send Succesfully");
+            }
+            return RedirectToAction("PhysicianProfile", "Providers", new { id = Convert.ToInt32(CV.UserID()) });
         }
         #endregion
     }

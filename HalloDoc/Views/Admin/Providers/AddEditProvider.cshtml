@@ -13,7 +13,10 @@
                        Name = e.ToString()
                    };
 }
-
+@if (CV.role() == "Provider")
+{
+    <partial name="../../AdminActions/_partial/ContactAdmin.cshtml" />
+}
 <div class="container mb-3">
     <div class="d-flex justify-content-between">
         <div class="d-flex align-self-center">
@@ -35,7 +38,8 @@
                 <h5><strong>Account Information</strong></h5>
                 @if (CV.role() == "Provider")
                 {
-                 <a class="btn border-info text-info" data-bs-toggle="modal" data-bs-target="#Cancelcase">Contact To Admin</a>
+                        var userid = Int32.Parse(@CV.UserID());
+                        <a class="btn border-info text-info" data-bs-toggle="modal" data-bs-target="#ContactAdmin">Contact To Admin</a>
                 }
             </div>
                 <div class="col-xl-12 mt-3"  >
@@ -56,7 +60,7 @@
                     {
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <select class="form-select input0" required asp-for="Status" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level" >
+                                <select class="form-select input0" required asp-for="Status" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
                                 </select>
                                 <label for="Status">Status</label>
                                 <span asp-validation-for="Status" class="text-danger"></span>
@@ -353,7 +357,7 @@
                                 @{
                                     if(Model != null)
                                     {
-                                        <a href="~/Upload/Physician/@Model.Physicianid/Agreementdoc.pdf" target="_blank" class="btn btn-info text-white viewbtn" style="display:none;">View</a>
+                                                <a href="~/Upload/Physician/@Model.Physicianid/Agreementdoc.pdf" target="_blank" class="btn btn-info text-white viewbtn" style="display:none;">View</a>
                                     }
                         }
                           </div>
@@ -388,7 +392,7 @@
                                 @{
                                     if (Model != null)
                                     {
-                                        <a href="~/Upload/Physician/@Model.Physicianid/BackGrounddoc.pdf" target="_blank" class="btn btn-info text-white viewbtn" style="display:none;">View</a>
+                                                <a href="~/Upload/Physician/@Model.Physicianid/BackGrounddoc.pdf" target="_blank" class="btn btn-info text-white viewbtn" style="display:none;">View</a>
 
                                     }
 								}
@@ -425,7 +429,7 @@
                                 @{
                                     if (Model != null)
                                     {
-                                        <a href="~/Upload/Physician/@Model.Physicianid/Trainingdoc.pdf" target="_blank" class="btn btn-info text-white viewbtn" style="display:none;">View</a>
+                                                <a href="~/Upload/Physician/@Model.Physicianid/Trainingdoc.pdf" target="_blank" class="btn btn-info text-white viewbtn" style="display:none;">View</a>
 
                                     }
 							}
@@ -461,7 +465,7 @@
                                 @{
                                     if (Model != null)
                                     {
-                                        <a href="~/Upload/Physician/@Model.Physicianid/NonDisclosuredoc.pdf" target="_blank" class="btn btn-info text-white viewbtn" style="display:none;">View</a>
+                                                <a href="~/Upload/Physician/@Model.Physicianid/NonDisclosuredoc.pdf" target="_blank" class="btn btn-info text-white viewbtn" style="display:none;">View</a>
                                     }
 								}
                         </div>
@@ -497,7 +501,7 @@
                                 @{
                                     if (Model != null)
                                     {
-                                        <a href="~/Upload/Physician/@Model.Physicianid/Agreementdoc.pdf" target="_blank" class="btn btn-info text-white viewbtn" style="display:none;">View</a>
+                                                <a href="~/Upload/Physician/@Model.Physicianid/Agreementdoc.pdf" target="_blank" class="btn btn-info text-white viewbtn" style="display:none;">View</a>
                                     }
                                 }
                         </div>
@@ -526,23 +530,46 @@
     </div>
 </div>
 <script>
-    if ("@ViewData["PhysicianAccount"]" == "Edit") {
-        window.onload = function (e) {
-            toggleFormElements0('true')
-            toggleFormElements1('true')
+    if ("@CV.role()" == "Admin") {
+
+        if ("@ViewData["PhysicianAccount"]" == "Edit") {
+            window.onload = function (e) {
+                toggleFormElements0('true')
+                toggleFormElements1('true')
                 toggleFormElements2('true')
                 toggleFormElements3('true')
                 $(".region-check").prop("disabled", true);
-            
-            $('#add').css("display", "none");
-        }
-    }
-    $(document).ready(function () {
 
-        if ("@ViewData["PhysicianAccount"]" == "Add") {
-            $('#save0,#save1,#save2,#save3,#edit0,#edit1,#edit2,#edit3,#deleteaccount,#formsave,#resetpassbtn').css("display", "none");
+                $('#add').css("display", "none");
+            }
         }
-    });
+        $(document).ready(function () {
+
+            if ("@ViewData["PhysicianAccount"]" == "Add") {
+                $('#save0,#save1,#save2,#save3,#edit0,#edit1,#edit2,#edit3,#deleteaccount,#formsave,#resetpassbtn').css("display", "none");
+            }
+        });
+    }
+    else {
+        $(document).ready(function () {
+            var inputs0 = document.getElementsByClassName("input0");
+            var inputs1 = document.getElementsByClassName("input1");
+            var inputs2 = document.getElementsByClassName("input2");
+            var inputs3 = document.getElementsByClassName("input3");
+            for (var i = 0; i < inputs0.length; i++) {
+                inputs0[i].disabled = true;
+            }
+            for (var i = 0; i < inputs1.length; i++) {
+                inputs1[i].disabled = true;
+            }
+            for (var i = 0; i < inputs2.length; i++) {
+                inputs2[i].disabled = true;
+            }
+            for (var i = 0; i < inputs3.length; i++) {
+                inputs3[i].disabled = true;
+            }
+        });
+    }
     $("#file").change(function () {
         filename = this.files[0].name;
         $("#choosenfile").text(filename);

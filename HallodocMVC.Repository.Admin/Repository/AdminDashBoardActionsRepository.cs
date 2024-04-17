@@ -958,6 +958,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             return true;
         }
         #endregion
+
         #region TransfertoAdmin
         public async Task<bool> TransfertoAdmin(int RequestID, string Note, int ProviderId)
         {
@@ -980,6 +981,22 @@ namespace HallodocMVC.Repository.Admin.Repository
             _context.SaveChanges();
 
             return true;
+        }
+        #endregion
+
+        #region SendAgreement
+        public bool ContactAdmin(int ProviderId,string Notes)
+        {
+            try
+            {
+                var res = _context.Physicians.FirstOrDefault(e => e.Physicianid == ProviderId);
+                _emailConfig.SendMail(res.Email, "Request For Profile Chnges", Notes);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         #endregion
     }

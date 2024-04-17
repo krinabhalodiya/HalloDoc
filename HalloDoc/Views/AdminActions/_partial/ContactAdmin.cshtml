@@ -1,0 +1,25 @@
+﻿﻿<div class="modal fade" id="ContactAdmin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header  bg-info text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Contact To Admin</h1>
+                <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
+            </div>
+            <form asp-action="ContactAdmin" asp-controller="AdminActions" class="needs-validation" novalidate>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <textarea required id="changenote" rows="4" name="Note" class="input-outline w-100 h-100 fs-6 form-control shadow-none" type="text"></textarea>
+                        <label class="inputs-lable inputs-lable fs-6" for="changenote">Changes For Your Profile</label>
+                        <div class="invalid-feedback">
+                            Enter Valid Changes for updating into your profile.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class=" btn btn-info text-white">Confirm</button>
+                    <a class="btn btn-outline-info" data-bs-dismiss="modal">Close</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

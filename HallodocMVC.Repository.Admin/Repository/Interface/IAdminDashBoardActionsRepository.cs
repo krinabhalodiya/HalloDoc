@@ -36,5 +36,6 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public bool EditEncounterDetails(ViewEncounterData Data, string id);
         public Task<bool> AcceptPhysician(int requestid, string note, int ProviderId);
         public Task<bool> TransfertoAdmin(int RequestID, string Note, int ProviderId);
+        public bool ContactAdmin(int ProviderId, string Notes);
     }
 }
