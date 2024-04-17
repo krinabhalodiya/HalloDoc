@@ -34,8 +34,12 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public bool CloseCase(int RequestID);
         public ViewEncounterData GetEncounterDetails(int RequestID);
         public bool EditEncounterDetails(ViewEncounterData Data, string id);
+        public bool CaseFinalized(ViewEncounterData Data);
         public Task<bool> AcceptPhysician(int requestid, string note, int ProviderId);
         public Task<bool> TransfertoAdmin(int RequestID, string Note, int ProviderId);
         public bool ContactAdmin(int ProviderId, string Notes);
+        public bool Housecall(int RequestId);
+        public bool Consult(int RequestId);
+        public bool ConcludeCarePost(int RequestId, string Notes);
     }
 }

@@ -218,9 +218,9 @@
                 <div class="card-footer border-0 bg-transparent text-end">
                     <button type="submit" class="btn btn-info text-white">Save Changes</button>
                     @{
-                        if (Model.Isfinalize == false)
+                        if (CV.role()=="Provider")
                         {
-                            <button type="submit" value="Finalize" asp-action="Finalize" asp-controller="SubmitForm" class="btn btn-danger btn-cancel ">Finalize</button>
+                            <button type="submit" value="Finalize" asp-action="Finalize" asp-controller="AdminActions" class="btn btn-danger btn-cancel ">Finalize</button>
                         }
                     }
                     <a class="btn btn-outline-danger btn-cancel" asp-action="Index" asp-controller="AdminDashBoard">

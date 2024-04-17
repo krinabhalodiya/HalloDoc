@@ -20,9 +20,11 @@
         public string ADStatus { get; set; }
         public int RegionId { get; set; }
         public short Status { get; set; }
+        public int providerencounterstatus { get; set; }
         public string ConfirmationNumber { get; set; }
         public DateTime ConcludedDate { get; set; }
         public int? RequestClientId { get; set; }
+        public bool IsFinalize { get; set; }
     }
     public class PaginatedViewModel
     {

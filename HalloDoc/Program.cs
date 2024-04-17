@@ -7,6 +7,7 @@ using AspNetCoreHero.ToastNotification.Extensions;
 using HalloDoc.Entity.Models;
 using HallodocMVC.Repository.Patient.Repository;
 using HallodocMVC.Repository.Patient.Repository.Interface;
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var emailConfig = builder.Configuration
@@ -42,7 +43,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+app.UseRotativa();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();

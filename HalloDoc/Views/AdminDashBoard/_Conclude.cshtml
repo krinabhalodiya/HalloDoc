@@ -108,7 +108,14 @@
                         <ul class="dropdown-menu">
                             <li><a asp-action="ViewCase" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>View Case</a></li>
                             <li><a asp-action="ViewNotes" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-card-text me-1"></i>View Notes</a></li>
-                            <li><a asp-action="Encounter" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
+                            @if (item.IsFinalize)
+                            {
+                                <li><a data-bs-toggle="modal" data-bs-target="#EncounterPdf" class="dropdown-item" onclick="model_Case(@item.RequestID)"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
+                            }
+                            else
+                            {
+                                <li><a asp-action="Encounter" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
+                            }
                             <li><a asp-action="ViewUpload" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-file-earmark-zip me-1"></i>View Uploads</a></li>
                             
                             @if (CV.role() == "Provider")
@@ -266,6 +273,9 @@
     <input type="hidden" asp-for="IsAscending" id="isAsc" />
 </form>
 <script>
+    function model_Case(id) {
+        document.getElementById('RequestID_EncounterPdf').value = id;
+    }
     function setpagenumber(e) {
         if (e == 'previous') {
             var cp = @Model.CurrentPage-1;

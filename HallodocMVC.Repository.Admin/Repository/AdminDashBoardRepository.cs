@@ -184,7 +184,9 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                     Address = rc.Address,
                                                     Notes = rc.Notes,
                                                     ProviderID = req.Physicianid,
-                                                    RequestorPhoneNumber = req.Phonenumber
+                                                    RequestorPhoneNumber = req.Phonenumber,
+                                                    providerencounterstatus = req.Status,
+                                                    IsFinalize = _context.Encounterforms.Any(ef => ef.Requestid == req.Requestid && ef.Isfinalize),
                                                 }).ToList();
 
 
@@ -206,7 +208,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                     _ => allData.OrderByDescending(x => x.PatientName).ToList()
                 };
             }
-
+            
             int totalItemCount = allData.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
             List<AdminDashboardList> list1 = allData.Skip((data.CurrentPage - 1) * data.PageSize).Take(data.PageSize).ToList();

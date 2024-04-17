@@ -47,6 +47,12 @@
                             <small>Notes</small>
                         </th>
                     }
+                    @if (CV.role() == "Provider")
+                    {
+                        <th scope="col">
+                            <small>Status</small>
+                        </th>
+                    }
                     <th scope="col">
                         <small>Actions</small>
                     </th>
@@ -96,6 +102,10 @@
                         }
                     </td>
                     <td><small>@item.Address</small></td>
+                    @if (CV.role() == "Provider")
+                    {
+                        <td><small>@item.providerencounterstatus</small></td>
+                    }
                     @if (CV.role() == "Admin")
                     {
                         <td><small>@item.Notes</small></td>
@@ -107,7 +117,18 @@
                         <ul class="dropdown-menu">
 							<li><a asp-action="ViewCase" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>View Case</a></li>
 							<li><a asp-action="ViewNotes" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-card-text me-1"></i>View Notes</a></li>
-							<li><a asp-action="Encounter" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
+                            @if(item.providerencounterstatus == 4 && CV.role()=="Provider")
+                            {
+                                <li><a data-bs-toggle="modal" data-bs-target="#Encounter" class="dropdown-item" onclick="model_Case(@item.RequestID)"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
+                            }
+                            @if (item.IsFinalize)
+                            {
+                                <li><a data-bs-toggle="modal" data-bs-target="#EncounterPdf" class="dropdown-item" onclick="model_Case(@item.RequestID)"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
+                            }
+                            else
+                            {
+                                <li><a asp-action="Encounter" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
+                            }
                             <li><a asp-action="ViewUpload" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-file-earmark-zip me-1"></i>View Uploads</a></li>
                            @if (loginRepository.isAccessGranted((int)CV.RoleID(), "SendOrder"))
                             {
@@ -295,5 +316,9 @@
             document.getElementById('isAsc').value = true;
         }
         $(".sortingform").submit();
+    }
+    function model_Case(id) {
+        document.getElementById('RequestID_Encounter').value = id;
+        document.getElementById('RequestID_EncounterPdf').value = id;
     }
 </script>

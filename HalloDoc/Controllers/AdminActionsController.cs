@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using HalloDoc.Entity.Models;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using HalloDoc.Models;
-
+using ViewAsPdf = Rotativa.AspNetCore.ViewAsPdf;
+using HalloDoc.Entity.DataModels;
 namespace HalloDoc.Controllers
 {
     public class AdminActionsController : Controller
@@ -356,7 +357,7 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
-        #region Encounter_View
+        #region EncounterEdit
         public IActionResult EncounterEdit(ViewEncounterData data)
         {
             if (_IAdminDashBoardActionsRepository.EditEncounterDetails(data, CV.ID()))
@@ -368,6 +369,37 @@ namespace HalloDoc.Controllers
                 _notyf.Error("Encounter Changes Not Saved...");
             }
             return RedirectToAction("Encounter", new { id = data.Requesid });
+        }
+        #endregion
+
+        #region Finalize
+        public IActionResult Finalize(ViewEncounterData model)
+        {
+            bool data = _IAdminDashBoardActionsRepository.EditEncounterDetails(model, CV.ID());
+            if (data)
+            {
+                bool final = _IAdminDashBoardActionsRepository.CaseFinalized(model);
+                if (final)
+                {
+                    _notyf.Success("Case Is Finalized...");
+                    if (CV.role() == "Provider")
+                    {
+                        return Redirect("~/Physician/DashBoard");
+                    }
+                    return RedirectToAction("Index", "AdminDashBoard");
+                }
+                else
+                {
+                    _notyf.Error("Case Is Not Finalized Please Enter Valid Data...");
+                    return RedirectToAction("Encounter", new { id = model.Requesid });
+                }
+            }
+            else
+            {
+                _notyf.Error("Case Is Not Finalized...");
+                return RedirectToAction("Encounter", new { id = model.Requesid });
+            }
+
         }
         #endregion
 
@@ -415,6 +447,85 @@ namespace HalloDoc.Controllers
                 _notyf.Error("Mail Not Send Succesfully");
             }
             return RedirectToAction("PhysicianProfile", "Providers", new { id = Convert.ToInt32(CV.UserID()) });
+        }
+        #endregion
+
+        #region Housecall
+        public IActionResult Housecall(int RequestId)
+        {
+            if (_IAdminDashBoardActionsRepository.Housecall(RequestId))
+            {
+                _notyf.Success("Case Accepted...");
+            }
+            else
+            {
+                _notyf.Error("Case Not Accepted...");
+            }
+            return Redirect("~/Physician/DashBoard");
+        }
+        #endregion
+
+        #region Consult
+        public IActionResult Consult(int RequestId)
+        {
+            if (_IAdminDashBoardActionsRepository.Consult(RequestId))
+            {
+                _notyf.Success("Case is in conclude state...");
+            }
+            else
+            {
+                _notyf.Error("Error...");
+            }
+            return Redirect("~/Physician/DashBoard");
+        }
+        #endregion
+
+        #region generatePDF
+        public IActionResult generatePDF(int id)
+        {
+            var FormDetails = _IAdminDashBoardActionsRepository.GetEncounterDetails(id);
+            return new ViewAsPdf("../AdminActions/EncounterPdf", FormDetails);
+        }
+		#endregion
+
+		#region View_Upload
+		public async Task<IActionResult> ConcludeCare(int? id, ViewDocuments viewDocument)
+		{
+			if (id == null)
+			{
+				id = viewDocument.RequestID;
+			}
+			ViewDocuments v = await _IAdminDashBoardActionsRepository.GetDocumentByRequest(id, viewDocument);
+			return View("../AdminActions/ConcludeCare", v);
+		}
+        #endregion
+
+        #region UploadDoc_Files
+        public IActionResult UploadDocProvider(int Requestid, IFormFile file)
+        {
+            if (_IAdminDashBoardActionsRepository.SaveDoc(Requestid, file))
+            {
+                _notyf.Success("File Uploaded Successfully");
+            }
+            else
+            {
+                _notyf.Error("File Not Uploaded");
+            }
+            return RedirectToAction("ConcludeCare", "AdminActions", new { id = Requestid });
+        }
+        #endregion
+        #region ConcludecarePost
+        public IActionResult ConcludeCarePost(int RequestId, string Notes)
+        {
+            if (_IAdminDashBoardActionsRepository.ConcludeCarePost(RequestId, Notes))
+            {
+                _notyf.Success("Case concluded...");
+            }
+            else
+            {
+                _notyf.Error("Error...");
+            }
+            return Redirect("~/Physician/DashBoard");
         }
         #endregion
     }

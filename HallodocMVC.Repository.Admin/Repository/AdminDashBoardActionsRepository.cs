@@ -751,7 +751,6 @@ namespace HallodocMVC.Repository.Admin.Repository
         {
             var datareq = _context.Requestclients.FirstOrDefault(e => e.Requestid == RequestID);
             var Data = _context.Encounterforms.FirstOrDefault(e => e.Requestid == RequestID);
-            DateTime? fd = new DateTime((int)datareq.Intyear, DateTime.ParseExact(datareq.Strmonth, "MMMM", new CultureInfo("en-US")).Month, (int)datareq.Intdate);
             if (Data != null)
             {
                 ViewEncounterData enc = new ViewEncounterData
@@ -913,6 +912,23 @@ namespace HallodocMVC.Repository.Admin.Repository
         }
         #endregion
 
+        public bool CaseFinalized(ViewEncounterData Data)
+        {
+            try
+            {
+                var data = _context.Encounterforms.FirstOrDefault(e => e.Encounterformid == Data.EncounterID);
+                data.Modifieddate = DateTime.Now;
+                data.Isfinalize = true;
+                _context.Encounterforms.Update(data);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         #region GetRequestDetails
         public async Task<ViewActions> GetRequestDetails(int? id)
         {
@@ -984,7 +1000,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         }
         #endregion
 
-        #region SendAgreement
+        #region ContactAdmin
         public bool ContactAdmin(int ProviderId,string Notes)
         {
             try
@@ -997,6 +1013,66 @@ namespace HallodocMVC.Repository.Admin.Repository
             {
                 return false;
             }
+        }
+        #endregion
+
+        #region Housecall
+        public bool Housecall(int RequestId)
+        {
+            var request = _context.Requests.FirstOrDefault(req => req.Requestid == RequestId);
+            request.Status = 5;
+            request.Modifieddate = DateTime.Now;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            Requeststatuslog rsl = new Requeststatuslog();
+            rsl.Requestid = RequestId;
+            rsl.Createddate = DateTime.Now;
+            rsl.Status = 5;
+            _context.Requeststatuslogs.Add(rsl);
+            _context.SaveChanges();
+            return true;
+        }
+        #endregion
+
+        #region Consult
+        public bool Consult(int RequestId)
+        {
+            var request = _context.Requests.FirstOrDefault(req => req.Requestid == RequestId);
+            request.Status = 6;
+            request.Modifieddate = DateTime.Now;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            Requeststatuslog rsl = new Requeststatuslog();
+            rsl.Requestid = RequestId;
+            rsl.Createddate = DateTime.Now;
+            rsl.Status = 6;
+            _context.Requeststatuslogs.Add(rsl);
+            _context.SaveChanges();
+            return true;
+        }
+        #endregion
+
+        #region Conclude Care
+        public bool ConcludeCarePost(int RequestId, string Notes)
+        {
+            var requestData = _context.Requests.FirstOrDefault(e => e.Requestid == RequestId);
+            requestData.Status = 8;
+            requestData.Modifieddate = DateTime.Now;
+            _context.Requests.Update(requestData);
+            _context.SaveChanges();
+
+            Requeststatuslog rsl = new Requeststatuslog
+            {
+                Requestid = RequestId,
+                Notes = Notes,
+                Status = 8,
+                Createddate = DateTime.Now
+            };
+            _context.Requeststatuslogs.Add(rsl);
+            _context.SaveChanges();
+            return true;
         }
         #endregion
     }

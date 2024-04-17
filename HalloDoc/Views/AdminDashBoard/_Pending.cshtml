@@ -47,12 +47,7 @@
                             <small>Notes</small>
                         </th>
                     }
-                    @if (CV.role() == "Provider")
-                    {
-                        <th scope="col">
-                            <small>Status</small>
-                        </th>
-                    }
+                    
                     <th scope="col">
                         <small>Actions</small>
                     </th>
@@ -105,10 +100,7 @@
                     {
                         <td><small>@item.Notes</small></td>
                     }
-                    @if (CV.role() == "Provider")
-                    {
-                        <td><small>@item.ADStatus</small></td>                        
-                    }
+                    
                     <td>
                         <button class="btn border border-white text-white my-2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <small>Actions</small>
