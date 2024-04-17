@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using DocumentFormat.OpenXml.Bibliography;
 using HalloDoc.Entity.DataContext;
 using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
@@ -88,6 +89,19 @@ namespace HalloDoc.Controllers.Admin
                 default:
                     return PartialView("../Admin/Providers/Scheduling/_DayWise");
             }
+        }
+        #endregion
+
+        #region LoadSchedulingPartialforprovider
+        public IActionResult LoadSchedulingPartialProivder(string date)
+        {
+            var currentDate = DateTime.Parse(date);
+             MonthWiseScheduling month = new MonthWiseScheduling
+             {
+                date = currentDate,
+                shiftdetails = _context.Shiftdetails.Include(u => u.Shift).Where(u => u.Isdeleted == new BitArray(new[] { false }) && u.Shift.Physicianid==Int32.Parse(CV.UserID())).ToList()
+                };
+            return PartialView("../Admin/Providers/Scheduling/_MonthWise", month);
         }
         #endregion
 

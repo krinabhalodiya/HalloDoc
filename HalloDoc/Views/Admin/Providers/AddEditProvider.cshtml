@@ -22,12 +22,24 @@
         <div class="d-flex align-self-center">
             <h4><strong>@ViewData["PhysicianAccount"] Physician Account</strong></h4>
         </div>
-        <a asp-controller="@(path.StartsWith("/Providers") ? "Providers" : "Access")" asp-action="@(path.StartsWith("/Providers") ? "Index" : "UserAccess")" class="btn border border-info bg-light rounded mt-3 mb-1">
-            <span class="text-info">
-                <i class="fa fa-angle-left align-middle"></i>
-                <b>&nbsp;&nbsp;Back</b>
-            </span>
-        </a>
+        @if (CV.role() == "Admin")
+        {
+            <a asp-controller="@(path.StartsWith("/Providers") ? "Providers" : "Access")" asp-action="@(path.StartsWith("/Providers") ? "Index" : "UserAccess")" class="btn border border-info bg-light rounded mt-3 mb-1">
+                <span class="text-info">
+                    <i class="fa fa-angle-left align-middle"></i>
+                    <b>&nbsp;&nbsp;Back</b>
+                </span>
+            </a>
+        }
+        else
+        {
+            <a onclick="history.go(-1);" class="btn border border-info bg-light rounded mt-3 mb-1">
+                <span class="text-info">
+                    <i class="fa fa-angle-left align-middle"></i>
+                    <b>&nbsp;&nbsp;Back</b>
+                </span>
+            </a>
+        }
     </div>
     @* Profile Information *@
 	<div class="bg-white rounded shadow mt-3 pb-3">
@@ -552,6 +564,7 @@
     }
     else {
         $(document).ready(function () {
+            $(".region-check").prop("disabled", true);
             var inputs0 = document.getElementsByClassName("input0");
             var inputs1 = document.getElementsByClassName("input1");
             var inputs2 = document.getElementsByClassName("input2");
@@ -578,7 +591,6 @@
         filename2 = this.files[0].name;
         $("#choosenfile1").text(filename2);
     });
-
     function toggleFormElements0(bDisabled) {
         var inputs0 = document.getElementsByClassName("input0");
         

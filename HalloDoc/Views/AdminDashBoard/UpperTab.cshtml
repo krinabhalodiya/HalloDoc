@@ -165,7 +165,7 @@
                     <a id="regionicon">
 						<i class="fa fa-search"></i>
                     </a>
-                    @if (loginRepository.isAccessGranted((int)CV.RoleID(), "Scheduling"))
+                    @if (loginRepository.isAccessGranted((int)CV.RoleID(),"Regions"))
                     {
                     <select class="form-select" asp-for="RegionId" data-allow-clear="true" tabindex="-1" id="regiondropdown" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                         <option>All Region</option>
