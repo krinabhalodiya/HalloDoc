@@ -103,6 +103,13 @@ namespace HallodocMVC.Repository.Patient.Repository
                 User = user;
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
+                var role = new Aspnetuserrole()
+                {
+                    Userid = User.Aspnetuserid,
+                    Roleid = "3",
+                };
+                _context.Aspnetuserroles.Add(role);
+                await _context.SaveChangesAsync();
             }
 
 
@@ -144,13 +151,7 @@ namespace HallodocMVC.Repository.Patient.Repository
             _context.Requestclients.Add(requestclient);
             await _context.SaveChangesAsync();
 
-            var role = new Aspnetuserrole()
-            {
-               Userid = User.Aspnetuserid,
-               Roleid = "3",
-            };
-            _context.Aspnetuserroles.Add(role);
-            await _context.SaveChangesAsync();
+            
 
             if (createPatientRequest.UploadFile != null)
             {
@@ -182,7 +183,7 @@ namespace HallodocMVC.Repository.Patient.Repository
                 var aspnetuser = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == createFamilyFriendRequest.Email);
                 if(aspnetuser == null) {
                     var Subject = "Create Account";
-                    var agreementUrl = "https://localhost:44306/Home/CreateAccount";
+                    var agreementUrl = "https://localhost:44306/Home/CreatNewAccont";
                     _emailConfig.SendMail(createFamilyFriendRequest.Email, Subject, $"<a href='{agreementUrl}'>Create Account</a>");
                 }
 
@@ -254,7 +255,7 @@ namespace HallodocMVC.Repository.Patient.Repository
             if (aspnetuser == null)
             {
                 var Subject = "Create Account";
-                var agreementUrl = "https://localhost:44306/Home/CreateAccount";
+                var agreementUrl = "https://localhost:44306/Home/CreatNewAccont";
                 _emailConfig.SendMail(createConciergeRequest.Email, Subject, $"<a href='{agreementUrl}'>Create Account</a>");
             }
             var statename = _context.Regions.FirstOrDefault(x => x.Regionid == createConciergeRequest.C_State);
@@ -330,7 +331,7 @@ namespace HallodocMVC.Repository.Patient.Repository
             if (aspnetuser == null)
             {
                 var Subject = "Create Account";
-                var agreementUrl = "https://localhost:44306/Home/CreateAccount";
+                var agreementUrl = "https://localhost:44306/Home/CreatNewAccont";
                 _emailConfig.SendMail(createBusinessRequest.Email, Subject, $"<a href='{agreementUrl}'>Create Account</a>");
             }
             var business = new Business

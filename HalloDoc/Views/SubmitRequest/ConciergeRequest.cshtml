@@ -131,9 +131,8 @@
                     </div>
                     <div class="col-md-6 phone">
                         <div class="form-floating mb-3 h-100">
-                            <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none" id="PhoneNumber" placeholder="Enter phone number">
-                            <label for="PhoneNumber">PhoneNumber</label>
-                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none" id="phone" autocomplete="off" />
+                            <span id="error-msg" class="text-danger"></span>
                         </div>
                     </div>
                 </div>

@@ -62,9 +62,9 @@
                     </div>
                     <div class="col-md-6 phone">
                         <div class="form-floating mb-3 h-100">
-                            <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none phone" id="PhoneNumber" placeholder="name@example.com"  autocomplete="off">
-                            <label for="PhoneNumber">PhoneNumber</label>
-                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none" id="phone" autocomplete="off" />
+                            <input asp-for="PhoneCode" type="hidden" id="phonecode" autocomplete="off">
+                            <span id="error-msg" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6" id="password" style="display:none;">
@@ -103,7 +103,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <select class="form-select" required aria-label="Phone" asp-for="State" data-allow-clear="true" tabindex="-1" onchange="selectprovider()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                            <select class="form-select" required aria-label="Phone" asp-for="State" data-allow-clear="true" tabindex="-1" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                                 <option value="">Select States</option>
                             </select>
                             <label for="region2">State</label>
@@ -146,7 +146,7 @@
                 </div>
 
                 <div class="d-flex justify-content-end mt-3">
-                    <button type="submit" class="btn btn-info text-white mx-2">Submit</button>
+                    <button type="submit" class="btn btn-info text-white mx-2" id="submit">Submit</button>
                     <a asp-controller="CreateRequest" asp-action="Index" class="btn border border-info text-info mx-2">Cancel</a>
                 </div>
             </form>
@@ -157,6 +157,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
+    
+    // $(document).ready(function () {
+    //     initTelInput();
+    // });
+    
     $(function () {
         $("#email").focusout(function () {
             var email = $("#email").val();
@@ -182,3 +187,4 @@
         });
     });
 </script>
+

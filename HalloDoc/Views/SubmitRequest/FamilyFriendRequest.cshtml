@@ -98,8 +98,8 @@
                     </div>
                     <div class="col-md-6 phone">
                         <div class="form-floating mb-3 h-100">
-                            <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none" id="phone1">
-                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none" id="phone" autocomplete="off" />
+                            <span id="error-msg" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -162,7 +162,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-info text-white mx-2">Submit</button>
+                    <button type="submit" class="btn btn-info text-white mx-2" id="submit">Submit</button>
                     <a asp-controller="CreateRequest" asp-action="Index" class="btn border border-info text-info mx-2">Cancel</a>
                 </div>
             </form>

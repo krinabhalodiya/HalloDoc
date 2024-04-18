@@ -32,13 +32,14 @@
                             <span asp-validation-for="BUS_LastName" class="text-danger"></span>
                         </div>
                     </div>
+                    
                     <div class="col-md-6 phone">
                         <div class="form-floating mb-3 h-100">
-                            <input asp-for="BUS_PhoneNumber" type="tel" class="form-control shadow-none" id="BUS_PhoneNumber" placeholder="Enter phone number">
-                            <label for="BUS_PhoneNumber">PhoneNumber</label>
-                            <span asp-validation-for="BUS_PhoneNumber" class="text-danger"></span>
+                            <input asp-for="BUS_PhoneNumber" type="tel" class="form-control shadow-none" id="phone" autocomplete="off" />
+                            <span id="error-msg" class="text-danger"></span>
                         </div>
                     </div>
+                    
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
                             <input asp-for="BUS_Email" type="email" class="form-control shadow-none" id="BUS_Email" placeholder="name@example.com">
