@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using HalloDoc.Entity.DataContext;
 using HalloDoc.Entity.Models.PatientModels;
+using HallodocMVC.Repository.Admin.Repository.Interface;
 using HallodocMVC.Repository.Patient.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,22 +10,24 @@ namespace HalloDoc.Controllers
 {
     public class SubmitRequestController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        
         #region Configuration
         private readonly HalloDocContext _context;
         private readonly ICreateRequest _ICreateRequest;
         private readonly INotyfService _INotyfService;
-        public SubmitRequestController(HalloDocContext context, ICreateRequest iActions, INotyfService iNotyfService)
+        private readonly IComboboxRepository _combobox;
+        public SubmitRequestController(HalloDocContext context, ICreateRequest iActions, INotyfService iNotyfService, IComboboxRepository iComboboxRepository)
         {
             _context = context;
             _ICreateRequest = iActions;
             _INotyfService = iNotyfService;
+            _combobox = iComboboxRepository;
         }
         #endregion Configuration
-
+        public async Task<IActionResult> Index()
+        {
+            return View();
+        }
         #region CheckEmail
         [HttpPost]
         public async Task<IActionResult> CheckEmailAsync(string email)
@@ -38,8 +41,9 @@ namespace HalloDoc.Controllers
         #endregion CheckEmail
 
         #region PatientRequest
-        public IActionResult PatientRequest()
+        public async Task<IActionResult> PatientRequestAsync()
         {
+            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             return View();
         }
         #endregion PatientRequest 
@@ -60,8 +64,9 @@ namespace HalloDoc.Controllers
         #endregion CreatePatientRequest
 
         #region FamilyFriendRequest
-        public IActionResult FamilyFriendRequest()
+        public async Task<IActionResult> FamilyFriendRequestAsync()
         {
+            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             return View();
         }
         #endregion FamilyFriendRequest 
@@ -82,8 +87,9 @@ namespace HalloDoc.Controllers
         #endregion CreateFamilyFriendRequest
 
         #region ConciergeRequest
-        public IActionResult ConciergeRequest()
+        public async Task<IActionResult> ConciergeRequestAsync()
         {
+            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             return View();
         }
         #endregion ConciergeRequest 
@@ -104,8 +110,9 @@ namespace HalloDoc.Controllers
         #endregion CreateConciergeRequest
 
         #region BusinessRequest
-        public IActionResult BusinessRequest()
+        public async Task<IActionResult> BusinessRequestAsync()
         {
+            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             return View();
         }
         #endregion BusinessRequest 

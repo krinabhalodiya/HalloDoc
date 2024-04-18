@@ -72,8 +72,10 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input asp-for="C_State" type="text" class="form-control shadow-none" id="C_State" placeholder="Enter State">
-                            <label for="C_State">State</label>
+                            <select class="form-select" required aria-label="Phone" asp-for="C_State" data-allow-clear="true" tabindex="-1" onchange="selectprovider()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                                <option value="">Select States</option>
+                            </select>
+                            <label for="region2">State</label>
                             <span asp-validation-for="C_State" class="text-danger"></span>
                         </div>
                     </div>

@@ -51,7 +51,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                                             Lastname = r.Lastname,
                                             Firstname = r.Firstname,
                                             Status = r.Status,
-                                            Zipcode = r.Zip
+                                            Zipcode = r.Zip,
+                                            State = (int)r.Regionid
                                         }).FirstOrDefaultAsync();
             List<Regions> regions = new List<Regions>();
             regions = await _context.Adminregions
@@ -166,6 +167,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                         DataForChange.Address2 = _viewAdminProfile.Address2;
                         DataForChange.City = _viewAdminProfile.City;
                         DataForChange.Mobile = _viewAdminProfile.Mobile;
+                        DataForChange.Regionid = _viewAdminProfile.State;
                         _context.Admins.Update(DataForChange);
                         _context.SaveChanges();
                         return true;
@@ -243,7 +245,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                     //aspnet_user_roles
                     var aspnetuserroles = new Aspnetuserrole();
                     aspnetuserroles.Userid = Aspnetuser.Id;
-                    aspnetuserroles.Roleid = "Admin";
+                    aspnetuserroles.Roleid = "1";
                     _context.Aspnetuserroles.Add(aspnetuserroles);
                     _context.SaveChanges();
 
@@ -265,6 +267,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                     Admin.Altphone = admindata.AltMobile;
                     Admin.Createddate = DateTime.Now;
                     Admin.Createdby = AdminId;
+                    Admin.Regionid = admindata.State;
                     //Admin.Regionid = admindata.Regionid;
                     _context.Admins.Add(Admin);
                     _context.SaveChanges();

@@ -14,6 +14,6 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public Task<bool> CheckregisterdAsync(string email);
         public Task<bool> SavePass(string email, string Password);
         public bool isAccessGranted(int roleId, string menuName);
-
+        public Task<bool> CreatNewAccont(string Email, string Password);
     }
 }

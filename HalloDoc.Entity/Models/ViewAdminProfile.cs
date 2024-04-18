@@ -38,7 +38,7 @@ namespace HalloDoc.Entity.Models
         [Required(ErrorMessage = "City is required")]
         public string City { get; set; }
         [Required(ErrorMessage = "State is required")]
-        public string State { get; set; }
+        public int State { get; set; }
         public int? Regionid { get; set; }
         public string? Regionsid { get; set; }
         public List<Regions>? Regionids { get; set; }

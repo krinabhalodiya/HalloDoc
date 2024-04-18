@@ -61,6 +61,7 @@ namespace HallodocMVC.Repository.Patient.Repository
         #region RequestForMe
         public CreatePatientRequestModel RequestForMe(string userid)
         {
+
             var patientRequest = _context.Users
                                .Where(r => r.Userid == Convert.ToInt32(userid))
                                .Select(r => new CreatePatientRequestModel
@@ -79,6 +80,7 @@ namespace HallodocMVC.Repository.Patient.Repository
         #region CreateRequestForMe
         public async Task<bool> CreateRequestForMe(CreatePatientRequestModel patientRequest)
         {
+            var statename = _context.Regions.FirstOrDefault(x => x.Regionid == patientRequest.State);
             var isExist = _context.Users.FirstOrDefault(x => x.Email == patientRequest.Email);
             var request = new Request()
             {
@@ -110,7 +112,7 @@ namespace HallodocMVC.Repository.Patient.Repository
                 Phonenumber = patientRequest.PhoneNumber,
                 Street = patientRequest.Street,
                 City = patientRequest.City,
-                State = patientRequest.State,
+                State = statename.Name,
                 Zipcode = patientRequest.ZipCode
             };
             _context.Requestclients.Add(requestClient);
@@ -138,6 +140,7 @@ namespace HallodocMVC.Repository.Patient.Repository
         #region CreateRequestForSomeoneElse
         public async Task<bool> CreateRequestForSomeoneElse(CreatePatientRequestModel patientRequest, string userid)
         {
+            var statename = _context.Regions.FirstOrDefault(x => x.Regionid == patientRequest.State);
             var request = new Request()
             {
                 Isdeleted = new BitArray(1),
@@ -169,7 +172,7 @@ namespace HallodocMVC.Repository.Patient.Repository
                 Intyear = patientRequest.DateOfBirth.Year,
                 Street = patientRequest.Street,
                 City = patientRequest.City,
-                State = patientRequest.State,
+                State = statename.Name,
                 Zipcode = patientRequest.ZipCode
             };
             _context.Requestclients.Add(Requestclient);

@@ -4,13 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 using HalloDoc.Entity.DataContext;
 using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
 using HalloDoc.Entity.Models.PatientModels;
 using HallodocMVC.Repository.Patient.Repository.Interface;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HallodocMVC.Repository.Patient.Repository
 {
@@ -18,9 +21,11 @@ namespace HallodocMVC.Repository.Patient.Repository
     {
         #region Configuration
         private readonly HalloDocContext _context;
-        public CreateRequest(HalloDocContext context)
+        private readonly EmailConfiguration _emailConfig;
+        public CreateRequest(HalloDocContext context, EmailConfiguration emailConfiguration)
         {
             _context = context;
+            _emailConfig = emailConfiguration;
         }
         #endregion Configuration
         public int GetCountOfTodayRequests()
@@ -58,6 +63,7 @@ namespace HallodocMVC.Repository.Patient.Repository
         {
             var User = new User();
             var isUserExist = _context.Users.FirstOrDefault(x => x.Email == createPatientRequest.Email);
+            var statename = _context.Regions.FirstOrDefault(x => x.Regionid == createPatientRequest.State);
             var hasher = new PasswordHasher<string>();
             if (isUserExist == null)
             {
@@ -85,7 +91,8 @@ namespace HallodocMVC.Repository.Patient.Repository
                     Mobile = createPatientRequest.PhoneNumber,
                     Street = createPatientRequest.Street,
                     City = createPatientRequest.City,
-                    State = createPatientRequest.State,
+                    State = statename.Name,
+                    Regionid = createPatientRequest.State,
                     Zipcode = createPatientRequest.ZipCode,
                     Strmonth = createPatientRequest.DateOfBirth.ToString("MMMM"),
                     Intdate = createPatientRequest.DateOfBirth.Day,
@@ -101,7 +108,7 @@ namespace HallodocMVC.Repository.Patient.Repository
 
             var request = new Request()
             {
-                Confirmationnumber = GetConfirmationNumber(createPatientRequest.State, createPatientRequest.FirstName, createPatientRequest.LastName),
+                Confirmationnumber = GetConfirmationNumber(statename.Name, createPatientRequest.FirstName, createPatientRequest.LastName),
                 Requesttypeid = 2,
                 Status = 1,
                 Userid = isUserExist == null ? User.Userid : isUserExist.Userid,
@@ -123,7 +130,8 @@ namespace HallodocMVC.Repository.Patient.Repository
                 Lastname = createPatientRequest.LastName,
                 Street = createPatientRequest.Street,
                 City = createPatientRequest.City,
-                State = createPatientRequest.State,
+                State = statename.Name,
+                Regionid = createPatientRequest.State,
                 Zipcode = createPatientRequest.ZipCode,
                 Email = createPatientRequest.Email,
                 Phonenumber = createPatientRequest.PhoneNumber,
@@ -165,78 +173,97 @@ namespace HallodocMVC.Repository.Patient.Repository
         #region FamilyFriendRequest
         public async Task<bool> FamilyFriendRequest(CreateFamilyFriendRequestModel createFamilyFriendRequest)
         {
-            var isUserExist = _context.Users.FirstOrDefault(x => x.Email == createFamilyFriendRequest.Email);
-            if(isUserExist == null)
-            {
-               
-            }
             
-            var request = new Request()
+            try
             {
-                Userid = isUserExist.Userid,
-                Confirmationnumber = GetConfirmationNumber(createFamilyFriendRequest.State, createFamilyFriendRequest.FirstName, createFamilyFriendRequest.LastName),
-                Requesttypeid = 3,
-                Status = 1,
-                Firstname = createFamilyFriendRequest.FF_FirstName,
-                Lastname = createFamilyFriendRequest.FF_LastName,
-                Email = createFamilyFriendRequest.FF_Email,
-                Phonenumber = createFamilyFriendRequest.FF_PhoneNumber,
-                Relationname = createFamilyFriendRequest.FF_RelationWithPatients,
-                Createddate = DateTime.Now,
-                Isdeleted = new BitArray(1),
-                Isurgentemailsent = new BitArray(1)
-            };
-            _context.Requests.Add(request);
-            await _context.SaveChangesAsync();
+                var Request = new Request();
+                var Requestclient = new Requestclient();
+                var statename = _context.Regions.FirstOrDefault(x => x.Regionid == createFamilyFriendRequest.State);
+                var aspnetuser = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == createFamilyFriendRequest.Email);
+                if(aspnetuser == null) {
+                    var Subject = "Create Account";
+                    var agreementUrl = "https://localhost:44306/Home/CreateAccount";
+                    _emailConfig.SendMail(createFamilyFriendRequest.Email, Subject, $"<a href='{agreementUrl}'>Create Account</a>");
+                }
 
-            var requestClient = new Requestclient()
-            {
-                Requestid = request.Requestid,
-                Notes = createFamilyFriendRequest.Symptoms,
-                Firstname = createFamilyFriendRequest.FirstName,
-                Lastname = createFamilyFriendRequest.LastName,
-                Strmonth = createFamilyFriendRequest.DateOfBirth.ToString("MMMM"),
-                Intdate = createFamilyFriendRequest.DateOfBirth.Day,
-                Intyear = createFamilyFriendRequest.DateOfBirth.Year,
-                Email = createFamilyFriendRequest.Email,
-                Phonenumber = createFamilyFriendRequest.PhoneNumber,
-                Location = createFamilyFriendRequest.RoomSuite,
-                Street = createFamilyFriendRequest.Street,
-                City = createFamilyFriendRequest.City,
-                State = createFamilyFriendRequest.State,
-                Zipcode = createFamilyFriendRequest.ZipCode,
-                Address = createFamilyFriendRequest.Street + " " + createFamilyFriendRequest.City + " " + createFamilyFriendRequest.State + " " + createFamilyFriendRequest.ZipCode
-            };
-            _context.Requestclients.Add(requestClient);
-            await _context.SaveChangesAsync();
+                Request.Requesttypeid = 3;
+                Request.Status = 1;
+                Request.Confirmationnumber = GetConfirmationNumber(statename.Name, createFamilyFriendRequest.FirstName, createFamilyFriendRequest.LastName);
+                Request.Firstname = createFamilyFriendRequest.FF_FirstName;
+                Request.Lastname = createFamilyFriendRequest.FF_LastName;
+                Request.Email = createFamilyFriendRequest.FF_Email;
+                Request.Phonenumber = createFamilyFriendRequest.FF_PhoneNumber;
+                Request.Relationname = createFamilyFriendRequest.FF_RelationWithPatients;
+                Request.Isurgentemailsent = new BitArray(1);
+                Request.Isdeleted = new BitArray(1);
+                Request.Isdeleted[0] = false;
+                Request.Createddate = DateTime.Now;
+                _context.Requests.Add(Request);
+                await _context.SaveChangesAsync();
 
-            if (createFamilyFriendRequest.UploadFile != null)
-            {
-                string upload = FileSave.UploadDoc(createFamilyFriendRequest.UploadFile, request.Requestid);
+                Requestclient.Requestid = Request.Requestid;
+                Requestclient.Location = createFamilyFriendRequest.Symptoms;
+                Requestclient.Firstname = createFamilyFriendRequest.FirstName;
+                Requestclient.Street = createFamilyFriendRequest.Street;
+                Requestclient.City = createFamilyFriendRequest.City;
+                Requestclient.State = statename.Name;
+                Requestclient.Address = createFamilyFriendRequest.Street + "," + createFamilyFriendRequest.City + "," + createFamilyFriendRequest.State + "," + createFamilyFriendRequest.ZipCode;
+                Requestclient.Lastname = createFamilyFriendRequest.LastName;
+                Requestclient.Notes = createFamilyFriendRequest.Symptoms;
+                Requestclient.Regionid = createFamilyFriendRequest.State;
+                Requestclient.Zipcode = createFamilyFriendRequest.ZipCode;
 
-                var requestwisefile = new Requestwisefile()
+                Requestclient.Intdate = createFamilyFriendRequest.DateOfBirth.Day;
+                Requestclient.Intyear = createFamilyFriendRequest.DateOfBirth.Year;
+                Requestclient.Strmonth = createFamilyFriendRequest.DateOfBirth.ToString("MMMM");
+                Requestclient.Email = createFamilyFriendRequest.Email;
+                Requestclient.Phonenumber = createFamilyFriendRequest.PhoneNumber;
+
+                _context.Requestclients.Add(Requestclient);
+                await _context.SaveChangesAsync();
+                if (createFamilyFriendRequest.UploadFile != null)
                 {
-                    Isdeleted = new BitArray(1),
-                    Requestid = request.Requestid,
-                    Filename = upload,
-                    Createddate = DateTime.Now,
-                };
-                _context.Requestwisefiles.Add(requestwisefile);
-                _context.SaveChanges();
+                    createFamilyFriendRequest.UploadImage = FileSave.UploadDoc(createFamilyFriendRequest.UploadFile, Request.Requestid);
+
+                    var requestwisefile = new Requestwisefile
+                    {
+                        Requestid = Request.Requestid,
+                        Filename = createFamilyFriendRequest.UploadImage,
+                        Createddate = DateTime.Now,
+                        Isdeleted = new BitArray(new[] { false })
+                    };
+                    _context.Requestwisefiles.Add(requestwisefile);
+                    _context.SaveChanges();
+                }
+
+                return true;
             }
-            return true;
+            catch (DbUpdateConcurrencyException)
+            {
+
+                return false;
+
+            }
         }
         #endregion FamilyFriendRequest
 
         #region ConciergeRequest
         public async Task<bool> ConciergeRequest(CreateConciergeRequestModel createConciergeRequest)
         {
+            var aspnetuser = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == createConciergeRequest.Email);
+            if (aspnetuser == null)
+            {
+                var Subject = "Create Account";
+                var agreementUrl = "https://localhost:44306/Home/CreateAccount";
+                _emailConfig.SendMail(createConciergeRequest.Email, Subject, $"<a href='{agreementUrl}'>Create Account</a>");
+            }
+            var statename = _context.Regions.FirstOrDefault(x => x.Regionid == createConciergeRequest.C_State);
             var concierge = new Concierge
             {
                 Conciergename = createConciergeRequest.C_FirstName + " " + createConciergeRequest.C_LastName,
                 Street = createConciergeRequest.C_Street,
                 City = createConciergeRequest.C_City,
-                State = createConciergeRequest.C_State,
+                State = statename.Name,
                 Zipcode = createConciergeRequest.C_ZipCode,
                 Address = createConciergeRequest.C_Street + " " + createConciergeRequest.C_City + " " + createConciergeRequest.C_State + " " + createConciergeRequest.C_ZipCode,
                 Regionid = 1,
@@ -247,7 +274,7 @@ namespace HallodocMVC.Repository.Patient.Repository
 
             var request = new Request
             {
-                Confirmationnumber = GetConfirmationNumber(createConciergeRequest.C_State, createConciergeRequest.FirstName, createConciergeRequest.LastName),
+                Confirmationnumber = GetConfirmationNumber(statename.Name, createConciergeRequest.FirstName, createConciergeRequest.LastName),
                 Requesttypeid = 4,
                 Status = 1,
                 Firstname = createConciergeRequest.C_FirstName,
@@ -275,10 +302,10 @@ namespace HallodocMVC.Repository.Patient.Repository
                 Location = createConciergeRequest.RoomSuite,
                  Street = createConciergeRequest.C_Street,
                 City = createConciergeRequest.C_City,
-                State = createConciergeRequest.C_State,
+                State=statename.Name,
+                Regionid = createConciergeRequest.C_State,
                 Zipcode = createConciergeRequest.C_ZipCode,
                 Address = createConciergeRequest.C_Street + " " + createConciergeRequest.C_City + " " + createConciergeRequest.C_State + " " + createConciergeRequest.C_ZipCode,
-                Regionid = 1,
             };
             _context.Requestclients.Add(requestClient);
             await _context.SaveChangesAsync();
@@ -298,6 +325,14 @@ namespace HallodocMVC.Repository.Patient.Repository
         #region BusinessRequest
         public async Task<bool> BusinessRequest(CreateBusinessRequestModel createBusinessRequest)
         {
+            var statename = _context.Regions.FirstOrDefault(x => x.Regionid == createBusinessRequest.State);
+            var aspnetuser = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == createBusinessRequest.Email);
+            if (aspnetuser == null)
+            {
+                var Subject = "Create Account";
+                var agreementUrl = "https://localhost:44306/Home/CreateAccount";
+                _emailConfig.SendMail(createBusinessRequest.Email, Subject, $"<a href='{agreementUrl}'>Create Account</a>");
+            }
             var business = new Business
             {
                 Name = createBusinessRequest.BUS_FirstName + " " + createBusinessRequest.BUS_LastName,
@@ -312,7 +347,7 @@ namespace HallodocMVC.Repository.Patient.Repository
 
             var request = new Request
             {
-                Confirmationnumber = GetConfirmationNumber(createBusinessRequest.State, createBusinessRequest.FirstName, createBusinessRequest.LastName),
+                Confirmationnumber = GetConfirmationNumber(statename.Name, createBusinessRequest.FirstName, createBusinessRequest.LastName),
                 Requesttypeid = 1,
                 Status = 1,
                 Firstname = createBusinessRequest.BUS_FirstName,
@@ -340,7 +375,8 @@ namespace HallodocMVC.Repository.Patient.Repository
                 Phonenumber = createBusinessRequest.PhoneNumber,
                 Street = createBusinessRequest.Street,
                 City = createBusinessRequest.City,
-                State = createBusinessRequest.State,
+                State = statename.Name,
+                Regionid = createBusinessRequest.State,
                 Zipcode = createBusinessRequest.ZipCode,
                 Location = createBusinessRequest.RoomSuite,
                 Address = createBusinessRequest.Street + " " + createBusinessRequest.City + " " + createBusinessRequest.State + " " + createBusinessRequest.ZipCode
@@ -358,5 +394,6 @@ namespace HallodocMVC.Repository.Patient.Repository
             return true;
         }
         #endregion BusinessRequest
+
     }
 }

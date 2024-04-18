@@ -25,7 +25,7 @@ namespace HalloDoc.Entity.Models.PatientModels
         [Required(ErrorMessage = "City is required")]
         public string C_City { get; set; }
         [Required(ErrorMessage = "State is required")]
-        public string C_State { get; set; }
+        public int C_State { get; set; }
         [Required(ErrorMessage = "Zip Code is required")]
         public string C_ZipCode { get; set; }
         public string ID { get; set; }

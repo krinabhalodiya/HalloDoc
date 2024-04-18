@@ -151,15 +151,22 @@
                             Please Select At Least One Region
                         </div>
                     </div>
-                    <div class="form-floating">
-                        <select class="form-select form-select-sm mt-3 p-2" required asp-for="physicianid" data-allow-clear="true" tabindex="-1" id="Physician" data-control="select2" data-placeholder="Select Level">
-                            @* <option>Select Physician</option> *@
-                        </select>
-                        
-                        <div class="invalid-feedback">
-                            Please Select At Least One Physician
+                    @if(CV.role() == "Admin")
+                    {
+                        <div class="form-floating">
+                            <select class="form-select form-select-sm mt-3 p-2" required asp-for="physicianid" data-allow-clear="true" tabindex="-1" id="Physician" data-control="select2" data-placeholder="Select Level">
+                                @* <option>Select Physician</option> *@
+                            </select>
+
+                            <div class="invalid-feedback">
+                                Please Select At Least One Physician
+                            </div>
                         </div>
-                    </div>
+                    }
+                    @if(CV.role() == "Provider")
+                    {
+                        <input type="hidden" asp-for="physicianid" value="@CV.UserID()"/>
+                    }
                     <div class="form-floating mt-3">
                         <input asp-for="shiftdate" required type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" placeholder="Date">
                         <label for="floatingInput">Shift Date</label>
@@ -246,12 +253,19 @@
                             Please Select At Least One Region
                         </div>
                     </div>
-                    <select asp-for="physicianid" required class="form-select mt-4" id="physelect2" aria-label="Floating label select example" style="height:58px" disabled>
-                        <option id="shiftmodalPhysician" selected>Select Physician</option>
-                    </select>
-                    <div class="invalid-feedback">
-                        Please Select At Least One Physician
-                    </div>
+                    @if (CV.role() == "Admin")
+                    {
+                        <select asp-for="physicianid" required class="form-select mt-4" id="physelect2" aria-label="Floating label select example" style="height:58px" disabled>
+                            <option id="shiftmodalPhysician" selected>Select Physician</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please Select At Least One Physician
+                        </div>
+                    }
+                    @if (CV.role() == "Provider")
+                    {
+                        <input type="hidden" asp-for="physicianid" value="@CV.UserID()" />
+                    }
                     <div class="form-floating mt-3">
                         <input asp-for="shiftdate" required type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" id="shiftmodalDate" class="form-control disable" placeholder="Date" readonly>
                         <label for="floatingInput">Shift Date</label>
@@ -362,10 +376,10 @@
             });
         }
         // Change Physician according to Region
-        if ("@CV.role()" == "Admin") {
+        
             $(document).ready(function () {
             localStorage.getItem("currentPartial");
-            
+                localStorage.setItem("currentPartial", "_MonthWise");
                 myFunction();
            
             $('#schedulingregion').on('change', function () {
@@ -435,7 +449,7 @@
                 }
             });
         });
-        }
+       
         function editclick() {
             $('.cancel').removeClass('d-none').addClass('d-inline-block');
             $('.edit').removeClass('d-inline-block').addClass('d-none');

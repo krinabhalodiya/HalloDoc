@@ -200,6 +200,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                     Physician.Address1 = physiciandata.Address1;
                     Physician.Address2 = physiciandata.Address2;
                     Physician.City = physiciandata.City;
+                    Physician.Regionid = physiciandata.Regionid;
                     Physician.Zip = physiciandata.Zipcode;
                     Physician.Altphone = physiciandata.Altphone;
                     Physician.Businessname = physiciandata.Businessname;
@@ -310,6 +311,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                                        Syncemailaddress = r.Syncemailaddress,
                                        Zipcode = r.Zip,
                                        Regionid = r.Regionid,
+                                       State = r.Regionid,
                                        Mobile = r.Mobile
                                    })
                                    .FirstOrDefaultAsync();

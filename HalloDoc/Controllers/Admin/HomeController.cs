@@ -1,7 +1,9 @@
-﻿using System.Data;
+﻿using System.Collections;
+using System.Data;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Spreadsheet;
 using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
@@ -171,6 +173,24 @@ namespace HalloDoc.Controllers.Admin
             return View("../Admin/Home/ResetPassword");
         }
         #endregion
+        #endregion
+        public async Task<IActionResult> CreatNewAccontPost(string Email, string Password)
+        {
+            if (await _loginRepository.CreatNewAccont(Email, Password))
+            {
+                _notyf.Success("User Created Successfully");
+            }
+            else
+            {
+                _notyf.Error("User Created Successfully");
+            }
+            return View("../Admin/Home/Index");
+        }
+        #region ResetPassWord
+        public async Task<IActionResult> CreatNewAccont()
+        {
+            return View("../Admin/Home/CreateAccount");
+        }
         #endregion
     }
 }

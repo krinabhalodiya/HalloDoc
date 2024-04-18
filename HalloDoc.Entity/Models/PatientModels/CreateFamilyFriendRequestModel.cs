@@ -41,7 +41,7 @@ namespace HalloDoc.Entity.Models.PatientModels
         [Required(ErrorMessage = "City is required")]
         public string City { get; set; }
         [Required(ErrorMessage = "State is required")]
-        public string State { get; set; }
+        public int State { get; set; }
         [Required(ErrorMessage = "Zip Code is required")]
         public string ZipCode { get; set; }
         public string? RoomSuite { get; set; }

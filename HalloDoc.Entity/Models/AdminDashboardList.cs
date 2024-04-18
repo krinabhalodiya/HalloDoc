@@ -35,7 +35,7 @@
         public string? SearchInput { get; set; }
         public int? RegionId { get; set; }
         public int? RequestType { get; set; }
-        public bool? IsAscending { get; set; } = true;
+        public bool? IsAscending { get; set; } = false;
         public string? SortedColumn { get; set; } = "RequestedDate";
         public string? Status { get; set; }
         public int NewRequest { get; set; }

@@ -31,43 +31,43 @@
                 
                 <div class="col-md-6 pb-3">
                     <div class="form-floating">
-                        <input asp-for="FirstName" type="text" class="form-control shadow-none inputs" id="FirstName">
+                        <input asp-for="FirstName" type="text" class="form-control shadow-none inputs" id="FirstName" disabled>
                         <label for="FirstName">First Name</label>
                     </div>
                 </div>
                 <div class="col-md-6 pb-3">
                     <div class="form-floating">
-                        <input asp-for="LastName" type="text" class="form-control shadow-none inputs" id="LastName">
+                        <input asp-for="LastName" type="text" class="form-control shadow-none inputs" id="LastName" disabled>
                         <label for="LastName">Last Name</label>
                     </div>
                 </div>
                 <div class="col-lg-12 pb-3">
                     <div class="form-floating">
-                        <input asp-for="Location" type="text" class="form-control shadow-none inputs" id="Location">
+                        <input asp-for="Location" type="text" class="form-control shadow-none inputs" id="Location" disabled>
                         <label for="Location">Address</label>
                     </div>
                 </div>
                 <div class="col-md-6 pb-3">
                     <div class="form-floating">
-                        <input asp-for="DOB" type="date" class="form-control shadow-none inputs" id="DOB">
+                        <input asp-for="DOB" type="date" class="form-control shadow-none inputs" id="DOB" disabled>
                         <label for="DOB">Date Of Birth</label>
                     </div>
                 </div>
                 <div class="col-md-6 pb-3">
                     <div class="form-floating">
-                        <input asp-for="Date" type="date" class="form-control shadow-none inputs" id="Date">
+                        <input asp-for="Date" type="date" class="form-control shadow-none inputs" id="Date" disabled>
                         <label for="Date">Date</label>
                     </div>
                 </div>
                 <div class="col-md-6 pb-3">
                     <div class="form-floating">
-                        <input asp-for="PhoneNumber" type="text" class="form-control shadow-none inputs" id="PhoneNumber">
+                        <input asp-for="PhoneNumber" type="text" class="form-control shadow-none inputs" id="PhoneNumber" disabled>
                         <label for="PhoneNumber">Phone Number</label>
                     </div>
                 </div>
                 <div class="col-md-6 pb-3">
                     <div class="form-floating">
-                        <input asp-for="Email" type="text" class="form-control shadow-none inputs" id="Email">
+                        <input asp-for="Email" type="text" class="form-control shadow-none inputs" id="Email" disabled>
                         <label for="Email">Email</label>
                     </div>
                 </div>
@@ -91,8 +91,9 @@
                 </div>
                 <div class="col-md-6 pb-3">
                     <div class="form-floating">
-                        <input asp-for="Allergies" type="text" class="form-control shadow-none inputs" id="Allergies">
+                        <input asp-for="Allergies" type="text" class="form-control shadow-none inputs" id="Allergies" required>
                         <label for="Allergies">Allergies</label>
+                        <span asp-validation-for="Allergies" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4 pb-3">
@@ -193,26 +194,30 @@
                 </div>
                 <div class="col-md-6 pb-3">
                     <div class="form-floating">
-                        <input asp-for="Treatment" type="text" class="form-control shadow-none inputs" id="Treatment">
+                        <input asp-for="Treatment" type="text" class="form-control shadow-none inputs" id="Treatment" required>
                         <label for="Treatment">Treatment Plan</label>
+                        <span asp-validation-for="Treatment" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6 pb-3">
                     <div class="form-floating">
-                        <input asp-for="MedicationsDispensed" type="text" class="form-control shadow-none inputs" id="MedicationsDispensed">
+                        <input asp-for="MedicationsDispensed" type="text" class="form-control shadow-none inputs" id="MedicationsDispensed" required>
                         <label for="MedicationsDispensed">Medications Dispensed</label>
+                        <span asp-validation-for="MedicationsDispensed" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6 pb-3">
                     <div class="form-floating">
-                        <input asp-for="Procedures" type="text" class="form-control shadow-none inputs" id="Procedures">
+                        <input asp-for="Procedures" type="text" class="form-control shadow-none inputs" id="Procedures" required>
                         <label for="Procedures">Procedures</label>
+                        <span asp-validation-for="Procedures" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-12 pb-3">
                     <div class="form-floating">
-                        <input asp-for="Followup" type="text" class="form-control shadow-none inputs" id="Followup">
+                        <input asp-for="Followup" type="text" class="form-control shadow-none inputs" id="Followup" required>
                         <label for="Followup">Followup</label>
+                        <span asp-validation-for="Followup" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="card-footer border-0 bg-transparent text-end">
@@ -231,3 +236,6 @@
         </div>
     </div>
 </div>
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

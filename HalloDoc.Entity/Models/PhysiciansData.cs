@@ -32,7 +32,7 @@ namespace HalloDoc.Entity.Models
         [RegularExpression(@"([0-9]{10})", ErrorMessage = "Please enter 10 digits for a contact number")]
         public string? Mobile { get; set; }
         [Required(ErrorMessage = "State is required")]
-        public string? State { get; set; }
+        public int? State { get; set; }
         [Required(ErrorMessage = "Zipcode is required")]
         public string? Zipcode { get; set; }
         [Required(ErrorMessage = "Medicallicense is required")]
