@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="CSS/headersidebar.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="CSS/Dashboard.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-white ">
+        <div class="container-fluid">
+            <div class="d-flex p-4" style="width: 280px;">
+
+                <a class="navbar" type="button" onclick="sidebar()">
+                    <img src="images/menu-bar.svg" alt="company logo" />
+                </a>
+                <a href="/"
+                    class="d-flex align-items-center mb-3 mb-md-0 me-md-auto  text-decoration-none">
+                    <div class="px-3">
+                        <img src="images/logo.svg" alt="company logo" class="companylogo img-fluid" />
+                    </div>
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse ml-3">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <form class="d-flex" role="search">
+                        <img src="images/search-icon.svg" alt="serch" class="img-fluid" width="20px" />
+                        <input class="form-control me-2 border-0" type="search" placeholder="Search"
+                            aria-label="Search">
+                    </form>
+                </ul>
+                <form class="d-flex " role="search">
+                    <img src="images/notification-icon.svg" class="mx-5" />
+                    <a href="#" class="profilediv d-flex">
+                        <img class="mx-3" src="images/profile.png" />
+                        <p class="text-dark align-middle p-0 pt-2">John Doe</p>
+                        <span id="static">.</span>
+                        <img class="mx-3" src="images/downward-arrow.svg" />
+                    </a>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <div class="mainbody">
+        <div class="sbar" id="sidebar">
+            <ul class="list">
+                <a class="sblink" href="#">
+                    <li class="sbitems selecteditem"><img class="sbimg" src="images/dashboard-active.svg"
+                            alt="dashboardlogo">
+                        <spans class="sbname selecteditem">Dashboard</span>
+                    </li>
+                </a><br>
+                <a class="sblink" href="innerpage.html">
+                    <li class="sbitems"><img class="sbimg" src="images/graph-default.svg" alt="Analysislogo"><span
+                            class="sbname">Analysis</span></li>
+                </a><br>
+                <a class="sblink" href="#">
+                    <li class="sbitems"><img class="sbimg" src="images/inbox-default.svg" alt="Inboxlogo"><span
+                            class="sbname">Inbox</span></li>
+                </a><br>
+                <a class="sblink" href="#">
+                    <li class="sbitems"><img class="sbimg" src="images/clock-default.svg" alt="Historylogo"><span
+                            class="sbname">History</span></li>
+                </a><br>
+                <a class="sblink" href="#">
+                    <li class="sbitems"><img class="sbimg" src="images/user-default.svg" alt="Userslogo"><span
+                            class="sbname">Users</span></li>
+                </a><br>
+                <a class="sblink" href="#">
+                    <li class="sbitems"><img class="sbimg" src="images/maintenance-default.svg"
+                            alt="maintenancelogo"><span class="sbname">maintenance</span></li>
+                </a><br>
+                <a class="sblink" href="#">
+                    <li class="sbitems"><img class="sbimg" src="images/setting-default.svg" alt="settinglogo"><span
+                            class="sbname">setting</span></li>
+                </a><br>
+            </ul>
+        </div>
+
+        <div class="maindiv" id="krina">
+            <div class="subdiv">
+                <!-- heading -->
+                <h1 class="pgheading">Dashboard</h1>
+                <br>
+
+
+                <div class="container-fluid carddiv">
+                    <!-- card view -->
+                    <div class="row d-flex flex-row ">
+                        <div class="col-lg-2 col-md-3 d-flex flex-row m-4 rounded border-0 myCard">
+                            <div>
+                                <img class="saleImg" src="images/star.svg" />
+                            </div>
+                            <div class="d-flex flex-column">
+                                <p class="myData">23,456</p>
+                                <p class="myInfo">New Products</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 d-flex flex-row m-4 rounded border-0 myCard">
+                            <div>
+                                <img class="saleImg" src="images/new-product.svg" />
+                            </div>
+                            <div class="d-flex flex-column">
+                                <p class="myData">2345</p>
+                                <p class="myInfo">Added Products</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 d-flex flex-row m-4 rounded border-0 myCard">
+                            <div>
+                                <img class="saleImg" src="images/total-product.svg" />
+                            </div>
+                            <div class="d-flex flex-column">
+                                <p class="myData">32456</p>
+                                <p class="myInfo">Total Products</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 d-flex flex-row m-4 rounded border-0 myCard">
+                            <div>
+                                <img class="saleImg" src="images/dollar-filled.svg" />
+                            </div>
+                            <div class="d-flex flex-column">
+                                <p class="myData">5678</p>
+                                <p class="myInfo">Today's Sale</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-3 d-flex flex-row m-4 rounded border-0 myCard">
+                            <div>
+                                <img class="saleImg" src="images/money-bag.svg" />
+                            </div>
+                            <div class="d-flex flex-column">
+                                <p class="myData">33,5342</p>
+                                <p class="myInfo">Total Sale</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- graph view -->
+                    <!-- <div class="container-fluid graphdiv"> -->
+                    <div class="row   ">
+                        
+                        <div class="col-lg-7 col-xl-8 m-3 rounded bg-white">
+                            <div class="d-flex justify-content-between">
+                                <div class="fs-3 text-dark p-3" >Sale</div>
+                                <div class=" text-dark p-3" >
+                                    <nav class="nav">
+                                        <a class="nav-link text-danger" href="#" tabindex="-1" aria-disabled="true">Weekly </a>
+                                        <a class="nav-link text-danger" href="#" tabindex="-1" aria-disabled="true">Monthly</a>
+                                        <a class="nav-link text-primary text-danger" href="#">Yearly</a>
+                                    </nav>
+                                </div>
+                            </div>
+                            <div class="text-center"><img class="graphimg img-fluid" src="images/data-graph.png"></div>
+
+                        </div>
+                        <div class="col-lg-4 col-xl-3  m-3 rounded bg-white ">
+                            <div class="fs-3 text-dark p-3" >Sales by Country</div>
+                            <div class="text-center"><img src="images/pie-chart.svg" class="pie img-fluid"></div>
+                            <table style="width: 100%;">
+                                <tr class="row-fluid">
+                                    <td><img class="graphicon " src="images/radio-checked-icon.svg"> States of America
+                                    </td>
+                                    <td><img class="graphicon" src="images/radio-checked-icon.svg">Canada</td>
+                                </tr>
+                                <tr class="row-fluid">
+                                    <td><img class="graphicon" src="images/radio-checked-icon.svg">Russia</td>
+                                    <td><img class="graphicon" src="images/radio-checked-icon.svg">India</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!-- Table view -->
+                    <div class="row mx-2" >
+                        <div class="col-md-12 card border-0 p-4">
+                          <div class="d-flex justify-content-between">
+                            <div class="fs-4 text-start">
+                              Invoices
+                            </div>
+                            <div class="fs-6 text-danger ">
+                                <a href="#" class="sblink text-danger">View All</a>
+                            </div>
+                          </div>
+                          <div class=" table-responsive p-2 pt-3">
+                            <table class="table table-responsive">
+                              <thead>
+                                <tr>
+                                  <th scope="col">INVOICE</th>
+                                  <th scope="col">COMPANY NAME</th>
+                                  <th scope="col">EMAIL</th>
+                                  <th scope="col">DUE DATE</th>
+                                  <th scope="col">STATUS</th>
+                                  <th scope="col">AMOUNT</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr class="" >
+                                  <td>651535</td>
+                                  <td>Public Adjusting Firm</td>
+                                  <td>georgia.young@example.com</td>
+                                  <td>24 May, 2020</td>
+                                  <td><span class="d-inline-flex mt-1  mb-1 px-2 text-success  border-0  bg-success-subtle  rounded-2" >Paid</span></td>
+                                  <td>$47,800</td>
+                                </tr>
+                                <tr>
+                                  <td>651535</td>
+                                  <td>Public Adjusting Firm</td>
+                                  <td>georgia.young@example.com</td>
+                                  <td>24 May, 2020</td>
+                                  <td><span class="d-inline-flex mt-1  mb-1 px-2 text-success  border-0  bg-success-subtle  rounded-2" >Paid</span></td>
+                                  <td>$47,800</td>
+                                </tr>
+                                <tr>
+                                  <td>651535</td>
+                                  <td>Public Adjusting Firm</td>
+                                  <td>georgia.young@example.com</td>
+                                  <td>24 May, 2020</td>
+                                  <td><span class="d-inline-flex mt-1  mb-1 px-2 text-success  border-0  bg-success-subtle  rounded-2" >Paid</span></td>
+                                  <td>$47,800</td>
+                                </tr>
+                                <tr>
+                                  <td>651535</td>
+                                  <td>Public Adjusting Firm</td>
+                                  <td>georgia.young@example.com</td>
+                                  <td>24 May, 2020</td>
+                                  <td><span class="d-inline-flex mt-1  mb-1 px-2  text-danger  border-0 bg-danger-subtle  rounded-2 border-0" >Failed</span></td>
+                                  <td>$47,800</td>
+                                </tr>
+                                <tr>
+                                  <td>651535</td>
+                                  <td>Public Adjusting Firm</td>
+                                  <td>georgia.young@example.com</td>
+                                  <td>24 May, 2020</td>
+                                  <td><span class="d-inline-flex mt-1  mb-1 px-2 text-secondary  border-0 bg-secondary-subtle  rounded-2" >Pending</span></td>
+                                  <td>$47,800</td>
+                                </tr>
+                                <tr>
+                                  <td>651535</td>
+                                  <td>Public Adjusting Firm</td>
+                                  <td>georgia.young@example.com</td>
+                                  <td>24 May, 2020</td>
+                                  <td><span class="d-inline-flex mt-1  mb-1 px-2 text-success  border-0  bg-success-subtle  rounded-2" >Paid</span></td>
+                                  <td>$47,800</td>
+                                </tr>
+                                <tr>
+                                  <td>651535</td>
+                                  <td>Public Adjusting Firm</td>
+                                  <td>georgia.young@example.com</td>
+                                  <td>24 May, 2020</td>
+                                  <td><span class="d-inline-flex mt-1  mb-1 px-2  text-danger  border-0 bg-danger-subtle  rounded-2 border-0" >Failed</span></td>
+                                  <td>$47,800</td>
+                                </tr>
+                                <tr>
+                                  <td>651535</td>
+                                  <td>Public Adjusting Firm</td>
+                                  <td>georgia.young@example.com</td>
+                                  <td>24 May, 2020</td>
+                                  <td><span class="d-inline-flex mt-1  mb-1 px-2 text-success  border-0  bg-success-subtle  rounded-2" >Paid</span></td>
+                                  <td>$47,800</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                         
+                      </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="JS/custom.js"></script>
+
+</body>
+
+</html>

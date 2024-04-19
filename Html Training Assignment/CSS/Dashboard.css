@@ -1,0 +1,111 @@
+.mainbody{
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.maindiv{
+    width: 85VW;
+    background-color: #fafafa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container{
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    justify-content: space-around;
+}
+
+
+
+.saleImg{
+    width: 35px;
+    height: 50px;
+    margin-right: 19.5px;
+}
+
+.myCard {
+    width: 219px;
+    height: 116px;
+    background: #FFFFFF 0% 0% no-repeat;
+    align-items:center;
+    justify-content:center;
+}
+
+.myInfo {
+    font-size:20px;
+    font: normal normal normal 15px/20px Roboto;
+    color: #3E3E3E;
+}
+
+.myData {
+    font-size: 33px;
+    font: normal normal medium 25px/33px Roboto;
+    color: #3E3E3E;
+   font-weight:500;
+}
+
+.pgheading{
+    width: 75vw;
+    display: flex;
+    padding-top: 20px;
+    margin-left: 20px;
+    font: normal normal medium 30px/39px Roboto;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+    
+}
+
+.graphimg{
+    /* height: 500px;    */
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.pie {
+    height: 300px;
+   
+}
+.graphicon{
+    height: 40px;
+    width: 40px;
+}
+
+.tblcontent{
+    color: #3E3E3E;
+    font: normal normal normal Roboto;
+}
+
+.tblhead{
+    font: normal normal normal Roboto;
+    color: #ADADAD;
+    font-size: 20px;
+    letter-spacing: 1.5px;
+}
+
+.paid{
+    background: #EBFFEF  0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    color: #3CDD5F;;
+}
+
+.failed{
+    background: #FFF5F5  0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    color: #FF4545;
+}
+
+.pending{
+    background: #eeecec 0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    color: #BABABA;
+}
+
+.redcolour{
+    color: red;
+}

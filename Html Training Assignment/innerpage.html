@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Analysis</title>
+    <link rel="stylesheet" href="CSS/headersidebar.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="CSS/innerpage.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-white ">
+        <div class="container-fluid">
+            <div class="d-flex p-4" style="width: 280px;">
+
+                <a class="navbar" type="button" onclick="sidebar()">
+                    <img src="images/menu-bar.svg" alt="company logo" />
+                </a>
+                <a href="/"
+                    class="d-flex align-items-center mb-3 mb-md-0 me-md-auto  text-decoration-none">
+                    <div class="px-3">
+                        <img src="images/logo.svg" alt="company logo" class="companylogo img-fluid" />
+                    </div>
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse ml-3">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <form class="d-flex" role="search">
+                        <img src="images/search-icon.svg" alt="serch" class="img-fluid" width="20px" />
+                        <input class="form-control me-2 border-0" type="search" placeholder="Search"
+                            aria-label="Search">
+                    </form>
+                </ul>
+                <form class="d-flex " role="search">
+                    <img src="images/notification-icon.svg" class="mx-5" />
+                    <a href="#" class="profilediv d-flex">
+                        <img class="mx-3" src="images/profile.png" />
+                        <p class="text-dark align-middle p-0 pt-2">John Doe</p>
+                        <span id="static">.</span>
+                        <img class="mx-3" src="images/downward-arrow.svg" />
+                    </a>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mainbody">
+        <div class="sbar" id="sidebar">
+            <ul class="list">
+                <a class="sblink" href="dashboard.html">
+                    <li class="sbitems"><img class="sbimg" src="images/dashboard-default.svg" alt="dashboardlogo">
+                        <spans class="sbname">Dashboard</span>
+                    </li>
+                </a><br>
+                <a class="sblink" href="#">
+                    <li class="sbitems selecteditem"><img class="sbimg" src="images/graph-active.svg"
+                            alt="Analysislogo"><span class="sbname selecteditem">Analysis</span></li>
+                </a><br>
+                <a class="sblink" href="#">
+                    <li class="sbitems"><img class="sbimg" src="images/inbox-default.svg" alt="Inboxlogo"><span
+                            class="sbname">Inbox</span></li>
+                </a><br>
+                <a class="sblink" href="#">
+                    <li class="sbitems"><img class="sbimg" src="images/clock-default.svg" alt="Historylogo"><span
+                            class="sbname">History</span></li>
+                </a><br>
+                <a class="sblink" href="#">
+                    <li class="sbitems"><img class="sbimg" src="images/user-default.svg" alt="Userslogo"><span
+                            class="sbname">Users</span></li>
+                </a><br>
+                <a class="sblink" href="#">
+                    <li class="sbitems"><img class="sbimg" src="images/maintenance-default.svg"
+                            alt="maintenancelogo"><span class="sbname">maintenance</span></li>
+                </a><br>
+                <a class="sblink" href="#">
+                    <li class="sbitems"><img class="sbimg" src="images/setting-default.svg" alt="settinglogo"><span
+                            class="sbname">setting</span></li>
+                </a><br>
+
+            </ul>
+        </div>
+
+        <div class="maindiv" id="krina">
+            <div class="subdiv container-fluid mx-5 my-5 ">
+                <p class="heading">Analysis</p>
+                <div class=" container-fluid bg-white px-4">
+
+                    <!-- Row-1 -->
+                    <p class="rowheading mt-4">One Column</p>
+                    <input class="form-control form-control-lg my-3" type="text" placeholder="Name"
+                        aria-label=".form-control-lg example">
+
+                    <select class="form-select form-control-lg my-3" aria-label="Dropdown">
+                        <option selected>Dropdown</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                    <textarea class="form-control form-control-lg my-3" id="MultipleLines" rows="3"
+                        placeholder="MultipleLines"></textarea>
+
+                    <!-- row-2 -->
+                    <p class="rowheading mt-5">Two Column</p>
+                    <div class="row">
+                        <div class="col-6 form-floating">
+                            <input class="form-control form-control-lg my-2" type="text" id="name" placeholder="Name"
+                                aria-label=".form-control-lg example">
+                            <label for="name">Name</label>
+                        </div>
+                        <div class="col-6 form-floating">
+                            <input class="form-control form-control-lg my-2 shadow-none" type="text" id="username"
+                                placeholder="Username" aria-label=".form-control-lg example">
+                            <label for="username">Username</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 form-floating">
+                            <input class="form-control form-control-lg my-2" type="password" id="password"
+                                placeholder="Password" aria-label=".form-control-lg example">
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="col-6">
+                            <select class="form-select form-control-lg my-3" aria-label="Dropdown">
+                                <option selected>Dropdown</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- row-3 -->
+                    <p class="rowheading mt-5">Three Column</p>
+                    <div class="row">
+                        <div class="col-4 form-floating">
+                            <input class="form-control form-control-lg my-2 border border-danger" type="text" id="Focus"
+                                placeholder="Focus" aria-label=".form-control-lg example">
+                            <label for="Focus">Focus</label>
+                        </div>
+                        <div class="col-4 form-floating">
+                            <input class="form-control form-control-lg my-2" type="password" id="Password"
+                                placeholder="Password" aria-label=".form-control-lg example">
+                            <label for="Password">Password</label>
+                        </div>
+                        <div class="col-4 form-floating">
+                            <input class="form-control form-control-lg my-2 disabletxt bg-white" type="text"
+                                id="Disable" placeholder="Disable" aria-label=".form-control-lg example" disabled>
+                            <label for="Disable">Disable</label>
+                        </div>
+                    </div>
+
+                    <!-- row-4 -->
+                    <p class="rowheading mt-5">Four Column</p>
+                    <div class="row">
+                        <div class="col-3 form-floating">
+                            <input class="form-control form-control-lg my-2 redborder" type="text" id="designation"
+                                placeholder="Designation" aria-label=".form-control-lg example">
+                            <label for="designation">Designation</label>
+                        </div>
+                        <div class="col-3 form-floating">
+                            <input class="form-control form-control-lg my-2" type="password" placeholder="Name"
+                                id="name" aria-label=".form-control-lg example">
+                            <label for="name">Name</label>
+                        </div>
+                        <div class="col-3 form-floating">
+                            <input class="form-control form-control-lg my-2 bg-white" type="text" placeholder="Username"
+                                id="username" aria-label=".form-control-lg example">
+                            <label for="username">Username</label>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-select form-control-lg my-3" aria-label="Dropdown">
+                                <option selected>Select</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Other Design Elements -->
+                    <p class="rowheading mt-5">Other Design Elements</p>
+
+                    <p class="subheading mt-4">File Upload</p>
+
+
+                    <!-- file Upload -->
+                    <div class="p-3">
+                        <div class="d-flex justify-content-start">
+                            <button class="border border-danger rounded-pill bg-white btn btn-lg"
+                                onclick="document.getElementById('choosenfile').click()">
+                                <label for="files" class="btn">
+                                    <i class="fa fa-cloud-upload"></i>
+                                    Upload
+                                </label>
+                            </button>
+                            <span id="choosenfile" class="p-3">No file chosen</span>
+                            <input id="files" type="file">
+                        </div>
+                    </div>
+
+                    <!-- radio button -->
+                    <p class="subheading mt-4">Radio Button</p>
+                    <div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Default radio
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                                checked>
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Default checked radio
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- check box -->
+                    <p class="subheading mt-4">Check Box</p>
+                    <div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Option 1
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input pl-3" type="checkbox" value="" id="flexCheckChecked" checked>
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Option 2
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- snackbar -->
+                    <p class="subheading mt-4">Snackbar</p>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-6 d-flex justify-content-left">
+                                <button type="button"
+                                    class="btn btn-outline-danger form-control p-2 my-3 d-flex justify-content-start">
+                                    <img src="images/error-icon.svg" alt="" class="snackimg">
+                                    This is an error message!
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button"
+                                    class="btn  btn-outline-info form-control p-2  my-3 d-flex justify-content-start">
+                                    <img src="images/info-icon.svg" alt="" class="snackimg">
+                                    This is an information message!
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="button"
+                                    class="btn btn-outline-warning form-control p-2 d-flex justify-content-start"><img
+                                        src="images/warning-icon.svg" alt="" class="snackimg">
+                                    This is an Warning message!
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button"
+                                    class="btn btn-outline-success form-control p-2 d-flex justify-content-start"><img
+                                        src="images/success-icon.svg" alt="" class="snackimg">
+                                    This is an success message!
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- call to action -->
+                    <p class="subheading mt-4">Call to action</p>
+                    <button type="button" class="btn btn-outline-danger mr-5 rounded-pill">Primary</button>
+                    <button type="button" class="btn btn-outline-danger rounded-pill">Secondary</button>
+
+                    <!-- Tabs -->
+                    <p class="subheading mt-4">Tabs</p>
+
+                    <div class="tab">
+                        <button class="tablinks active" onclick="openCity(event, 'Tab1')">Tab1</button>
+                        <button class="tablinks" onclick="openCity(event, 'Tab2')">Tab2</button>
+                        <button class="tablinks" onclick="openCity(event, 'Tab3')">Tab3</button>
+                    </div>
+
+                    <div id="Tab1" class="tabcontent defaulttab py-3">
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus nostrum optio nam
+                            accusantium neque. Pariatur eos commodi molestiae esse rerum voluptas doloribus voluptates
+                            modi officiis, reiciendis, inventore optio labore totam
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi, sapiente ipsum maiores est
+                            veniam error, molestias culpa rerum, veritatis velit exercitationem quas debitis magni
+                            voluptas! Asperiores porro quia dolore expedita.
+                        </p>
+                    </div>
+
+                    <div id="Tab2" class="tabcontent py-3">
+                        <p>
+                            Temporibus, incidunt pariatur quae praesentium nemo error placeat accusantium maiores
+                            inventore eius sit illo aut provident iste impedit voluptas illum. Cupiditate, eaque.
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Necessitatibus, adipisci debitis,
+                            officia distinctio assumenda sint beatae deserunt error unde delectus voluptatum quo aut rem
+                            molestias culpa perferendis explicabo ipsa inventore.
+                        </p>
+                    </div>
+
+                    <div id="Tab3" class="tabcontent py-3">
+                        <p>
+                            Odit dolore corrupti dolor repellendus temporibus consectetur soluta labore sapiente, aut,
+                            et ducimus numquam maiores, blanditiis ea maxime. Deserunt adipisci earum blanditiis.
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aperiam laudantium similique
+                            commodi minima veniam in, repellat repellendus excepturi labore eaque illum vel quae id
+                            facere, quisquam itaque tempore? Incidunt, excepturi.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="JS/custom.js"></script>
+</body>
+
+</html>
