@@ -182,7 +182,8 @@ namespace HalloDoc.Controllers.Admin
             }
             else
             {
-                _notyf.Error("User Created Successfully");
+                _notyf.Error("You can not create account with this id twice");
+                return View("../Admin/Home/CreateAccount");
             }
             return View("../Admin/Home/Index");
         }

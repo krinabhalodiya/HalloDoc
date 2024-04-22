@@ -23,13 +23,13 @@ namespace HalloDoc.Controllers
         public IActionResult accept(int RequestID)
         {
             _IAdminDashBoardActionsRepository.SendAgreement_accept(RequestID);
-            return RedirectToAction("Index", "AdminDashBoard");
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Reject(int RequestID, string Notes)
         {
             _IAdminDashBoardActionsRepository.SendAgreement_Reject(RequestID, Notes);
-            return RedirectToAction("Index", "AdminDashBoard");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

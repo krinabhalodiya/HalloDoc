@@ -68,22 +68,22 @@ namespace HalloDoc.Controllers
             {
                 case "1":
                     return PartialView("../AdminDashBoard/_New", contacts);
-                    break;
+                    
                 case "2":
                     return PartialView("../AdminDashBoard/_Pending", contacts);
-                    break;
+                   
                 case "4,5":
                     return PartialView("../AdminDashBoard/_Active", contacts);
-                    break;
+                    
                 case "6":
                     return PartialView("../AdminDashBoard/_Conclude", contacts);
-                    break;
+                   
                 case "3,7,8":
                     return PartialView("../AdminDashBoard/_ToClose", contacts);
-                    break;
+                    
                 case "9":
                     return PartialView("../AdminDashBoard/_UnPaid", contacts);
-                    break;
+                    
                 default:
                     break;
             }
@@ -150,16 +150,17 @@ namespace HalloDoc.Controllers
         }
         #endregion
         #region PatientRequest
-        public IActionResult PatientRequest()
+        public async Task<IActionResult> PatientRequest()
         {
-            return View("../SubmitRequest/PatientRequest");
+            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
+            return View("../SubmitRequest/FamilyFriendRequest");
         }
         #endregion PatientRequest 
 
         #region CreatePatientRequest
-        public async Task<IActionResult> CreatePatientRequest(CreatePatientRequestModel model)
+        public async Task<IActionResult> CreatePatientRequest(CreateFamilyFriendRequestModel model)
         {
-            if (await _ICreateRequest.PatientRequest(model))
+            if (await _ICreateRequest.FamilyFriendRequest(model))
             {
                 _notyf.Success("Request has been created successfully.");
             }

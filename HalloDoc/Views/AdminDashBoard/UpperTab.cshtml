@@ -218,28 +218,38 @@
 <script>
     function subsubmit() {
         console.log("abc");
+        $(".loding-div").show();
         $('#filterForm').submit();
+        setTimeout(function () { $(".loding-div").hide() }, 200);
     }
     function assignvalue(e) {
         $('#requesttypevalue').val(e);
+        $(".loding-div").show();
         $('#filterForm').submit();
+        setTimeout(function () { $(".loding-div").hide() }, 200);
     }
     function changeStatus(e) {
         $('#requeststatus').val(e);
+        $(".loding-div").show();
         $('#filterForm').submit();
+        setTimeout(function () { $(".loding-div").hide() }, 200);
     }
     
     $(function () {
         $('#searchicon').on('click', function () {
             console.log("abc");
+            $(".loding-div").show();
             $('#filterForm').submit();
+            setTimeout(function () { $(".loding-div").hide() }, 200);
         });
     });
 
     $(function () {
         $('#regionicon').on('click', function () {
             console.log("abc");
+            $(".loding-div").show();
             $('#filterForm').submit();
+            setTimeout(function () { $(".loding-div").hide() }, 200);
         });
     });
 
@@ -253,14 +263,18 @@
     $(function () {
         $('#regiondropdown').on('change', function () {
             console.log("abc");
+            $(".loding-div").show();
             $('#filterForm').submit();
+            setTimeout(function () { $(".loding-div").hide() }, 200);
         });
     });
 
     $(function () {
         $('#pagesizedropdown').on('change', function () {
             console.log("abc");
+            $(".loding-div").show();
             $('#filterForm').submit();
+            setTimeout(function () { $(".loding-div").hide() }, 200);
         });
     });
     function Export(status) {

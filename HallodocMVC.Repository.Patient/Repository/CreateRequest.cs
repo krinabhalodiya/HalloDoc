@@ -341,6 +341,7 @@ namespace HallodocMVC.Repository.Patient.Repository
                 Address1 = createBusinessRequest.Street,
                 City = createBusinessRequest.City,
                 Zipcode = createBusinessRequest.ZipCode,
+                Regionid = createBusinessRequest.State,
                 Createddate = DateTime.Now
             };
             _context.Businesses.Add(business);

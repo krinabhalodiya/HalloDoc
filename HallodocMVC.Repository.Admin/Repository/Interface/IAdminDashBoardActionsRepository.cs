@@ -21,7 +21,7 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public ViewNotesData getNotesByID(int id);
         public bool EditViewNotes(string? adminnotes, string? physiciannotes, int RequestID);
         public Task<ViewDocuments> GetDocumentByRequest(int? id, ViewDocuments viewDocument);
-        public Boolean SaveDoc(int Requestid, IFormFile file);
+        public Boolean SaveDoc(int Requestid, IFormFile file, string aspnetid, string uploadertype);
         public Task<bool> DeleteDocumentByRequest(string ids);
         public Task<bool> SendFileEmail(string ids, int Requestid, string email);
         public Healthprofessional SelectProfessionlByID(int VendorID);

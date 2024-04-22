@@ -17,7 +17,6 @@ namespace HalloDoc.Entity.Models.PatientModels
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string C_Email { get; set; }
         [Required(ErrorMessage = "Contact number is required")]
-        [RegularExpression(@"([0-9]{10})", ErrorMessage = "Please enter 10 digits for a contact number")]
         public string C_PhoneNumber { get; set; }
         public string C_Property { get; set; }
         [Required(ErrorMessage = "Street is required")]
@@ -40,7 +39,6 @@ namespace HalloDoc.Entity.Models.PatientModels
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Contact number is required")]
-        [RegularExpression(@"([0-9]{10})", ErrorMessage = "Please enter 10 digits for a contact number")]
         public string PhoneNumber { get; set; }
         public string? RoomSuite { get; set; }
     }

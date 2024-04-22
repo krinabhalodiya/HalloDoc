@@ -21,9 +21,7 @@
                     <h4 class="mt-2 font-weight-bold"><strong>Documents</strong></h4>
                 </div>
             </div>
-            <a onclick="history.go(-1);"
-            
-            class="btn border border-info bg-light rounded mt-3 mb-1">
+            <a onclick="history.go(-1)" class="btn border border-info bg-light rounded mt-3 mb-1">
                 <i class="fa fa-angle-left text-info align-middle"></i>
                 <span class="text-info">
                     <b class="align-text-top">&nbsp;&nbsp;Back</b>
@@ -43,7 +41,7 @@
                 review
             </div>
             <div class="col-md-12 mt-3">
-                <form method="post" id="myForm" asp-action="UploadDoc" asp-controller="PatientDashBoard" enctype="multipart/form-data">
+                <form method="post" id="myForm" asp-action="UploadDoc" asp-controller="AdminActions" enctype="multipart/form-data">
                     <div class="d-flex justify-content-between bg-light border border-secondary rounded">
                         <button type="button" id="choosenfile" class="col btn text-start text-secondary" onclick="document.getElementById('file').click()">
                             Select File

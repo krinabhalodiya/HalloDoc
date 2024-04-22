@@ -130,10 +130,10 @@ namespace HalloDoc.Controllers.Admin
 			}
             return RedirectToAction("Index");
         }
-		#endregion
+        #endregion
 
-		#region DeletePhysician
-		public async Task<IActionResult> DeleteRole(int roleid)
+        #region DeleteRole
+        public async Task<IActionResult> DeleteRole(int roleid)
 		{
 			bool data = await _IRoleAccessRepository.DeleteRoles(roleid, CV.ID());
 			if (data)
@@ -143,7 +143,7 @@ namespace HalloDoc.Controllers.Admin
 			}
 			else
 			{
-				_notyf.Success("Role not deleted successfully...");
+				_notyf.Error("Role not deleted successfully...");
 				return RedirectToAction("Index");
 			}
 		}
@@ -172,8 +172,6 @@ namespace HalloDoc.Controllers.Admin
 
         public async Task<IActionResult> AdminAddEdit(int? id)
         {
-
-
             //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             ViewBag.userrolecombobox = await _combobox.AdminRoleComboBox();
@@ -212,7 +210,7 @@ namespace HalloDoc.Controllers.Admin
             }
             else
             {
-                _notyf.Error("Admin not Added Successfully..!");
+                _notyf.Error("You can not add admin with existing email address..!");
                 return View("../Admin/Access/AdminAddEdit", vm);
             }
             /*else
@@ -242,7 +240,7 @@ namespace HalloDoc.Controllers.Admin
         #region SaveAdministrationinfo
         public async Task<IActionResult> EditAdministratorInfo(ViewAdminProfile vm)
         {
-            bool data = await _IMyProfileRepository.EditAdministratorInfo(vm);
+            bool data = await _IMyProfileRepository.EditAdministratorInfo(vm,CV.ID());
             if (data)
             {
 				_notyf.Success("Administration Information Changed successfully...");

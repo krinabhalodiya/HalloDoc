@@ -24,7 +24,7 @@ namespace HalloDoc.Entity.Models
         public List<Documents>? documentslist { get; set; } = null;
         public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; } = 1;
-        public int PageSize { get; set; } = 5;
+        public int PageSize { get; set; } = 15;
         public bool? IsAscending { get; set; } = true;
         public string? SortedColumn { get; set; } = "RequestedDate";
     }

@@ -17,13 +17,15 @@ namespace HalloDoc.Controllers.Patient
         private readonly ILogger<AdminDashBoardController> _logger;
         private readonly IAdminDashBoardActionsRepository _IAdminDashBoardActionsRepository;
         private readonly INotyfService _notyf;
+        private readonly IComboboxRepository _combobox;
 
-        public PatientDashboardController(ILogger<AdminDashBoardController> logger, IPatientDashboard iPatientDashboard, IAdminDashBoardActionsRepository iAdminDashBoardActionsRepository, INotyfService iNotyfService)
+        public PatientDashboardController(ILogger<AdminDashBoardController> logger, IPatientDashboard iPatientDashboard, IAdminDashBoardActionsRepository iAdminDashBoardActionsRepository, INotyfService iNotyfService, IComboboxRepository combobox)
         {
             _IPatientDashboard = iPatientDashboard;
             _logger = logger;
             _IAdminDashBoardActionsRepository = iAdminDashBoardActionsRepository;
             _notyf = iNotyfService;
+            _combobox = combobox;
         }
         [CheckProviderAccess("Patient")]
         public IActionResult Index(PatientDashList listdata)
@@ -42,7 +44,7 @@ namespace HalloDoc.Controllers.Patient
         }
         public IActionResult UploadDoc(int Requestid, IFormFile file)
         {
-            if (_IAdminDashBoardActionsRepository.SaveDoc(Requestid, file))
+            if (_IAdminDashBoardActionsRepository.SaveDoc(Requestid, file,CV.UserID(),"Patient"))
             {
                 _notyf.Success("File Uploaded Successfully");
             }
@@ -53,8 +55,9 @@ namespace HalloDoc.Controllers.Patient
             return RedirectToAction("ViewUploads", "PatientDashboard", new { id = Requestid });
         }
         #region RequestForMe
-        public IActionResult RequestForMe()
+        public async Task<IActionResult>  RequestForMe()
         {
+            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             CreatePatientRequestModel model = _IPatientDashboard.RequestForMe(CV.UserID());
             return View("../Patient/PatientDashboard/RequestForMe", model);
         }

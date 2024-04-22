@@ -15,7 +15,7 @@
             </strong>
         </a>
     </div>
-
+    <partial name="../../AdminActions/_partial/EncounterPdf.cshtml" />
     <div class="bg-white rounded shadow my-3">
         <!--List of Outcomes-->
         <div class="table-responsive">
@@ -43,9 +43,10 @@
                             <td scope="row">@item.ConcludedDate.ToString("MMM d, yyyy")</td>
                             <td scope="row">@Enum.GetName(typeof(Status), item.Status)</td>
                             <td>
-                                <a asp-action="" asp-controller="" class="btn border-info text-info btn-sm document-button">
-                                    View
-                                </a>
+                                @if (item.IsFinalize)
+                                {
+                                    <a data-bs-toggle="modal" data-bs-target="#EncounterPdf" class="btn border-info text-info btn-sm document-button" onclick="model_Case(@item.RequestID)"><i class="bi bi-journal-text me-1"></i>View</a>
+                                }
                             </td>
                             <td>
                                 <div class="dropdown">

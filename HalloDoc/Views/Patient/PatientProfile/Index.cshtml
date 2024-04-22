@@ -99,10 +99,13 @@
                             <label for="City">City</label>
                         </div>
                     </div>
-                    <div class="col-md-6 pb-3">
-                        <div class="form-floating">
-                            <input asp-for="State" type="text" class="form-control shadow-none" id="Stata" placeholder="Date Of Birth">
-                            <label for="Stata">Stata</label>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <select class="form-select input2" required aria-label="Phone" asp-for="State" data-allow-clear="true" tabindex="-1" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                                <option value="">Select States</option>
+                            </select>
+                            <label for="region2">State</label>
+                            <span asp-validation-for="State" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6 pb-3">

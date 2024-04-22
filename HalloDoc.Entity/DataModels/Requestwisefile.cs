@@ -63,4 +63,6 @@ public partial class Requestwisefile
     [ForeignKey("Requestid")]
     [InverseProperty("Requestwisefiles")]
     public virtual Request Request { get; set; } = null!;
+
+    
 }

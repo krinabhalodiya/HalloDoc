@@ -77,7 +77,7 @@
         <div class="mt-3 ">
             @if (loginRepository.isAccessGranted((int)CV.RoleID(), "Regions"))
 {
-                <div class="search m-1 d-flex justify-content-start">
+                <div class="search m-1 d-flex justify-content-start col-2">
                 <a id="regionicon">
                     <i class="fa fa-search"></i>
                 </a>
@@ -89,8 +89,8 @@
                 <div class="btns d-flex justify-content-end">
                 @if (CV.role() == "Admin")
                 {
-                    <a asp-action="MDSOnCall" asp-controller="Scheduling" class="btn btn-info text-white">Providers On Call</a>
-                    <a asp-action="RequestedShift" asp-controller="Scheduling" class="btn btn-info text-white">Shifts For Review</a>
+                    <a asp-action="MDSOnCall" asp-controller="Scheduling" class="btn btn-info text-white me-2">Providers On Call</a>
+                    <a asp-action="RequestedShift" asp-controller="Scheduling" class="btn btn-info text-white me-2">Shifts For Review</a>
                 }
                     <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#addShiftModal">Add New Shifts</button>
                 </div>

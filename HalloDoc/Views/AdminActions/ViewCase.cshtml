@@ -115,7 +115,7 @@
                     </div>
                     @* Edit *@
                      <div class="d-flex justify-content-end">
-                        @if(CV.CurrentStatus()=="1")
+                        @if(CV.CurrentStatus()=="1" && CV.role() == "Admin")
                         {
                             <a class="btn btn-info text-white rounded me-2" onclick="model_Case(@Model.RequestID)" data-bs-toggle="modal" data-bs-target="#assigncase" data-bs-requestid="@Model.RequestID" data-bs-patientname="@Model.FirstName">Assign</a>
                         }

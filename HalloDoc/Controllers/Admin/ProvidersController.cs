@@ -157,7 +157,7 @@ namespace HalloDoc.Controllers.Admin
         #region EditPhysicianInfo
         public async Task<IActionResult> EditPhysicianInfo(PhysiciansData data)
         {
-            if (await _IProviderRepository.EditPhysicianInfo(data))
+            if (await _IProviderRepository.EditPhysicianInfo(data,CV.ID()))
             {
                 _notyf.Success("Administrator Information Changed Successfully..!");
                 return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });

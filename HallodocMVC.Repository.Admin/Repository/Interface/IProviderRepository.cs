@@ -18,7 +18,7 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public Task<PhysiciansData> GetPhysicianById(int id);
         public Task<bool> EditAccountInfo(PhysiciansData vm);
         public Task<bool> ChangePasswordAsync(string password, int Physicianid);
-        public Task<bool> EditPhysicianInfo(PhysiciansData vm);
+        public Task<bool> EditPhysicianInfo(PhysiciansData vm, string aspnetid);
         public Task<bool> EditMailBillingInfo(PhysiciansData vm, string AdminId);
         public Task<bool> EditProviderProfile(PhysiciansData vm, string AdminId);
         public Task<bool> EditProviderOnbording(PhysiciansData vm, string AdminId);

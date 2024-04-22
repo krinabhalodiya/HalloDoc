@@ -127,14 +127,18 @@
                             {
                                 <li><a data-bs-toggle="modal" data-bs-target="#Encounter" class="dropdown-item" onclick="model_Case(@item.RequestID)"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
                             }
-                            @if (item.IsFinalize)
-                            {
-                                <li><a data-bs-toggle="modal" data-bs-target="#EncounterPdf" class="dropdown-item" onclick="model_Case(@item.RequestID)"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
-                            }
                             else
                             {
-                                <li><a asp-action="Encounter" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
+                                @if (item.IsFinalize)
+                                {
+                                    <li><a data-bs-toggle="modal" data-bs-target="#EncounterPdf" class="dropdown-item" onclick="model_Case(@item.RequestID)"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
+                                }
+                                else
+                                {
+                                    <li><a asp-action="Encounter" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>Encounter</a></li>
+                                }
                             }
+                            
                             <li><a asp-action="ViewUpload" asp-controller="AdminActions" asp-route-id="@item.RequestID" class="dropdown-item"><i class="bi bi-file-earmark-zip me-1"></i>View Uploads</a></li>
                            @if (loginRepository.isAccessGranted((int)CV.RoleID(), "SendOrder"))
                             {

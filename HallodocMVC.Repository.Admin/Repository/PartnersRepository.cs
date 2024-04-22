@@ -36,7 +36,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                 FaxNumber = v.Faxnumber,
                                                 Address = v.Address,
                                                 City = v.City,
-                                                State = v.State,
+                                                State = (int)v.Regionid,
                                                 ZipCode = v.Zip,
                                                 CreatedDate = v.Createddate,
                                                 Email = v.Email,
@@ -74,7 +74,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                                            FaxNumber = v.Faxnumber,
                                            Address = v.Address,
                                            City = v.City,
-                                           State = v.State,
+                                           State = (int)v.Regionid,
                                            ZipCode = v.Zip,
                                            CreatedDate = v.Createddate,
                                            Email = v.Email,
@@ -91,6 +91,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         {
             try
             {
+                var statename = _context.Regions.FirstOrDefault(x => x.Regionid == data.State);
                 if (data.VendorId != 0)
                 {
                     var result = _context.Healthprofessionals.Where(hp => hp.Vendorid == data.VendorId).FirstOrDefault();
@@ -102,7 +103,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                         result.Faxnumber = data.FaxNumber;
                         result.Address = data.Address;
                         result.City = data.City;
-                        result.State = data.State;
+                        result.Regionid = data.State;
+                        result.State = statename.Name;
                         result.Zip = data.ZipCode;
                         result.Createddate = DateTime.Now;
                         result.Phonenumber = data.PhoneNumber;
@@ -130,7 +132,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                         Faxnumber = data.FaxNumber,
                         Address = data.Address,
                         City = data.City,
-                        State = data.State,
+                        Regionid = data.State,
+                        State = statename.Name,
                         Zip = data.ZipCode,
                         Createddate = DateTime.Now,
                         Phonenumber = data.PhoneNumber,

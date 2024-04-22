@@ -100,6 +100,7 @@ namespace HallodocMVC.Repository.Patient.Repository
 
             var requestClient = new Requestclient()
             {
+                Regionid = patientRequest.State,
                 Requestid = request.Requestid,
                 Firstname = patientRequest.FirstName,
                 Lastname = patientRequest.LastName,

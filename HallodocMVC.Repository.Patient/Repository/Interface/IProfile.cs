@@ -10,6 +10,6 @@ namespace HallodocMVC.Repository.Patient.Repository.Interface
     public interface IProfile
     {
         public ViewDataUserProfile? ProviderProfile(string id);
-        public Task<bool> Edit(ViewDataUserProfile userprofile);
+        public Task<bool> Edit(ViewDataUserProfile userprofile, string id);
     }
 }

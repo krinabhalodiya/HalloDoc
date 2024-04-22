@@ -18,14 +18,20 @@
     <partial name="../AdminActions/_partial/TranstoAdmin.cshtml" />
         <partial name="../AdminActions/_partial/Encounter.cshtml" />
         <partial name="../AdminActions/_partial/EncounterPdf.cshtml" />
-    <partial name="UpperTab.cshtml" />
-    <div id="SearchResult" class="mt-4"></div>
-        
+		<partial name="UpperTab.cshtml" />
+        <div class="middle loding-div position-absolute" style="left:50%;">
+			<span class="loader"></span>
+		</div>
+        <div id="SearchResult" class="mt-4">
+        </div>
 </div>
+    
         }
 <script>
     $(function () {
+        $(".loding-div").show();
         $("#filterForm").submit();
+        setTimeout(function () { $(".loding-div").hide() }, 1000);
     });
 </script>
 

@@ -86,17 +86,19 @@ namespace HallodocMVC.Repository.Admin.Repository
         #endregion
 
         #region EditAdministratorInfo
-        public async Task<bool> EditAdministratorInfo(ViewAdminProfile _viewAdminProfile)
+        public async Task<bool> EditAdministratorInfo(ViewAdminProfile _viewAdminProfile,string aspnetid)
         {
             try
             {
-                if (_viewAdminProfile == null)
+                var isAdminExist = _context.Aspnetusers.FirstOrDefault(x => x.Email == _viewAdminProfile.Email && x.Id != aspnetid);
+                if (_viewAdminProfile == null || isAdminExist != null)
                 {
                     return false;
                 }
                 else
                 {
                     var DataForChange = await _context.Admins.Where(W => W.Adminid == _viewAdminProfile.AdminId).FirstOrDefaultAsync();
+                    var DataForAspnetuser = await _context.Aspnetusers.Where(W => W.Id == aspnetid).FirstOrDefaultAsync();
                     if (DataForChange != null)
                     {
                         DataForChange.Email = _viewAdminProfile.Email;
@@ -105,6 +107,12 @@ namespace HallodocMVC.Repository.Admin.Repository
                         DataForChange.Mobile = _viewAdminProfile.Mobile;
                         _context.Admins.Update(DataForChange);
                         _context.SaveChanges();
+
+                        DataForAspnetuser.Phonenumber = _viewAdminProfile.Mobile;
+                        DataForAspnetuser.Email = _viewAdminProfile.Email;
+                        _context.Aspnetusers.Update(DataForAspnetuser);
+                        _context.SaveChanges();
+
                         List<int> regions = await _context.Adminregions.Where(r => r.Adminid == _viewAdminProfile.AdminId).Select(req => req.Regionid).ToListAsync();
                         List<int> priceList = _viewAdminProfile.Regionsid.Split(',').Select(int.Parse).ToList();
                         foreach (var item in priceList)
@@ -229,67 +237,76 @@ namespace HallodocMVC.Repository.Admin.Repository
         {
             try
             {
-                if (admindata.UserName != null && admindata.Password != null)
+                var isAdminExist = _context.Aspnetusers.FirstOrDefault(x => x.Email == admindata.Email);
+                if (isAdminExist == null)
                 {
-                    //Aspnet_user
-                    var Aspnetuser = new Aspnetuser();
-                    var hasher = new PasswordHasher<string>();
-                    Aspnetuser.Id = Guid.NewGuid().ToString();
-                    Aspnetuser.Username = admindata.UserName;
-                    Aspnetuser.Passwordhash = hasher.HashPassword(null, admindata.Password);
-                    Aspnetuser.Email = admindata.Email;
-                    Aspnetuser.CreatedDate = DateTime.Now;
-                    _context.Aspnetusers.Add(Aspnetuser);
-                    _context.SaveChanges();
-
-                    //aspnet_user_roles
-                    var aspnetuserroles = new Aspnetuserrole();
-                    aspnetuserroles.Userid = Aspnetuser.Id;
-                    aspnetuserroles.Roleid = "1";
-                    _context.Aspnetuserroles.Add(aspnetuserroles);
-                    _context.SaveChanges();
-
-                    //Admin
-                    var Admin = new HalloDoc.Entity.DataModels.Admin();
-                    Admin.Aspnetuserid = Aspnetuser.Id;
-                    Admin.Firstname = admindata.Firstname;
-                    Admin.Lastname = admindata.Lastname;
-                    Admin.Status = 1;
-                    Admin.Roleid = admindata.Roleid;
-                    Admin.Email = admindata.Email;
-                    Admin.Mobile = admindata.Mobile;
-                    Admin.Isdeleted = new BitArray(1);
-                    Admin.Isdeleted[0] = false;
-                    Admin.Address1 = admindata.Address1;
-                    Admin.Address2 = admindata.Address2;
-                    Admin.City = admindata.City;
-                    Admin.Zip = admindata.Zipcode;
-                    Admin.Altphone = admindata.AltMobile;
-                    Admin.Createddate = DateTime.Now;
-                    Admin.Createdby = AdminId;
-                    Admin.Regionid = admindata.State;
-                    //Admin.Regionid = admindata.Regionid;
-                    _context.Admins.Add(Admin);
-                    _context.SaveChanges();
-
-                    //Admin_region
-                    List<int> priceList = admindata.Regionsid.Split(',').Select(int.Parse).ToList();
-                    foreach (var item in priceList)
+                    if (admindata.UserName != null && admindata.Password != null)
                     {
-                        Adminregion ar = new Adminregion();
-                        ar.Regionid = item;
-                        ar.Adminid = (int)Admin.Adminid;
-                        _context.Adminregions.Add(ar);
+                        //Aspnet_user
+                        var Aspnetuser = new Aspnetuser();
+                        var hasher = new PasswordHasher<string>();
+                        Aspnetuser.Id = Guid.NewGuid().ToString();
+                        Aspnetuser.Username = admindata.UserName;
+                        Aspnetuser.Passwordhash = hasher.HashPassword(null, admindata.Password);
+                        Aspnetuser.Email = admindata.Email;
+                        Aspnetuser.CreatedDate = DateTime.Now;
+                        Aspnetuser.Phonenumber = admindata.Mobile;
+                        _context.Aspnetusers.Add(Aspnetuser);
                         _context.SaveChanges();
+
+                        //aspnet_user_roles
+                        var aspnetuserroles = new Aspnetuserrole();
+                        aspnetuserroles.Userid = Aspnetuser.Id;
+                        aspnetuserroles.Roleid = "1";
+                        _context.Aspnetuserroles.Add(aspnetuserroles);
+                        _context.SaveChanges();
+
+                        //Admin
+                        var Admin = new HalloDoc.Entity.DataModels.Admin();
+                        Admin.Aspnetuserid = Aspnetuser.Id;
+                        Admin.Firstname = admindata.Firstname;
+                        Admin.Lastname = admindata.Lastname;
+                        Admin.Status = 1;
+                        Admin.Roleid = admindata.Roleid;
+                        Admin.Email = admindata.Email;
+                        Admin.Mobile = admindata.Mobile;
+                        Admin.Isdeleted = new BitArray(1);
+                        Admin.Isdeleted[0] = false;
+                        Admin.Address1 = admindata.Address1;
+                        Admin.Address2 = admindata.Address2;
+                        Admin.City = admindata.City;
+                        Admin.Zip = admindata.Zipcode;
+                        Admin.Altphone = admindata.AltMobile;
+                        Admin.Createddate = DateTime.Now;
+                        Admin.Createdby = AdminId;
+                        Admin.Regionid = admindata.State;
+                        //Admin.Regionid = admindata.Regionid;
+                        _context.Admins.Add(Admin);
+                        _context.SaveChanges();
+
+                        //Admin_region
+                        List<int> priceList = admindata.Regionsid.Split(',').Select(int.Parse).ToList();
+                        foreach (var item in priceList)
+                        {
+                            Adminregion ar = new Adminregion();
+                            ar.Regionid = item;
+                            ar.Adminid = (int)Admin.Adminid;
+                            _context.Adminregions.Add(ar);
+                            _context.SaveChanges();
+                        }
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
                     }
                 }
                 else
                 {
                     return false;
                 }
-                return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

@@ -38,6 +38,7 @@ namespace HalloDoc.Controllers.Admin
         public async Task<IActionResult> AddEditBusiness(int? VendorId)
         {
             List<HealthProfessionalTypeComboBox> hpt = await _combobox.healthprofessionaltype();
+            ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             ViewBag.ProfessionType = hpt;
             if (VendorId == null)
             {

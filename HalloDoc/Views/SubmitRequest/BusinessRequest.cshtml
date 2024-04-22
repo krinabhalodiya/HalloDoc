@@ -7,7 +7,7 @@
 <div class="d-flex justify-content-center">
     <div class="d-flex flex-column my-2 col-lg-8 col-md-10">
         <div class="d-flex justify-content-end pe-2">
-            <a asp-controller="SubmitRequest" asp-action="Index" class="btn border border-info">
+            <a onclick="history.go(-1);" class="btn border border-info">
                 <strong class="text-info">
                     <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
                 </strong>
@@ -35,11 +35,11 @@
                     
                     <div class="col-md-6 phone">
                         <div class="form-floating mb-3 h-100">
-                            <input asp-for="BUS_PhoneNumber" type="tel" class="form-control shadow-none" id="phone" autocomplete="off" />
-                            <span id="error-msg" class="text-danger"></span>
+                            <input asp-for="BUS_PhoneNumber" type="tel" class="form-control shadow-none" id="phone1" autocomplete="off" />
+                            <span id="error-msg1" class="text-danger"></span>
+                            <span asp-validation-for="BUS_PhoneNumber" class="text-danger"></span>
                         </div>
                     </div>
-                    
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
                             <input asp-for="BUS_Email" type="email" class="form-control shadow-none" id="BUS_Email" placeholder="name@example.com">
@@ -104,8 +104,8 @@
                     </div>
                     <div class="col-md-6 phone">
                         <div class="form-floating mb-3 h-100">
-                            <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none" id="PhoneNumber" placeholder="Enter phone number">
-                            <label for="PhoneNumber">PhoneNumber</label>
+                            <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none" id="phone" autocomplete="off" />
+                            <span id="error-msg" class="text-danger"></span>
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
                     </div>
@@ -151,7 +151,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-info text-white mx-2">Submit</button>
+                    <button type="submit" class="btn btn-info text-white mx-2" id="submit">Submit</button>
                     <a asp-controller="CreateRequest" asp-action="Index" class="btn border border-info text-info mx-2">Cancel</a>
                 </div>
             </form>
@@ -164,7 +164,6 @@
 <script>
     $(document).ready(function () {
         $('#targetModal').modal('show');
-        phone1();
         phone2();
     });
     </script>

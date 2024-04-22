@@ -54,7 +54,7 @@ namespace HalloDoc.Controllers.Admin
         [HttpPost]
         public async Task<IActionResult> EditAdministratorInfo(ViewAdminProfile _viewAdminProfile)
         {
-            if (await _IMyProfileRepository.EditAdministratorInfo(_viewAdminProfile))
+            if (await _IMyProfileRepository.EditAdministratorInfo(_viewAdminProfile,CV.ID()))
             {
                 _notyf.Success("Information changed Successfully...");
             }

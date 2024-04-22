@@ -191,7 +191,16 @@ namespace HalloDoc.Controllers
         #region UploadDoc_Files
         public IActionResult UploadDoc(int Requestid, IFormFile file)
         {
-            if (_IAdminDashBoardActionsRepository.SaveDoc(Requestid, file))
+            var uploader = "Patient";
+            if(CV.role() == "Provider")
+            {
+                uploader = "Provider";
+            }
+            else if(CV.role() == "Admin")
+            {
+                uploader = "Admin";
+            }
+            if (_IAdminDashBoardActionsRepository.SaveDoc(Requestid, file,CV.UserID(),uploader))
             {
                 _notyf.Success("File Uploaded Successfully");
             }
@@ -503,7 +512,12 @@ namespace HalloDoc.Controllers
         #region UploadDoc_Files
         public IActionResult UploadDocProvider(int Requestid, IFormFile file)
         {
-            if (_IAdminDashBoardActionsRepository.SaveDoc(Requestid, file))
+            var requesttype = "Provider";
+            if (CV.role() == "Admin")
+            {
+                 requesttype = "Admin";
+            }
+            if (_IAdminDashBoardActionsRepository.SaveDoc(Requestid, file,CV.UserID(), requesttype))
             {
                 _notyf.Success("File Uploaded Successfully");
             }
@@ -514,6 +528,7 @@ namespace HalloDoc.Controllers
             return RedirectToAction("ConcludeCare", "AdminActions", new { id = Requestid });
         }
         #endregion
+
         #region ConcludecarePost
         public IActionResult ConcludeCarePost(int RequestId, string Notes)
         {

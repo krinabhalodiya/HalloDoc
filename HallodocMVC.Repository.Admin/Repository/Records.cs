@@ -188,7 +188,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                                                           RegionId = (int)rc.Regionid,
                                                           RequestorPhoneNumber = req.Phonenumber,
                                                           ConcludedDate = req.Createddate,
-                                                          ConfirmationNumber = req.Confirmationnumber
+                                                          ConfirmationNumber = req.Confirmationnumber,
+                                                          IsFinalize = _context.Encounterforms.Any(ef => ef.Requestid == req.Requestid && ef.Isfinalize),
                                                       }).ToListAsync();
 
             int totalItemCount = allData.Count;

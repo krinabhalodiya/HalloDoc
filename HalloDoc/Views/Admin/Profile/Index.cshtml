@@ -101,9 +101,9 @@
                             </div>
                             <div class="col-md-6 pb-3">
                                 <div class="form-floating">
-                                    <input type="text" asp-for="Email" class="form-control shadow-none input1" id="email1" placeholder="Date Of Birth">
+                                    <input type="text" asp-for="confirmEmail" class="form-control shadow-none input1" id="email1" placeholder="Date Of Birth">
                                     <label for="email1">Confirm Email</label>
-                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                    <span asp-validation-for="confirmEmail" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6 pb-3">
@@ -173,7 +173,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <select class="form-select input2" required aria-label="Phone" asp-for="State" data-allow-clear="true" tabindex="-1" onchange="selectprovider()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                                    <select class="form-select input2" required aria-label="Phone" asp-for="State" data-allow-clear="true" tabindex="-1" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                                         <option value="">Select States</option>
                                     </select>
                                     <label for="region2">State</label>

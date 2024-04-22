@@ -165,13 +165,14 @@ namespace HallodocMVC.Repository.Admin.Repository
         {
             try
             {
-                if (physiciandata.UserName != null && physiciandata.PassWord != null)
+                var isphysicianexist = await _context.Aspnetusers.Where(r => r.Email == physiciandata.Email).FirstOrDefaultAsync();
+                if (physiciandata.PassWord != null && isphysicianexist == null)
                 {
                     // ASP_User
                     var Aspnetuser = new Aspnetuser();
                     var hasher = new PasswordHasher<string>();
                     Aspnetuser.Id = Guid.NewGuid().ToString();
-                    Aspnetuser.Username = physiciandata.UserName;
+                    Aspnetuser.Username = string.Concat("MD.", physiciandata.Lastname, physiciandata.Firstname.AsSpan(0,1));
                     Aspnetuser.Passwordhash = hasher.HashPassword(null, physiciandata.PassWord);
                     Aspnetuser.Email = physiciandata.Email;
                     Aspnetuser.CreatedDate = DateTime.Now;
@@ -200,7 +201,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                     Physician.Address1 = physiciandata.Address1;
                     Physician.Address2 = physiciandata.Address2;
                     Physician.City = physiciandata.City;
-                    Physician.Regionid = physiciandata.Regionid;
+                    Physician.Regionid = physiciandata.State;
                     Physician.Zip = physiciandata.Zipcode;
                     Physician.Altphone = physiciandata.Altphone;
                     Physician.Businessname = physiciandata.Businessname;
@@ -248,26 +249,23 @@ namespace HallodocMVC.Repository.Admin.Repository
                         _context.SaveChanges();
 
                     }
+                    return true;
                 }
                 else
                 {
-
+                    return false;
                 }
-                return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-
+                return false;
             }
-            return false;
         }
         #endregion
 
         #region GetPhysicianById
         public async Task<PhysiciansData> GetPhysicianById(int id)
         {
-
-
             PhysiciansData? pl = await (from r in _context.Physicians
                                    join Aspnetuser in _context.Aspnetusers
                                    on r.Aspnetuserid equals Aspnetuser.Id into aspGroup
@@ -331,7 +329,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         }
         #endregion
 
-        #region SavePhysicianInfo
+        #region EditAccountInfo
         public async Task<bool> EditAccountInfo(PhysiciansData vm)
         {
             try
@@ -401,7 +399,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         #endregion
 
         #region EditPhysicianInfo
-        public async Task<bool> EditPhysicianInfo(PhysiciansData vm)
+        public async Task<bool> EditPhysicianInfo(PhysiciansData vm, string aspnetid)
         {
             try
             {
@@ -411,10 +409,14 @@ namespace HallodocMVC.Repository.Admin.Repository
                 }
                 else
                 {
+                    var isphysicianexist = await _context.Aspnetusers.Where(r => r.Email == vm.Email && r.Id != aspnetid).FirstOrDefaultAsync();
                     var DataForChange = await _context.Physicians
                         .Where(W => W.Physicianid == vm.Physicianid)
                         .FirstOrDefaultAsync();
-                    if (DataForChange != null)
+                    var DataForAspnetUser = await _context.Aspnetusers
+                        .Where(W => W.Id == aspnetid)
+                        .FirstOrDefaultAsync();
+                    if (DataForChange != null && isphysicianexist == null)
                     {
                         DataForChange.Firstname = vm.Firstname;
                         DataForChange.Lastname = vm.Lastname;
@@ -423,6 +425,14 @@ namespace HallodocMVC.Repository.Admin.Repository
                         DataForChange.Medicallicense = vm.Medicallicense;
                         DataForChange.Npinumber = vm.Npinumber;
                         DataForChange.Syncemailaddress = vm.Syncemailaddress;
+                        DataForChange.Modifiedby = aspnetid;
+                        DataForChange.Modifieddate = DateTime.Now;
+                        _context.Physicians.Update(DataForChange);
+                        _context.SaveChanges();
+
+                        DataForAspnetUser.Email = vm.Email;
+                        DataForAspnetUser.Phonenumber = vm.Mobile;
+                        DataForAspnetUser.Modifieddate = DateTime.Now;
                         _context.Physicians.Update(DataForChange);
                         _context.SaveChanges();
                         List<int> regions = await _context.Physicianregions.Where(r => r.Physicianid == vm.Physicianid).Select(req => req.Regionid).ToListAsync();
@@ -460,7 +470,6 @@ namespace HallodocMVC.Repository.Admin.Repository
                     {
                         return false;
                     }
-
                 }
             }
             catch (Exception ex)

@@ -165,6 +165,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                         Phonenumber = requestData.Phonenumber,
                         Email = requestData.Email,
                         Reason = Note,
+                        Isactive = new BitArray(new[] { true }),
                         Createddate = DateTime.Now,
                         Modifieddate = DateTime.Now
                     };
@@ -408,6 +409,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         public async Task<ViewDocuments> GetDocumentByRequest(int? id, ViewDocuments viewDocument)
         {
             var req = _context.Requests.FirstOrDefault(r => r.Requestid == id);
+            var reqclient = _context.Requestclients.FirstOrDefault(r => r.Requestid == id);
             var result = (from requestWiseFile in _context.Requestwisefiles
                          join request in _context.Requests on requestWiseFile.Requestid equals request.Requestid
                          join physician in _context.Physicians on request.Physicianid equals physician.Physicianid into physicianGroup
@@ -417,7 +419,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                          where request.Requestid == id && requestWiseFile.Isdeleted == new BitArray(1)
                          select new Documents
                          {
-                             Uploader = requestWiseFile.Physicianid != null ? phys.Firstname : (requestWiseFile.Adminid != null ? adm.Firstname : request.Firstname),
+                             Uploader = requestWiseFile.Physicianid != null ? phys.Firstname : (requestWiseFile.Adminid != null ? adm.Firstname : (requestWiseFile.Ispatientrecords != null ? reqclient.Firstname : req.Firstname)),
                              isDeleted = requestWiseFile.Isdeleted.ToString(),
                              RequestwisefilesId = requestWiseFile.Requestwisefileid,
                              Status = requestWiseFile.Doctype,
@@ -455,8 +457,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                 PageSize = viewDocument.PageSize,
                 SortedColumn = viewDocument.SortedColumn,
                 IsAscending = viewDocument.IsAscending,
-                Firstname = req.Firstname,
-                Lastname = req.Lastname,
+                Firstname = reqclient.Firstname,
+                Lastname = reqclient.Lastname,
                 ConfirmationNumber = req.Confirmationnumber,
                 RequestID = req.Requestid
             };
@@ -465,7 +467,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         #endregion
 
         #region Save_Document
-        public bool SaveDoc(int Requestid, IFormFile file)
+        public bool SaveDoc(int Requestid, IFormFile file, string aspnetid, string uploadertype)
         {
             string UploadDoc = FileSave.UploadDoc(file, Requestid);
             var requestwisefile = new Requestwisefile
@@ -473,9 +475,20 @@ namespace HallodocMVC.Repository.Admin.Repository
                 Requestid = Requestid,
                 Filename = UploadDoc,
                 Createddate = DateTime.Now,
-                Isdeleted = new BitArray(1),
-                Adminid = 1
+                Isdeleted = new BitArray(1)
             };
+            if(uploadertype == "Admin")
+            {
+                requestwisefile.Adminid = Int32.Parse(aspnetid) ;
+            }
+            else if(uploadertype == "Provider")
+            {
+                requestwisefile.Physicianid = Int32.Parse(aspnetid) ;
+            }
+            else
+            {
+                requestwisefile.Ispatientrecords = new BitArray(new[] { true });
+            }
             _context.Requestwisefiles.Add(requestwisefile);
             _context.SaveChanges();
             return true;
@@ -574,6 +587,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == requestid);
             var agreementUrl = "https://localhost:44306/SendAgreement/Index?RequestID=" + requestid;
             _emailConfig.SendMail(res.Email, "Agreement for your request", $"<a href='{agreementUrl}'>Agree/Disagree</a>");
+            _emailConfig.SendSMS(res.Phonenumber, $"Agreement for your request <a href='{agreementUrl}'>Agree/Disagree</a>");
             return true;
         }
         #endregion
@@ -853,7 +867,6 @@ namespace HallodocMVC.Repository.Admin.Repository
                         Skin = Data.Skin,
                         Temp = Data.Temp,
                         TreatmentPlan = Data.Treatment,
-                        Adminid = admindata.Adminid,
                         Createddate = DateTime.Now,
                         Modifieddate = DateTime.Now,
                     };
@@ -892,7 +905,6 @@ namespace HallodocMVC.Repository.Admin.Repository
                         encdetails.Skin = Data.Skin;
                         encdetails.Temp = Data.Temp;
                         encdetails.TreatmentPlan = Data.Treatment;
-                        encdetails.Adminid = admindata.Adminid;
                         encdetails.Modifieddate = DateTime.Now;
                         _context.Encounterforms.Update(encdetails);
                         _context.SaveChanges();

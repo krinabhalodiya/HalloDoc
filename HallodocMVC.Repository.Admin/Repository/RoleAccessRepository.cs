@@ -132,7 +132,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             try
             {
                 Role check = await _context.Roles.Where(r => r.Name == role.Name).FirstOrDefaultAsync();
-                if (check == null && role != null && Menusid != null)
+                if (check == null && role != null && Menusid != null && role.Accounttype != 0)
                 {
                     Role r = new Role();
                     r.Name = role.Name;
@@ -159,7 +159,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -172,8 +172,9 @@ namespace HallodocMVC.Repository.Admin.Repository
         {
             try
             {
+                Role checkname = await _context.Roles.Where(r => r.Name == role.Name && r.Roleid != role.Roleid).FirstOrDefaultAsync();
                 Role check = await _context.Roles.Where(r => r.Roleid == role.Roleid).FirstOrDefaultAsync();
-                if (check != null && role != null && Menusid != null)
+                if (checkname==null && check != null && role != null && Menusid != null && role.Accounttype!=0)
                 {
                     check.Name = role.Name;
                     check.Accounttype = role.Accounttype;
@@ -215,7 +216,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -227,32 +228,40 @@ namespace HallodocMVC.Repository.Admin.Repository
 		{
 			try
 			{
-				BitArray bt = new BitArray(1);
-				bt.Set(0, true);
-				if (roleid == null)
-				{
-					return false;
-				}
-				else
-				{
-					var DataForChange = await _context.Roles
-						.Where(W => W.Roleid == roleid)
-						.FirstOrDefaultAsync();
-					if (DataForChange != null)
-					{
-						DataForChange.Isdeleted = bt;
-						DataForChange.Isdeleted[0] = true;
-						DataForChange.Modifieddate = DateTime.Now;
-						DataForChange.Modifiedby = AdminID;
-						_context.Roles.Update(DataForChange);
-						_context.SaveChanges();
-						return true;
-					}
-					else
-					{
-						return false;
-					}
-				}
+                var iscurrentrole = _context.Admins.FirstOrDefault(x => x.Roleid == roleid);
+                if (iscurrentrole != null)
+                {
+                    return false;
+                }
+                else
+                {
+                    BitArray bt = new BitArray(1);
+                    bt.Set(0, true);
+                    if (roleid == null)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        var DataForChange = await _context.Roles
+                            .Where(W => W.Roleid == roleid)
+                            .FirstOrDefaultAsync();
+                        if (DataForChange != null)
+                        {
+                            DataForChange.Isdeleted = bt;
+                            DataForChange.Isdeleted[0] = true;
+                            DataForChange.Modifieddate = DateTime.Now;
+                            DataForChange.Modifiedby = AdminID;
+                            _context.Roles.Update(DataForChange);
+                            _context.SaveChanges();
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
 			}
 			catch (Exception ex)
 			{

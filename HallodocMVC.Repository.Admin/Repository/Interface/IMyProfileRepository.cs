@@ -11,7 +11,7 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
     {
         public Task<ViewAdminProfile> GetProfileDetails(int UserId);
         public Task<bool> EditPassword(string password, int adminId);
-        public Task<bool> EditAdministratorInfo(ViewAdminProfile _viewAdminProfile);
+        public Task<bool> EditAdministratorInfo(ViewAdminProfile _viewAdminProfile, string aspnetid);
         public Task<bool> BillingInfoEdit(ViewAdminProfile _viewAdminProfile);
         public Task<bool> SaveAdminInfo(ViewAdminProfile vm);
         public Task<bool> AdminPost(ViewAdminProfile admindata, string AdminId);

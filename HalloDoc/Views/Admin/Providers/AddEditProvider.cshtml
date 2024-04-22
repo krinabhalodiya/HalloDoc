@@ -42,26 +42,28 @@
         }
     </div>
     @* Profile Information *@
-	<div class="bg-white rounded shadow mt-3 pb-3">
+    <div class="bg-white rounded shadow mt-3 pb-3">
         <form method="post" asp-controller="Providers" asp-action="PhysicianAdd" id="addedit" enctype="multipart/form-data">
-        <div class="p-4 border border-bottom">
-            @* Account Information *@
-            <div class="w-100 d-flex justify-content-between">
-                <h5><strong>Account Information</strong></h5>
-                @if (CV.role() == "Provider")
-                {
+            <div class="p-4 border border-bottom">
+                @* Account Information *@
+                <div class="w-100 d-flex justify-content-between">
+                    <h5><strong>Account Information</strong></h5>
+                    @if (CV.role() == "Provider")
+                    {
                         var userid = Int32.Parse(@CV.UserID());
                         <a class="btn border-info text-info" data-bs-toggle="modal" data-bs-target="#ContactAdmin">Contact To Admin</a>
-                }
-            </div>
+                    }
+                </div>
                 <div class="col-xl-12 mt-3"  >
                 <div class="row pb-4">
-                    <div class="col-md-6 pb-3">
-                        <div class="form-floating">
-                            <input type="text" asp-for="UserName" class="form-control shadow-none" id="UserName" placeholder=Suchtext disabled/>
-                            <label for="UserName">User Name</label>
+                    @if (@ViewData["PhysicianAccount"] == "Edit"){
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="UserName" class="form-control shadow-none" id="UserName" placeholder=Suchtext disabled/>
+                                <label for="UserName">User Name</label>
+                            </div>
                         </div>
-                    </div>
+                    }
                     <div class="col-md-6 pb-3">
                         <div class="form-floating">
                             <input type="text" asp-for="PassWord" class="form-control shadow-none" id="PassWord" placeholder="Last Name" />
@@ -589,7 +591,7 @@
         filename = this.files[0].name;
         $("#choosenfile").text(filename);
     });
-    $("#file1").change(function () {
+    $("#file2").change(function () {
         filename2 = this.files[0].name;
         $("#choosenfile1").text(filename2);
     });

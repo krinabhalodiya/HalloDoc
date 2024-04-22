@@ -15,7 +15,6 @@ namespace HalloDoc.Entity.Models.PatientModels
         [Required(ErrorMessage = "Last Name is required")]
         public string FF_LastName { get; set; }
         [Required(ErrorMessage = "Contact number is required")]
-        [RegularExpression(@"([0-9]{10})", ErrorMessage = "Please enter 10 digits for a contact number")]
         public string FF_PhoneNumber { get; set; }
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
@@ -34,7 +33,6 @@ namespace HalloDoc.Entity.Models.PatientModels
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Contact number is required")]
-        [RegularExpression(@"([0-9]{10})", ErrorMessage = "Please enter 10 digits for a contact number")]
         public string PhoneNumber { get; set; }
         [Required(ErrorMessage = "Street is required")]
         public string Street { get; set; }

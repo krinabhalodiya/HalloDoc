@@ -19,7 +19,7 @@ namespace HalloDoc.Entity.Models
         [Required(ErrorMessage = "City is required")]
         public string City { get; set; }
         [Required(ErrorMessage = "State is required")]
-        public string State { get; set; }
+        public int State { get; set; }
         [Required(ErrorMessage = "ZipCode is required")]
         public string ZipCode { get; set; }
         public DateTime CreatedDate { get; set; }
