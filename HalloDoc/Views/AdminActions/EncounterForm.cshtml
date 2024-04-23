@@ -60,9 +60,9 @@
                     </div>
                 </div>
                 <div class="col-md-6 pb-3">
-                    <div class="form-floating">
-                        <input asp-for="PhoneNumber" type="text" class="form-control shadow-none inputs" id="PhoneNumber" disabled>
-                        <label for="PhoneNumber">Phone Number</label>
+                    <div class="form-floating phone">
+                        <input asp-for="PhoneNumber" type="text" class="form-control shadow-none inputs" id="phone" disabled>
+                        <span id="error-msg" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6 pb-3">
@@ -221,7 +221,7 @@
                     </div>
                 </div>
                 <div class="card-footer border-0 bg-transparent text-end">
-                    <button type="submit" class="btn btn-info text-white">Save Changes</button>
+                    <button type="submit" class="btn btn-info text-white" id="submit">Save Changes</button>
                     @{
                         if (CV.role()=="Provider")
                         {
@@ -239,3 +239,8 @@
 
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    window.onload = function (e) {
+        phone1();
+    }
+</script>

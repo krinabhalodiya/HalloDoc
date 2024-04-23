@@ -25,14 +25,14 @@ namespace HalloDoc.Controllers.Admin
             var jwtservice = filterContext.HttpContext.RequestServices.GetService<IJwtService>();
             if (jwtservice == null)
             {
-                filterContext.Result = new RedirectResult("../Home/AuthError");
+                filterContext.Result = new RedirectResult("~/Home/AuthError");
                 return;
             }
             var request = filterContext.HttpContext.Request;
             var toket = request.Cookies["jwt"];
             if (toket == null || !jwtservice.ValidateToken(toket, out JwtSecurityToken jwtSecurityTokenHandler))
             {
-                filterContext.Result = new RedirectResult("../Home/AuthError");
+                filterContext.Result = new RedirectResult("~/Home/AuthError");
                 return;
             }
             var roles = jwtSecurityTokenHandler.Claims.FirstOrDefault(claiim => claiim.Type == ClaimTypes.Role);
@@ -47,7 +47,7 @@ namespace HalloDoc.Controllers.Admin
 			}
 			if (roles == null)
             {
-                filterContext.Result = new RedirectResult("../Home/AuthError");
+                filterContext.Result = new RedirectResult("~/Home/AuthError");
                 return;
             }
             var flag = false;
@@ -67,12 +67,15 @@ namespace HalloDoc.Controllers.Admin
 			{
 				if (flag == false || !str.Contains(_manu))
 				{
-					filterContext.Result = new RedirectResult("../Home/AuthError");
+                    if(_manu != "")
+                    {
+                        filterContext.Result = new RedirectResult("~/Home/AuthError");
+                    }
 				}
 			}
 			if (!flag)
             {
-                filterContext.Result = new RedirectResult("../Home/AuthError");
+                filterContext.Result = new RedirectResult("~/Home/AuthError");
             }
         }
     }

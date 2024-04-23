@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 
 namespace HalloDoc.Controllers.Admin
 {
+    
     public class ProvidersController : Controller
     {
         #region Constructor
@@ -29,9 +30,10 @@ namespace HalloDoc.Controllers.Admin
             _combobox = combobox;
             _emailConfig = emailConfiguration;
         }
-		#endregion
-		#region Index
-		public async Task<IActionResult> IndexAsync(int? region)
+        #endregion
+        #region Index
+        [CheckProviderAccess("Admin")]
+        public async Task<IActionResult> IndexAsync(int? region)
         {
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             var v = await _IProviderRepository.PhysicianAll();
@@ -49,6 +51,7 @@ namespace HalloDoc.Controllers.Admin
         #endregion
 
         #region ChangeNotificationPhysician
+        [CheckProviderAccess("Admin")]
         public async Task<IActionResult> ChangeNotificationPhysician(string changedValues)
 		{
 			Dictionary<int, bool> changedValuesDict = JsonConvert.DeserializeObject<Dictionary<int, bool>>(changedValues);
@@ -58,6 +61,7 @@ namespace HalloDoc.Controllers.Admin
         #endregion
 
         #region SendMessage
+        [CheckProviderAccess("Admin")]
         public async Task<IActionResult> SendMessage(string? email, string? contact, int? way, string? message)
         {
             bool result = false, sms = false;
@@ -86,8 +90,9 @@ namespace HalloDoc.Controllers.Admin
         }
         #endregion
 
-        
+
         #region AddEdit_Profile
+        [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> PhysicianProfile(int? id)
         {
 
@@ -109,6 +114,7 @@ namespace HalloDoc.Controllers.Admin
         #endregion
         #region Physician_Add
         [HttpPost]
+        [CheckProviderAccess("Admin")]
         public async Task<IActionResult> PhysicianAdd(PhysiciansData physicians)
         {
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
@@ -126,6 +132,7 @@ namespace HalloDoc.Controllers.Admin
         }
         #endregion
         #region Update_Physician_Profile
+        [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> EditAccountInfo(PhysiciansData data)
         {
             string actionName = RouteData.Values["action"].ToString();
@@ -142,6 +149,7 @@ namespace HalloDoc.Controllers.Admin
         }
         #endregion
         #region ResetPassAdmin
+        [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> ResetPassAdmin(string password, int Physicianid)
         {
             if (await _IProviderRepository.ChangePasswordAsync(password, Physicianid))
@@ -156,6 +164,7 @@ namespace HalloDoc.Controllers.Admin
         }
         #endregion
         #region EditPhysicianInfo
+        [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> EditPhysicianInfo(PhysiciansData data)
         {
             if (await _IProviderRepository.EditPhysicianInfo(data,CV.ID()))
@@ -172,6 +181,7 @@ namespace HalloDoc.Controllers.Admin
         #endregion
 
         #region EditMailBillingInfo
+        [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> EditMailBillingInfo(PhysiciansData data)
         {
             if (await _IProviderRepository.EditMailBillingInfo(data, CV.ID()))
@@ -188,6 +198,7 @@ namespace HalloDoc.Controllers.Admin
         #endregion
 
         #region EditProviderProfile
+        [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> EditProviderProfile(PhysiciansData data)
         {
             if (await _IProviderRepository.EditProviderProfile(data, CV.ID()))
@@ -203,6 +214,7 @@ namespace HalloDoc.Controllers.Admin
         }
         #endregion
         #region EditProviderOnbording
+        [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> EditProviderOnbording(PhysiciansData data)
         {
             if (await _IProviderRepository.EditProviderOnbording(data, CV.ID()))
@@ -218,6 +230,7 @@ namespace HalloDoc.Controllers.Admin
         }
         #endregion
         #region DeletePhysician
+        [CheckProviderAccess("Admin")]
         public async Task<IActionResult> DeletePhysician(int PhysicianID)
         {
             bool data = await _IProviderRepository.DeletePhysician(PhysicianID, CV.ID());

@@ -78,17 +78,13 @@ namespace HallodocMVC.Repository.Admin.Repository
                             {
                                 string responseBody = await response.Content.ReadAsStringAsync();
                                 dynamic ipInfo = Newtonsoft.Json.JsonConvert.DeserializeObject(responseBody);
-
                                 string[] coordinates = ipInfo.loc.ToString().Split(',');
-
                                 string city = ipInfo.city.ToString();
                                 string region = ipInfo.region.ToString();
                                 string country = ipInfo.country.ToString();
                                 string postal = ipInfo.postal.ToString();
                                 string address = $"{city}, {region}, {country} {postal}";
-
                                 var data2 = _context.Physicianlocations.FirstOrDefault(e => e.Physicianid == admindata.Physicianid);
-
                                 data2.Longitude = Convert.ToDecimal(coordinates[1]);
                                 data2.Latitude = Convert.ToDecimal(coordinates[0]);
                                 data2.Address = address;

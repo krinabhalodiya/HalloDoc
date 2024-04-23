@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HalloDoc.Controllers.Admin
 {
+    [CheckProviderAccess("Admin", "VendorsInfo")]
     public class PartnersController : Controller
     {
         #region Constructor

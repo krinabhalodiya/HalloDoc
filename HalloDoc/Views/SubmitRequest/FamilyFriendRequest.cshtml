@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "_RequestLayout";
+    string path = Context.Request.Path;
 }
 @model HalloDoc.Entity.Models.PatientModels.CreateFamilyFriendRequestModel
 <partial name="../SubmitRequest/Confirmation.cshtml" />
@@ -14,7 +15,7 @@
             </a>
         </div>
         <div class="shadow bg-white rounded m-2 p-2">
-            <form asp-controller="SubmitRequest" asp-action="CreateFamilyFriendRequest" method="post" enctype="multipart/form-data">
+            <form asp-controller="@(path.StartsWith("/AdminDashBoard/PatientRequest") ? "AdminDashBoard" : "SubmitRequest")" asp-action="CreateFamilyFriendRequest" method="post" enctype="multipart/form-data">
                 <!-- Family / Friend Information -->
                 <strong class="fs-5 p-2">Family / Friend Information</strong>
                 <div class="row p-2">

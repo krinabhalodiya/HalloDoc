@@ -40,6 +40,7 @@ function phone1() {
 
         if (!input.value.trim()) {
             showError("Required");
+            document.getElementById('submit').setAttribute("disabled", "disabled");
 
         } else {
             // Assume 'e' is a validation object/library with methods isValidNumber() and getValidationError()
@@ -48,11 +49,13 @@ function phone1() {
                 const full_number = phoneInput.getNumber(intlTelInputUtils.numberFormat.E164);
                 console.log(full_number);
                 document.getElementById("phone").value = full_number;
+                document.getElementById('submit').removeAttribute("disabled");
 
             } else {
                 const errorCode = phoneInput.getValidationError(input.value);
                 const msg = errorMap[errorCode] || "Invalid number";
                 showError(msg);
+                document.getElementById('submit').setAttribute("disabled", "disabled");
             }
         }
     });
@@ -236,6 +239,67 @@ function phone2() {
 
    
     
+}
+function phone3() {
+    const phoneInputField3 = document.querySelector("#phone3");
+    const phoneInput3 = window.intlTelInput(phoneInputField3, {
+        initialCountry: "auto",
+        geoIpLookup: callback => {
+            fetch("https://ipapi.co/json")
+                .then(res => res.json())
+                .then(data => callback(data.country_code))
+                .catch(() => callback("us"));
+        },
+        separateDialCode: true,
+        hiddenInput: "full",
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
+    const input3 = document.querySelector("#phone3");
+    const button3 = document.querySelector("#phone3");
+    const errorMsg3 = document.querySelector("#error-msg3");
+    const errorMap3 = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+
+    const reset3 = () => {
+        input3.classList.remove("error");
+        errorMsg3.innerHTML = "";
+        errorMsg3.classList.add("hide");
+    };
+
+    const showError3 = (msg) => {
+        input3.classList.add("error");
+        errorMsg3.innerHTML = msg;
+        errorMsg3.classList.remove("hide");
+    };
+
+    button3.addEventListener('focusout', (event) => {
+
+        reset3();
+
+        if (!input3.value.trim()) {
+            showError3("Required");
+            document.getElementById('submit3').setAttribute("disabled", "disabled");
+
+        } else {
+            // Assume 'e' is a validation object/library with methods isValidNumber() and getValidationError()
+            if (phoneInput3.isValidNumber(input3.value)) {
+
+                const full_number3 = phoneInput3.getNumber(intlTelInputUtils.numberFormat.E164);
+                console.log(full_number3);
+                document.getElementById("phone3").value = full_number3;
+                document.getElementById('submit3').removeAttribute("disabled");
+
+            } else {
+                const errorCode3 = phoneInput3.getValidationError(input3.value);
+                const msg3 = errorMap3[errorCode3] || "Invalid number";
+                showError3(msg3);
+                document.getElementById('submit3').setAttribute("disabled", "disabled");
+            }
+        }
+    });
+
+    // Reset error state on input change
+    input3.addEventListener('change', reset3);
+    input3.addEventListener('keyup', reset3);
 }
 
 $(document).ready(function () {

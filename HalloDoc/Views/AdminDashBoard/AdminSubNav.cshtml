@@ -61,7 +61,7 @@
             }
             @if (CV.role() == "Provider")
             {
-                @if (loginRepository.isAccessGranted((int)CV.RoleID(), "MySchedule"))
+                @if (loginRepository.isAccessGranted((int)CV.RoleID(), "Scheduling"))
                 {
                     <li class="nav-item me-3">
                         <a class="nav-link text-dark @(path.StartsWith("/ProviderLocation") ? "activesbnav" : "")" asp-action="Index" asp-controller="Scheduling">Scheduling</a>

@@ -6,10 +6,11 @@
 <script>
     window.onload = function (e) {
         toggleFormElements('true')
+        phone1();
     }
     function toggleFormElements(bDisabled) {
         var inputs = document.getElementsByClassName("inputs");
-        var submit = document.getElementById("save");
+        var submit = document.getElementById("submit");
         var editprofile = document.getElementById("edit");
         for (var i = 0; i < inputs.length; i++) {
             inputs[i].disabled = !inputs[i].disabled;
@@ -158,10 +159,10 @@
                     </div>
                     <div class="col-md-6 pb-3">
                         <div class="mb-3 d-flex">
-                            <div class="form-floating h-100 w-100">
+                            <div class="form-floating h-100 w-100 phone">
                                 <input asp-for="RC_PhoneNumber" type="tel" class="form-control shadow-none inputs" id="phone" autocomplete="off" placeholder="Phone Number">
-                                <label for="phone">Phone Number</label>
                                 <span asp-validation-for="RC_PhoneNumber" class="text-danger"></span>
+                                <span id="error-msg" class="text-danger"></span>
                             </div>
                             <button class="btn border border-info text-info mx-2 " style="height:3.5rem;width:4rem">
                                 <i class="bi bi-telephone-fill"></i>
@@ -180,7 +181,7 @@
                 @* Edit *@
                 <div class="d-flex justify-content-end">
                     <span id="edit" onclick=" toggleFormElements('true')" class="btn btn-info text-white rounded me-2">Edit</span>
-                    <input type="submit" value="Save" id="save" class="btn btn-info text-white rounded me-2">
+                    <input type="submit" value="Save" id="submit" class="btn btn-info text-white rounded me-2">
             </form>
             <form asp-action="CloseCaseUnpaid" asp-controller="AdminActions" asp-route-id="@Model.RequestID">
                 <input type="hidden" name="RequestID" value="@Model.RequestID" class="inputs" />

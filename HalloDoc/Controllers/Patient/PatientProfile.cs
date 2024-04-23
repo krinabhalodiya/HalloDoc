@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HalloDoc.Controllers.Patient
 {
+    [CheckProviderAccess("Patient")]
     public class PatientProfile : Controller
     {
         private readonly IProfile _IProfile;

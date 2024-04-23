@@ -28,18 +28,23 @@ namespace HallodocMVC.Repository.Admin.Repository
         #region Find_Location_Physician
         public async Task<List<PhysicianLocation>> FindPhysicianLocation()
         {
-            List<PhysicianLocation> pl = await _context.Physicianlocations
-                                    .OrderByDescending(x => x.Physicianname)
-                        .Select(r => new PhysicianLocation
-                        {
-                            locationid = r.Locationid,
-                            longitude = r.Longitude,
-                            latitude = r.Latitude,
-                            physicianname = r.Physicianname
-
-                        }).ToListAsync();
-            return pl;
-
+            var data = _context.Physicianlocations.ToList();
+            List<PhysicianLocation> lst = new List<PhysicianLocation>();
+            foreach (var item in data)
+            {
+                lst.Add(new PhysicianLocation
+                {
+                    Name = item.Physicianname,
+                    Latitude = item.Latitude,
+                    Longitude = item.Longitude,
+                    Address = item.Address,
+                    ImgPath = _context.Physicians.FirstOrDefault(e => e.Physicianid == item.Physicianid).Photo,
+                    PhysicianID = item.Physicianid,
+                    PhoneNumber = item.Physician.Mobile,
+                    Created = (DateTime)item.Createddate,
+                });
+            }
+            return lst;
         }
         #endregion
 
@@ -409,12 +414,13 @@ namespace HallodocMVC.Repository.Admin.Repository
                 }
                 else
                 {
-                    var isphysicianexist = await _context.Aspnetusers.Where(r => r.Email == vm.Email && r.Id != aspnetid).FirstOrDefaultAsync();
+                     var Username = string.Concat("MD.", vm.Lastname, vm.Firstname.AsSpan(0, 1));
+                    var isphysicianexist = await _context.Aspnetusers.Where(r => r.Email == vm.Email && r.Username != Username).FirstOrDefaultAsync();
                     var DataForChange = await _context.Physicians
                         .Where(W => W.Physicianid == vm.Physicianid)
                         .FirstOrDefaultAsync();
                     var DataForAspnetUser = await _context.Aspnetusers
-                        .Where(W => W.Id == aspnetid)
+                        .Where(W => W.Username == Username)
                         .FirstOrDefaultAsync();
                     if (DataForChange != null && isphysicianexist == null)
                     {

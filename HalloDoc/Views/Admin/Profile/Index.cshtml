@@ -4,8 +4,6 @@
 }
 @using static HalloDoc.Entity.Models.Constant;
 @model HalloDoc.Entity.Models.ViewAdminProfile;
-@using HallodocMVC.Repository.Admin.Repository.Interface
-@inject ILoginRepository loginRepository
 @{
     var enumData = from AdminStatus e in Enum.GetValues(typeof(AdminStatus))
                    select new
@@ -14,8 +12,7 @@
                        Name = e.ToString()
                    };
 }
-@if (loginRepository.isAccessGranted((int)CV.RoleID(), "MyProfile"))
-{
+
     <div class="container">
         <div class="d-flex justify-content-between">
             <div class="d-flex align-self-center">
@@ -39,7 +36,7 @@
                         <div class="row pb-4">
                             <div class="col-md-6 pb-3">
                                 <div class="form-floating">
-                                    <input type="text" asp-for="UserName" class="form-control shadow-none input0" id="uname" placeholder="First Name"/>
+                                    <input type="text" asp-for="UserName" class="form-control shadow-none input0" id="uname" placeholder="First Name" />
                                     <label for="uname">User Name</label>
                                 </div>
                             </div>
@@ -65,8 +62,11 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <input type="button" value="Edit" id="edit0" class="btn btn-info text-white me-2" onclick="toggleFormElements0()" />
-                                <button type="submit" id="save0" class="btn btn-info text-white me-2" asp-action="SaveAdminInfo" asp-controller="Access">Save</button>
+                                @if (!path.StartsWith("/Profile"))
+                                {
+                                    <input type="button" value="Edit" id="edit0" class="btn btn-info text-white me-2" onclick="toggleFormElements0()" />
+                                    <button type="submit" id="save0" class="btn btn-info text-white me-2" asp-action="SaveAdminInfo" asp-controller="Access">Save</button>
+                                }
                                 <input type="submit" value="Reset Password" id="resetpassbtn" class="btn border border-info text-info" />
                             </div>
                         </div>
@@ -107,10 +107,10 @@
                                 </div>
                             </div>
                             <div class="col-md-6 pb-3">
-                                <div class="form-floating h-100 w-100">
-                                    <input type="tel" asp-for="Mobile" class="form-control shadow-none input1" id="phone1" autocomplete="off" placeholder="Phone Number">
-                                    <label for="phone1">Phone Number</label>
+                                <div class="form-floating h-100 w-100 phone">
+                                    <input type="tel" asp-for="Mobile" class="form-control shadow-none input1" id="phone" autocomplete="off" placeholder="Phone Number">
                                     <span asp-validation-for="Mobile" class="text-danger"></span>
+                                <span id="error-msg" class="text-danger"></span>
                                 </div>
                             </div>
                             <input asp-for="Regionsid" type="hidden" id="regionids" />
@@ -139,7 +139,7 @@
                             </div>
                             <div class="d-flex justify-content-end">
                                 <input type="button" value="Edit" id="edit1" class="btn btn-info text-white" onclick="toggleFormElements1()" />
-                                <input type="submit" value="Save" id="save1" class="btn btn-info text-white"  />
+                                <input type="submit" value="Save" id="submit" class="btn btn-info text-white"  />
                             </div>
                         </div>
                     </div>
@@ -188,15 +188,15 @@
                                 </div>
                             </div>
                             <div class="col-md-6 pb-3">
-                                <div class="form-floating h-100 w-100">
-                                    <input type="tel" asp-for="AltMobile" class="form-control shadow-none input2" id="phone" autocomplete="off">
-                                    <label for="phone">Phone Number</label>
+                                <div class="form-floating h-100 w-100 phone">
+                                    <input type="tel" asp-for="AltMobile" class="form-control shadow-none input2" id="phone3" autocomplete="off">
                                     <span asp-validation-for="AltMobile" class="text-danger"></span>
+                                <span id="error-msg3" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end">
                                 <input type="button" value="Edit" id="edit2" class="btn btn-info text-white" onclick="toggleFormElements2()" />
-                                <input type="submit" value="Save" id="save2" class="btn btn-info text-white" />
+                                <input type="submit" value="Save" id="submit3" class="btn btn-info text-white" />
                             </div>
                         </div>
                     </div>
@@ -204,13 +204,19 @@
             </div>
         </div>
     </div>
-}
 <script>
 	window.onload = function (e) {
-        toggleFormElements0('true')
+        if (window.location.href.indexOf("/Access/AdminEdit") > -1) {
+            toggleFormElements0('true')
+        }
+        else{
+            toggleFormElements01('true')
+        }
 		toggleFormElements1('true')
 		toggleFormElements2('true')
         $(".form-check-input").prop("disabled", true);
+        phone1();
+        phone3();
 	}
     function toggleFormElements0(bDisabled) {
         var inputs0 = document.getElementsByClassName("input0");
@@ -227,9 +233,15 @@
             editprofile0.style.display = "none";
         }
     }
+    function toggleFormElements01(bDisabled) {
+        var inputs0 = document.getElementsByClassName("input0");
+        for (var i = 0; i < inputs0.length; i++) {
+            inputs0[i].disabled = !inputs0[i].disabled;
+        }
+    }
 	function toggleFormElements1(bDisabled) {
 		var inputs = document.getElementsByClassName("input1");
-		var submit = document.getElementById("save1");
+		var submit = document.getElementById("submit");
 		var editprofile = document.getElementById("edit1");
 		for (var i = 0; i < inputs.length; i++) {
 			inputs[i].disabled = !inputs[i].disabled;
@@ -245,7 +257,7 @@
 	}
 	function toggleFormElements2(bDisabled) {
 		var inputs2 = document.getElementsByClassName("input2");
-		var submit2 = document.getElementById("save2");
+		var submit2 = document.getElementById("submit3");
 		var editprofile2 = document.getElementById("edit2");
 		for (var i = 0; i < inputs2.length; i++) {
 			inputs2[i].disabled = !inputs2[i].disabled;
@@ -258,12 +270,8 @@
 			editprofile2.style.display = "none";
 		}
 	}
-
-    
-    
-
     $(function () {
-        $('#save1').on('click', function () {
+        $('#submit').on('click', function () {
             let checkboxes = document.querySelectorAll('input[name="Region"]:checked');
             let regionIds = [];
             checkboxes.forEach((checkbox) => {

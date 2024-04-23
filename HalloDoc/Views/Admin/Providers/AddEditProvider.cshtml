@@ -127,10 +127,10 @@
                         </div>
                     </div>
                     <div class="col-md-6 pb-3">
-                        <div class="form-floating h-100 w-100">
-                            <input type="text" asp-for="Mobile" class="form-control shadow-none input1" id="Mobile" autocomplete="off" placeholder="Phone Number">
-                            <label for="Mobile">Phone Number</label>
-                            <span asp-validation-for="Mobile" class="text-danger"></span> 
+                        <div class="form-floating h-100 w-100 phone">
+                            <input type="text" asp-for="Mobile" class="form-control shadow-none input1" id="phone" autocomplete="off" placeholder="Phone Number">
+                            <span asp-validation-for="Mobile" class="text-danger"></span>
+                            <span id="error-msg" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6 pb-3">
@@ -182,7 +182,7 @@
                     {
                         <div class="d-flex justify-content-end">
                             <input type="button" value="Edit" id="edit1" class="btn btn-info text-white" onclick="toggleFormElements1()" />
-                            <button type="submit" id="save1" class="btn btn-info text-white" asp-action="EditPhysicianInfo" asp-controller="Providers">Save</button>
+                            <button type="submit" id="submit" class="btn btn-info text-white" asp-action="EditPhysicianInfo" asp-controller="Providers">Save</button>
                         </div>
                     }
                 </div>
@@ -231,10 +231,10 @@
                         </div>
                     </div>
                     <div class="col-md-6 pb-3">
-                        <div class="form-floating h-100 w-100">
-                            <input type="tel" asp-for="Altphone" class="form-control shadow-none input2" id="phone" placeholder=Suchtext autocomplete ="off">
-                            <label for="phone">Phone Number</label>
-                                <span asp-validation-for="Altphone" class="text-danger"></span> 
+                        <div class="form-floating h-100 w-100 phone">
+                            <input type="tel" asp-for="Altphone" class="form-control shadow-none input2" id="phone3" placeholder=Suchtext autocomplete ="off">
+                                <span asp-validation-for="Altphone" class="text-danger"></span>
+                                <span id="error-msg3" class="text-danger"></span>
                         </div>
                     </div>
                     @if (CV.role() == "Admin")
@@ -560,14 +560,17 @@
             }
         }
         $(document).ready(function () {
-
+            phone1();
+            phone3();
             if ("@ViewData["PhysicianAccount"]" == "Add") {
-                $('#save0,#save1,#save2,#save3,#edit0,#edit1,#edit2,#edit3,#deleteaccount,#formsave,#resetpassbtn').css("display", "none");
+                $('#save0,#submit,#save2,#save3,#edit0,#edit1,#edit2,#edit3,#deleteaccount,#formsave,#resetpassbtn').css("display", "none");
             }
         });
     }
     else {
         $(document).ready(function () {
+            phone1();
+            phone3();
             $(".region-check").prop("disabled", true);
             var inputs0 = document.getElementsByClassName("input0");
             var inputs1 = document.getElementsByClassName("input1");
@@ -720,7 +723,7 @@
 
     function toggleFormElements1(bDisabled) {
         var inputs = document.getElementsByClassName("input1");
-        var submit = document.getElementById("save1");
+        var submit = document.getElementById("submit");
         var editprofile = document.getElementById("edit1");
         for (var i = 0; i < inputs.length; i++) {
             inputs[i].disabled = !inputs[i].disabled;
@@ -780,7 +783,7 @@
     });
 
     $(function () {
-        $('#save1').on('click', function () {
+        $('#submit').on('click', function () {
             let checkboxes1 = document.querySelectorAll('input[name="Region"]:checked');
             let regionIds1 = [];
             checkboxes1.forEach((checkbox) => {

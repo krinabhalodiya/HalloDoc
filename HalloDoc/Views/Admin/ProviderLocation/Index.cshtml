@@ -2,83 +2,163 @@
     Layout = "_Layout";
 }
 <link rel='stylesheet' type='text/css' href='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps.css'>
+@model List<HalloDoc.Entity.Models.PhysicianLocation>
 <style>
-    #marker {
-        background-image: url("https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png");
-        background-size: cover;
-        width: 30px;
-        height: 30px;
-    }
     #mapAreash {
-        height: 68vh;
+        height: 70vh;
+        width: 50vw;
+        margin: 4rem auto;
+    }
+
+    .marker-img {
+        background-size: cover;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
     }
 </style>
 <div class="container">
-    @* heading *@
-    <div class="d-flex justify-content-between">
-        <div class="d-flex align-self-center">
-            <h4><strong>Provider Location</strong></h4>
-        </div>
-        <a asp-controller="AdminDashBoard" asp-action="Index" class="btn border border-info bg-light rounded mt-3 mb-1">
-            <span class="text-info">
-                <i class="fa fa-angle-left align-middle"></i>
-                <b>&nbsp;&nbsp;Back</b>
-            </span>
-        </a>
-    </div>
-    <div id="mapAreash" class="mt-3"></div>
-</div>
-    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps-web.min.js"></script>
-    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/services/services-web.min.js"></script>
-    <script>
-        const APIKey = "vAGt9S9PBmdnXyrThMamaHFh71MVeya3";
-        var Lagos = { lat: 20.5937, lng: 78.9629 };
-        var map = tt.map({
-            key: APIKey,
-            container: "mapAreash",
-            center: Lagos,
-            zoom: 5
-        });
-   
-        var sourcearray = null;
-        var sites = [];
-        @if (@ViewBag.Log != null)
-        {
-            foreach (var location in ViewBag.Log)
-            {
-                <text>
-                    console.log(sites);
-                    sites.push({
-                    lat: @location.latitude,
-                    lng: @location.longitude,
-                    name: '@location.physicianname'
-                });
-                </text>
-            }
-        }
-        sites.forEach(function (site) {
-            var element = document.createElement("div");
-            element.id = "marker";
-            var marker = new tt.Marker({ element: element }).setLngLat([site.lng, site.lat]).addTo(map);
-            var marker = new tt.Marker({ element: element }).setLngLat([site.lng, site.lat]).addTo(map);
-            var popup = new tt.Popup({ anchor: 'top' }).setHTML("<b>" + site.name + "</b>");
-            marker.setPopup(popup).togglePopup();
-        });
-        // not usefull for temp value
-        function moveMapTo(newLoc) {
-            map.flyTo({
-                center: newLoc,
-                zoom: 15
-            });
-        }
-        async function fetchshreyansLoc() {
-            const response = await tt.services.fuzzySearch({
-                key: APIKey,
-                query: document.querySelector("#query").value
-            });
+    <div class="card bg-transparent border-0">
+        <div class="card-header d-flex justify-content-between  border-0  bg-transparent p-1  mt-3 mb-2">
+            <div class="text-start d-flex align-items-center">
+                <h5 class="mt-2"><b> Provider Location</b></h5>
 
-            if (response.results) {
-                moveMapTo(response.results[0].position);
-            }
-        }
-    </script>
+            </div>
+            <div class="text-end">
+                <a asp-controller="Dashboard" asp-action="Index"
+                   class="btn btn-outline-info btn-back">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                         fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                    </svg>Back
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body rounded shadow ">
+            <div class="text-end">
+                <span class="text-danger" style="font-size:0.8rem"><i class="fa fa-hand-o-right mx-2" aria-hidden="true"></i>Click on Marker Icon To show physicain Details!!</span>
+            </div>
+            <div class="position-relative ">
+                <div class="middle z-2 loding-div position-absolute  top-50" style="left:50%;">
+                    <div class="bar bar1"></div>
+                    <div class="bar bar2"></div>
+                    <div class="bar bar3"></div>
+                    <div class="bar bar4"></div>
+                    <div class="bar bar5"></div>
+                    <div class="bar bar6"></div>
+                    <div class="bar bar7"></div>
+                    <div class="bar bar8"></div>
+                </div>
+                <div class="card w-100 mt-3" id="mapAreash">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps-web.min.js"></script>
+<script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/services/services-web.min.js"></script>
+<script>
+    const APIKey = "vAGt9S9PBmdnXyrThMamaHFh71MVeya3";
+
+    var Lagos = { lat: 20.5937, lng: 78.9629 };
+
+    var map = tt.map({
+        key: APIKey,
+        container: "mapAreash",
+        center: Lagos,
+        zoom: 4
+    });
+
+    var sites = [
+    ];
+
+    @foreach (var location in Model)
+    {
+        <text>
+            console.log(sites);
+        sites.push({
+            lat: @location.Latitude,
+            lng: @location.Longitude,
+            name: '@location.Name',
+            photo: '/Upload/Physician/@location.PhysicianID/@location.ImgPath',
+            address: '@location.Address',
+            phonenumber: '@location.PhoneNumber',
+            created: '@location.Created',
+
+            physicianid: @location.PhysicianID,
+        });
+        </text>
+    }
+        setTimeout(function () { $(".loding-div").hide() }, 1000);
+
+    function openModal(site) {
+        // Set the content in the modal
+        $('#modalName').text(site.name);
+        $('#PhoneNumber').text(site.phonenumber);
+        $('#Created').text(site.created)
+        $('#modalAddress').text(site.address);
+        $('#modalPic').attr('src', site.photo);
+        // Open the modal
+        $('#markerModal').modal('show');
+    }
+
+    setTimeout(function () { $(".loding-div").hide() }, 1000);
+
+    sites.forEach(function (site) {
+        var element = document.createElement("div");
+        element.id = "marker" + site.physicianid;
+        element.style.backgroundImage = 'url("' + site.photo + '")';
+        element.classList.add('marker-img');
+
+        var marker = new tt.Marker({ element: element }).setLngLat([site.lng, site.lat]).addTo(map);
+        var popup = new tt.Popup({ anchor: 'top' }).setHTML("<b>" + site.name + "</b>");
+
+        marker.setPopup(popup);
+
+
+        marker.getElement().addEventListener('click', function () {
+
+            openModal(site);
+        });
+    });
+
+
+
+
+
+</script>
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="markerModal" tabindex="-1" aria-labelledby="markerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="markerModalLabel">Physician Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img id="modalPic" height="230px" width="230px" src="" alt="Physician Picture">
+                    </div>
+                    <div class="col-md-6">
+                        <h5><b class=" text-info">Name: </b><span id="modalName"></span></h5>
+                        <p class="mt-3"><b class=" text-info">Address:</b> <span id="modalAddress"></span></p>
+                        <p class="mt-1 "><b class=" text-info">Phone Number:</b> <span id="PhoneNumber"></span></p>
+                        <p class="mt-1 "><b class=" text-info">Last Login Time:</b> <span id="Created"></span></p>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info text-white" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

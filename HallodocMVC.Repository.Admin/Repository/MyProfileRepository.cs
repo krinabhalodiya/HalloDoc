@@ -174,8 +174,8 @@ namespace HallodocMVC.Repository.Admin.Repository
                         DataForChange.Address1 = _viewAdminProfile.Address1;
                         DataForChange.Address2 = _viewAdminProfile.Address2;
                         DataForChange.City = _viewAdminProfile.City;
-                        DataForChange.Mobile = _viewAdminProfile.Mobile;
                         DataForChange.Regionid = _viewAdminProfile.State;
+                        DataForChange.Altphone = _viewAdminProfile.AltMobile;
                         _context.Admins.Update(DataForChange);
                         _context.SaveChanges();
                         return true;

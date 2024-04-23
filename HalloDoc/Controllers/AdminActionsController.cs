@@ -5,6 +5,7 @@ using AspNetCoreHero.ToastNotification.Abstractions;
 using HalloDoc.Models;
 using ViewAsPdf = Rotativa.AspNetCore.ViewAsPdf;
 using HalloDoc.Entity.DataModels;
+using HalloDoc.Controllers.Admin;
 namespace HalloDoc.Controllers
 {
     public class AdminActionsController : Controller
@@ -28,6 +29,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region ViewCase
+        [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> ViewCase(int id)
         {
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
@@ -38,6 +40,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region EditCase
+        [CheckProviderAccess("Admin,Provider")]
         public IActionResult EditCase(ViewCaseData vcd)
         {
             bool result = _IAdminDashBoardActionsRepository.EditCase(vcd);
@@ -53,6 +56,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region AssignProvider
+        [CheckProviderAccess("Admin,Provider", "Dashboard")]
         public async Task<IActionResult> AssignProvider(int requestid, int ProviderId, string Notes)
         {
             if (await _IAdminDashBoardActionsRepository.AssignProvider(requestid, ProviderId, Notes))
@@ -69,6 +73,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region providerbyregion
+        [CheckProviderAccess("Admin")]
         public IActionResult ProviderbyRegion(int? Regionid)
         {
             var v = _combobox.ProviderbyRegion(Regionid);
@@ -77,6 +82,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region _CancelCase
+        [CheckProviderAccess("Admin")]
         public IActionResult CancelCase(int RequestID, string Note, string CaseTag)
         {
             bool CancelCase = _IAdminDashBoardActionsRepository.CancelCase(RequestID, Note, CaseTag);
@@ -93,6 +99,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region _BlockCase
+        [CheckProviderAccess("Admin")]
         public IActionResult BlockCase(int RequestID, string Note)
         {
             bool BlockCase = _IAdminDashBoardActionsRepository.BlockCase(RequestID, Note);
@@ -109,6 +116,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region TransferProvider
+        [CheckProviderAccess("Admin")]
         public async Task<IActionResult> TransferProvider(int requestid, int ProviderId, string Notes)
         {
             if (await _IAdminDashBoardActionsRepository.TransferProvider(requestid, ProviderId, Notes))
@@ -125,6 +133,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region Clear_case
+        [CheckProviderAccess("Admin")]
         public IActionResult ClearCase(int RequestID)
         {
             bool cc = _IAdminDashBoardActionsRepository.ClearCase(RequestID);
@@ -142,6 +151,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region View_Notes
+        [CheckProviderAccess("Admin,Provider")]
         public IActionResult ViewNotes(int id)
         {
 
@@ -151,6 +161,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region Edit_Notes
+        [CheckProviderAccess("Admin,Provider")]
         public IActionResult ChangeNotes(int RequestID, string? adminnotes, string? physiciannotes)
         {
             if (adminnotes != null || physiciannotes != null)
@@ -177,6 +188,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region View_Upload
+        [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> ViewUpload(int? id , ViewDocuments viewDocument)
         {
             if (id == null)
@@ -189,6 +201,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region UploadDoc_Files
+        [CheckProviderAccess("Admin,Provider")]
         public IActionResult UploadDoc(int Requestid, IFormFile file)
         {
             var uploader = "Patient";
@@ -213,6 +226,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region DeleteOnesFile
+        [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> DeleteFile(int? id, int Requestid)
         {
             if (await _IAdminDashBoardActionsRepository.DeleteDocumentByRequest(id.ToString()))
@@ -228,6 +242,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region AllFilesDelete
+        [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> AllFilesDelete(string deleteids, int Requestid)
         {
             if (await _IAdminDashBoardActionsRepository.DeleteDocumentByRequest(deleteids))
@@ -242,7 +257,8 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
-        #region SendFilEmail
+        #region SendFileEmail
+        [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> SendFileEmail(string mailids, int Requestid, string email)
         {
             if (await _IAdminDashBoardActionsRepository.SendFileEmail(mailids, Requestid, email))
@@ -259,6 +275,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region order_action
+        [CheckProviderAccess("Admin,Provider", "SendOrder")]
         public async Task<IActionResult> Order(int id)
         {
             List<HealthProfessionalTypeComboBox> cs = await _combobox.healthprofessionaltype();
@@ -269,16 +286,19 @@ namespace HalloDoc.Controllers
             };
             return View("../AdminActions/SendOrders", data);
         }
+        [CheckProviderAccess("Admin,Provider", "SendOrder")]
         public Task<IActionResult> ProfessionalByType(int HealthprofessionalID)
         {
             var v = _combobox.ProfessionalByType(HealthprofessionalID);
             return Task.FromResult<IActionResult>(Json(v));
         }
+        [CheckProviderAccess("Admin,Provider", "SendOrder")]
         public Task<IActionResult> SelectProfessionalByID(int VendorID)
         {
             var v = _IAdminDashBoardActionsRepository.SelectProfessionlByID(VendorID);
             return Task.FromResult<IActionResult>(Json(v));
         }
+        [CheckProviderAccess("Admin,Provider", "SendOrder")]
         public IActionResult SendOrder(ViewSendOrderData sm)
         {
             if (ModelState.IsValid)
@@ -306,6 +326,7 @@ namespace HalloDoc.Controllers
         #region SendAgreement
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> SendAgreementmail(int requestid)
         {
             if (_IAdminDashBoardActionsRepository.SendAgreement(requestid))
@@ -317,11 +338,13 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region CloseCase
+        [CheckProviderAccess("Admin")]
         public async Task<IActionResult> CloseCase(int RequestID)
         {
             ViewCloseCaseModel vc = _IAdminDashBoardActionsRepository.CloseCaseData(RequestID);
             return View("../AdminActions/CloseCase", vc);
         }
+        [CheckProviderAccess("Admin")]
         public IActionResult CloseCaseUnpaid(int id)
         {
             bool result = _IAdminDashBoardActionsRepository.CloseCase(id);
@@ -340,6 +363,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region EditForCloseCase
+        [CheckProviderAccess("Admin")]
         public IActionResult EditForCloseCase(ViewCloseCaseModel sm)
         {
             bool result = _IAdminDashBoardActionsRepository.EditForCloseCase(sm);
@@ -359,6 +383,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region Encounter_View
+        [CheckProviderAccess("Admin,Provider")]
         public IActionResult Encounter(int id)
         {
             ViewEncounterData data = _IAdminDashBoardActionsRepository.GetEncounterDetails(id);
@@ -367,6 +392,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region EncounterEdit
+        [CheckProviderAccess("Admin,Provider")]
         public IActionResult EncounterEdit(ViewEncounterData data)
         {
             if (_IAdminDashBoardActionsRepository.EditEncounterDetails(data, CV.ID()))
@@ -382,6 +408,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region Finalize
+        [CheckProviderAccess("Provider")]
         public IActionResult Finalize(ViewEncounterData model)
         {
             bool data = _IAdminDashBoardActionsRepository.EditEncounterDetails(model, CV.ID());
@@ -415,6 +442,7 @@ namespace HalloDoc.Controllers
         #region _Accept RequestProviderPost
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CheckProviderAccess("Provider")]
         public async Task<IActionResult> _AcceptRequestPost(int RequestId , string Note)
         {
             if (await _IAdminDashBoardActionsRepository.AcceptPhysician(RequestId, Note, Convert.ToInt32(CV.UserID())))
@@ -432,6 +460,7 @@ namespace HalloDoc.Controllers
         #region __TransfertoAdminPost
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CheckProviderAccess("Provider")]
         public async Task<IActionResult> _TransfertoAdminPost(int RequestID, string Note)
         {
             if (await _IAdminDashBoardActionsRepository.TransfertoAdmin(RequestID, Note,Convert.ToInt32(CV.UserID())))
@@ -444,6 +473,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region ContactAdmin
+        [CheckProviderAccess("Provider")]
         public IActionResult ContactAdmin(string Note)
         {
             bool Contact = _IAdminDashBoardActionsRepository.ContactAdmin(Convert.ToInt32(CV.UserID()), Note);
@@ -460,6 +490,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region Housecall
+        [CheckProviderAccess("Provider")]
         public IActionResult Housecall(int RequestId)
         {
             if (_IAdminDashBoardActionsRepository.Housecall(RequestId))
@@ -475,6 +506,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region Consult
+        [CheckProviderAccess("Provider")]
         public IActionResult Consult(int RequestId)
         {
             if (_IAdminDashBoardActionsRepository.Consult(RequestId))
@@ -490,15 +522,17 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region generatePDF
+        [CheckProviderAccess("Admin,Provider")]
         public IActionResult generatePDF(int id)
         {
             var FormDetails = _IAdminDashBoardActionsRepository.GetEncounterDetails(id);
             return new ViewAsPdf("../AdminActions/EncounterPdf", FormDetails);
         }
-		#endregion
+        #endregion
 
-		#region View_Upload
-		public async Task<IActionResult> ConcludeCare(int? id, ViewDocuments viewDocument)
+        #region View_Upload
+        [CheckProviderAccess("Provider")]
+        public async Task<IActionResult> ConcludeCare(int? id, ViewDocuments viewDocument)
 		{
 			if (id == null)
 			{
@@ -510,6 +544,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region UploadDoc_Files
+        [CheckProviderAccess("Provider")]
         public IActionResult UploadDocProvider(int Requestid, IFormFile file)
         {
             var requesttype = "Provider";
@@ -530,6 +565,7 @@ namespace HalloDoc.Controllers
         #endregion
 
         #region ConcludecarePost
+        [CheckProviderAccess("Provider")]
         public IActionResult ConcludeCarePost(int RequestId, string Notes)
         {
             if (_IAdminDashBoardActionsRepository.ConcludeCarePost(RequestId, Notes))

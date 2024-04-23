@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HalloDoc.Controllers.Admin
 {
+    [CheckProviderAccess("Admin", "Role")]
     public class AccessController : Controller
     {
+        
         #region Constructor
         private readonly IRoleAccessRepository _IRoleAccessRepository;
         private readonly IProviderRepository _IProviderRepository;

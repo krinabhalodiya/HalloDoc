@@ -47,9 +47,9 @@
                         </div>
                     </div>
                     <div class="col-md-6 phone">
-                        <div class="form-floating mb-3 h-100">
+                        <div class="form-floating mb-3 h-100 phone">
                             <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none input" id="phone" autocomplete="off" placeholder="Enter phone Number">
-                            <label for="phone">Phone Number</label>
+                            <span id="error-msg" class="text-danger"></span>
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                 </div>
                 <div class="d-flex justify-content-end">
                     <button type="button" class="btn btn-info text-white" id="edit" onclick="toggleFormElementsBusiness()">Edit</button>
-                    <button type="submit" id="save" class="btn btn-info text-white mx-2">Save</button>
+                    <button type="submit" id="submit" class="btn btn-info text-white mx-2">Save</button>
                     <button type="button" id="cancel" class="btn border border-info text-info shadow-none" onclick="location.reload()">Cancel</button>
                     <input type="submit" class="btn btn-success text-white" id="add" value="Create Account" />
                 </div>
@@ -112,17 +112,23 @@
 <script>
     if ("@ViewData["Status"]" == "Edit") {
         window.onload = function (e) {
+            phone1();
             toggleFormElementsBusiness('true');
+            
         }
         $('#add').css("display", "none");
     }
     else {
-        $('#edit, #save, #cancel').css("display", "none");
+        window.onload = function (e) {
+            phone1();
+            
+        }
+        $('#edit, #submit, #cancel').css("display", "none");
     }
 
     function toggleFormElementsBusiness(bDisabled) {
         var inputs = document.getElementsByClassName("input");
-        var submit = document.getElementById("save");
+        var submit = document.getElementById("submit");
         var cancel = document.getElementById("cancel");
         var editprofile = document.getElementById("edit");
         for (var i = 0; i < inputs.length; i++) {

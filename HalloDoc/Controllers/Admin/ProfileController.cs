@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HalloDoc.Controllers.Admin
 {
+    [CheckProviderAccess("Admin", "MyProfile")]
     public class ProfileController : Controller
     {
         #region Constructor

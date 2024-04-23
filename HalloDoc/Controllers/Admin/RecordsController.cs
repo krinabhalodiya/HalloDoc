@@ -19,6 +19,7 @@ namespace HalloDoc.Controllers.Admin
         #endregion Configuration
 
         #region SearchRecords
+        [CheckProviderAccess("Admin", "History")]
         public IActionResult SearchRecords(RecordsModel rm)
         {
             RecordsModel model = _IRecords.GetFilteredSearchRecords(rm);
@@ -27,6 +28,7 @@ namespace HalloDoc.Controllers.Admin
         #endregion SearchRecords
 
         #region DeleteRequestSearchRecords
+        [CheckProviderAccess("Admin", "History")]
         public IActionResult DeleteRequest(int? RequestId)
         {
             if (_IRecords.DeleteRequest(RequestId))
@@ -42,6 +44,7 @@ namespace HalloDoc.Controllers.Admin
         #endregion DeleteRequestSearchRecords
 
         #region PatientHistory
+        [CheckProviderAccess("Admin", "PatientRecords")]
         public IActionResult PatientHistory(RecordsModel model)
         {
             RecordsModel rm = _IRecords.GetFilteredPatientHistory(model);
@@ -50,6 +53,7 @@ namespace HalloDoc.Controllers.Admin
         #endregion PatientHistory
 
         #region PatientRecords
+        [CheckProviderAccess("Admin", "PatientRecords")]
         public async Task<IActionResult> PatientRecords(PaginatedViewModel data, int UserId)
         {
             var r = await _IRecords.PatientRecord(UserId, data);
@@ -58,6 +62,7 @@ namespace HalloDoc.Controllers.Admin
         #endregion PatientRecords
 
         #region BlockHistory
+        [CheckProviderAccess("Admin", "BlockedHistory")]
         public IActionResult BlockHistory(RecordsModel rm)
         {
             RecordsModel r = _IRecords.BlockHistory(rm);
@@ -66,6 +71,7 @@ namespace HalloDoc.Controllers.Admin
         #endregion BlockHistory
 
         #region Unblock
+        [CheckProviderAccess("Admin", "BlockedHistory")]
         public IActionResult Unblock(int RequestId)
         {
             if (_IRecords.Unblock(RequestId, CV.ID()))
@@ -81,6 +87,7 @@ namespace HalloDoc.Controllers.Admin
         }
         #endregion 
         #region Unblock
+        [CheckProviderAccess("Admin", "BlockedHistory")]
         public IActionResult block(int RequestId)
         {
             if (_IRecords.block(RequestId, CV.ID()))
@@ -96,6 +103,7 @@ namespace HalloDoc.Controllers.Admin
         }
         #endregion Unblock
         #region EmailLogs
+        [CheckProviderAccess("Admin", "EmailLogs")]
         public IActionResult EmailLogs(RecordsModel rm)
         {
             RecordsModel r = _IRecords.GetFilteredEmailLogs(rm);
@@ -104,6 +112,7 @@ namespace HalloDoc.Controllers.Admin
         #endregion EmailLogs
 
         #region SMSLog
+        [CheckProviderAccess("Admin", "SMSLogs")]
         public IActionResult SMSLogs(RecordsModel rm)
         {
             RecordsModel r = _IRecords.GetFilteredSMSLogs(rm);

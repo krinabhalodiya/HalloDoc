@@ -215,6 +215,7 @@
                     <input type="hidden" asp-for="CurrentPage" id="currentpagevalue" />
                     <input type="hidden" asp-for="SortedColumn" />
                     <input type="hidden" asp-for="IsAscending" />
+                    <input type="hidden" asp-for="PageSize" />
                                             @if (@Model.CurrentPage > 1)
                     {
                                             <li class="page-item me-2"><button class="btn shadow-none" onclick="setpagenumber('previous')">&lt;</button></li>

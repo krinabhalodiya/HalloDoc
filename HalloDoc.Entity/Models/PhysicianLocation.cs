@@ -8,9 +8,17 @@ namespace HalloDoc.Entity.Models
 {
     public class PhysicianLocation
     {
-        public decimal? latitude { get; set; }
-        public decimal? longitude { get; set; }
-        public string? physicianname { get; set; }
-        public int? locationid { get; set; }
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
+        public string Name { get; set; }
+
+        public string ImgPath { get; set; }
+        public string Address { get; set; }
+
+        public DateTime Created { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+        public int PhysicianID { get; set; }
     }
 }

@@ -26,10 +26,8 @@ namespace HalloDoc.Entity.Models
         [Compare("Email", ErrorMessage = "Email and Confirm Email must match")]
         public string confirmEmail { get; set; }
         [Required(ErrorMessage = "Contact number is required")]
-        [RegularExpression(@"([0-9]{10})", ErrorMessage = "Please enter 10 digits for a contact number")]
         public string Mobile { get; set; }
         [Required(ErrorMessage = "Contact number is required")]
-        [RegularExpression(@"([0-9]{10})", ErrorMessage = "Please enter 10 digits for a contact number")]
         public string AltMobile { get; set; }
         [Required(ErrorMessage = "Address1 is required")]
         public string Address1 { get; set; }

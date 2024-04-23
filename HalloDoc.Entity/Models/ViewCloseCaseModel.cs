@@ -23,7 +23,6 @@ namespace HalloDoc.Entity.Models
         public string RC_Email { get; set; } 
         public DateTime RC_Dob { get; set; }
         [Required(ErrorMessage = "Contact number is required")]
-        [RegularExpression(@"([0-9]{10})", ErrorMessage = "Please enter 10 digits for a contact number")]
         public string RC_PhoneNumber { get; set; }
         public int RequestClientID { get; set; }
     }

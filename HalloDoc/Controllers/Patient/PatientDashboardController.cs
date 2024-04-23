@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HalloDoc.Controllers.Patient
 {
+    [CheckProviderAccess("Patient")]
     public class PatientDashboardController : Controller
     {
         private readonly IPatientDashboard _IPatientDashboard;
@@ -27,7 +28,7 @@ namespace HalloDoc.Controllers.Patient
             _notyf = iNotyfService;
             _combobox = combobox;
         }
-        [CheckProviderAccess("Patient")]
+        
         public IActionResult Index(PatientDashList listdata)
         {
             PatientDashList data = _IPatientDashboard.GetPatientRequest(CV.UserID(), listdata);
@@ -54,6 +55,7 @@ namespace HalloDoc.Controllers.Patient
             }
             return RedirectToAction("ViewUploads", "PatientDashboard", new { id = Requestid });
         }
+
         #region RequestForMe
         public async Task<IActionResult>  RequestForMe()
         {
@@ -86,7 +88,7 @@ namespace HalloDoc.Controllers.Patient
         #endregion RequestForSomeoneElse
 
         #region CreateRequestForSomeoneElse
-        public async Task<IActionResult> CreateRequestForSomeoneElse(CreatePatientRequestModel model)
+        public async Task<IActionResult> CreateFamilyFriendRequest(CreatePatientRequestModel model)
         {
             if (await _IPatientDashboard.CreateRequestForSomeoneElse(model,CV.UserID()))
             {

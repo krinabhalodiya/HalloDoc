@@ -18,6 +18,7 @@ using HalloDoc.Entity.Models.PatientModels;
 using HallodocMVC.Repository.Patient.Repository.Interface;
 namespace HalloDoc.Controllers
 {
+    [CheckProviderAccess("Admin,Provider", "Dashboard")]
     public class AdminDashBoardController : Controller
     {
         private readonly IAdminDashBoardRepository _IAdminDashBoardRepository;
@@ -34,7 +35,6 @@ namespace HalloDoc.Controllers
             _logger = logger;
             _ICreateRequest = iCreateRequest;
         }
-        [CheckProviderAccess("Admin,Provider", "Dashboard")]
         [Route("Physician/DashBoard")]
         [Route("Admin/DashBoard")]
         public async Task<IActionResult> IndexAsync()
@@ -150,7 +150,6 @@ namespace HalloDoc.Controllers
         }
 		#endregion
 		#region PatientRequest
-		[CheckProviderAccess("Admin,Provider", "Dashboard")]
 		public async Task<IActionResult> PatientRequest()
         {
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
@@ -159,7 +158,7 @@ namespace HalloDoc.Controllers
         #endregion PatientRequest 
 
         #region CreatePatientRequest
-        public async Task<IActionResult> CreatePatientRequest(CreateFamilyFriendRequestModel model)
+        public async Task<IActionResult> CreateFamilyFriendRequest(CreateFamilyFriendRequestModel model)
         {
             if (await _ICreateRequest.FamilyFriendRequest(model))
             {
@@ -169,7 +168,7 @@ namespace HalloDoc.Controllers
             {
                 _notyf.Error("Request has not been created successfully.");
             }
-            return RedirectToAction("Index", "AdminDashboard");
+            return Redirect("~/Admin/DashBoard");
         }
         #endregion CreatePatientRequest
     }

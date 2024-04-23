@@ -19,11 +19,12 @@ namespace HalloDoc.Controllers.Admin
             _notyf = notyf;
             _logger = logger;
         }
-        #endregion
-        public async Task<IActionResult> Index()
+		#endregion
+		[CheckProviderAccess("Admin", "ProviderLocation")]
+		public async Task<IActionResult> Index()
         {
-            ViewBag.Log = await _IProviderRepository.FindPhysicianLocation();
-            return View("../Admin/ProviderLocation/Index");
+            var list = await _IProviderRepository.FindPhysicianLocation();
+            return View("../Admin/ProviderLocation/Index", list);
         }
     }
 }

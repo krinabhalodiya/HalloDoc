@@ -65,10 +65,10 @@
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="mb-3 d-flex">
-                                <div class="form-floating h-100 w-100">
+                                <div class="form-floating h-100 w-100 phone">
                                     <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none inputs" id="phone" autocomplete="off" placeholder="Phone Number">
-                                    <label for="phone">Phone Number</label>
                                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    <span id="error-msg" class="text-danger"></span>
                                 </div>
                                 <button class="btn border border-info text-info mx-2 " style="height:3.5rem;width:4rem">
                                     <i class="bi bi-telephone-fill"></i>
@@ -136,8 +136,9 @@
 </script>
 <script>
     window.onload = function (e) {
-        toggleFormElementsviewcase('true')
-        console.log("viewcase")
+        toggleFormElementsviewcase('true');
+        console.log("viewcase");
+        phone1();
     }
     function toggleFormElementsviewcase(bDisabled) {
         var inputs = document.getElementsByClassName("inputs");

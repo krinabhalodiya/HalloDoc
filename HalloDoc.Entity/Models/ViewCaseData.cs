@@ -18,7 +18,6 @@ namespace HalloDoc.Entity.Models
 		[Required(ErrorMessage = "Last Name is required")]
 		public string LastName { get; set; }
 		[Required(ErrorMessage = "Contact number is required")]
-		[RegularExpression(@"([0-9]{10})", ErrorMessage = "Please enter 10 digits for a contact number")]
 		public string PhoneNumber { get; set; }
 		[Required(ErrorMessage = "Date Of Birth is required")]
 		public DateTime Dob { get; set; }

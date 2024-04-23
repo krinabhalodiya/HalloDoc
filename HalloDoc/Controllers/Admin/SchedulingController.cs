@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HalloDoc.Controllers.Admin
 {
+    [CheckProviderAccess("Admin,Provider", "Scheduling")]
     public class SchedulingController : Controller
     {
         private readonly HalloDocContext _context;
