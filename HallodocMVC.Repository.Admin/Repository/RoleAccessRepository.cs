@@ -107,10 +107,24 @@ namespace HallodocMVC.Repository.Admin.Repository
                         .FirstOrDefaultAsync();
             return r;
         }
-        #endregion
+		#endregion
 
-        #region GetMenusByAccount
-        public async Task<List<HalloDoc.Entity.DataModels.Menu>> GetMenusByAccount(short Accounttype)
+		#region getmenubyid
+		public List<string> getManuByID(int RoleID)
+		{
+			List<Rolemenu> data = _context.Rolemenus.Where(r => r.Roleid == RoleID).ToList();
+			List<string> list = new List<string>();
+			foreach (var item in data)
+			{
+				string str = _context.Menus.FirstOrDefault(e => e.Menuid == item.Menuid).Name;
+				list.Add(str);
+			}
+			return list;
+		}
+		#endregion
+
+		#region GetMenusByAccount
+		public async Task<List<HalloDoc.Entity.DataModels.Menu>> GetMenusByAccount(short Accounttype)
         {
             return await _context.Menus.Where(r => r.Accounttype == Accounttype).ToListAsync();
         }

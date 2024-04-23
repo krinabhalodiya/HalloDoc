@@ -13,7 +13,8 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public Task<List<Role>> GetRoleAccessDetails();
         public Task<List<ViewUserAcces>> GetAllUserDetails(int? User);
         public Task<ViewRoleByMenu> GetRoleByMenus(int roleid);
-        public Task<List<HalloDoc.Entity.DataModels.Menu>> GetMenusByAccount(short Accounttype);
+        public List<string> getManuByID(int RoleID);
+		public Task<List<HalloDoc.Entity.DataModels.Menu>> GetMenusByAccount(short Accounttype);
         public Task<List<int>> CheckMenuByRole(int roleid);
         public Task<bool> PostRoleMenu(ViewRoleByMenu role, string Menusid, string ID);
         public Task<bool> PutRoleMenu(ViewRoleByMenu role, string Menusid, string ID);

@@ -34,7 +34,7 @@ namespace HalloDoc.Controllers
             _logger = logger;
             _ICreateRequest = iCreateRequest;
         }
-        [CheckProviderAccess("Admin,Provider")]
+        [CheckProviderAccess("Admin,Provider", "Dashboard")]
         [Route("Physician/DashBoard")]
         [Route("Admin/DashBoard")]
         public async Task<IActionResult> IndexAsync()
@@ -148,9 +148,10 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Index", "AdminDashboard");
         }
-        #endregion
-        #region PatientRequest
-        public async Task<IActionResult> PatientRequest()
+		#endregion
+		#region PatientRequest
+		[CheckProviderAccess("Admin,Provider", "Dashboard")]
+		public async Task<IActionResult> PatientRequest()
         {
             ViewBag.RegionComboBox = await _combobox.RegionComboBox();
             return View("../SubmitRequest/FamilyFriendRequest");

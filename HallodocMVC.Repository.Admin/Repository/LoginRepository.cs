@@ -67,7 +67,38 @@ namespace HallodocMVC.Repository.Admin.Repository
                     {
                         var admindata = _context.Physicians.FirstOrDefault(u => u.Aspnetuserid == user.Id);
                         admin.UserId = admindata.Physicianid;
-                        admin.RoleID=(int)admindata.Roleid;
+                        admin.RoleID = (int)admindata.Roleid;
+                        using (HttpClient client = new HttpClient())
+                        {
+                            string apiKey = "3a5759a23c5b00";
+                            string apiUrl = $"https://ipinfo.io?token={apiKey}";
+
+                            HttpResponseMessage response = await client.GetAsync(apiUrl);
+                            if (response.IsSuccessStatusCode)
+                            {
+                                string responseBody = await response.Content.ReadAsStringAsync();
+                                dynamic ipInfo = Newtonsoft.Json.JsonConvert.DeserializeObject(responseBody);
+
+                                string[] coordinates = ipInfo.loc.ToString().Split(',');
+
+                                string city = ipInfo.city.ToString();
+                                string region = ipInfo.region.ToString();
+                                string country = ipInfo.country.ToString();
+                                string postal = ipInfo.postal.ToString();
+                                string address = $"{city}, {region}, {country} {postal}";
+
+                                var data2 = _context.Physicianlocations.FirstOrDefault(e => e.Physicianid == admindata.Physicianid);
+
+                                data2.Longitude = Convert.ToDecimal(coordinates[1]);
+                                data2.Latitude = Convert.ToDecimal(coordinates[0]);
+                                data2.Address = address;
+                                data2.Createddate = DateTime.Now;
+                                _context.Physicianlocations.Update(data2);
+                                _context.SaveChanges();
+                                return admin;
+                            }
+                        }
+                        return admin;
                     }
                     return admin;
                 }

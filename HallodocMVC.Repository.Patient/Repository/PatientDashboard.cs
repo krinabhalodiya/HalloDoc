@@ -80,61 +80,68 @@ namespace HallodocMVC.Repository.Patient.Repository
         #region CreateRequestForMe
         public async Task<bool> CreateRequestForMe(CreatePatientRequestModel patientRequest)
         {
-            var statename = _context.Regions.FirstOrDefault(x => x.Regionid == patientRequest.State);
-            var isExist = _context.Users.FirstOrDefault(x => x.Email == patientRequest.Email);
-            var request = new Request()
+            try
             {
-                Isdeleted = new BitArray(1),
-                Requesttypeid = 2,
-                Userid = isExist.Userid,
-                Firstname = patientRequest.FirstName,
-                Lastname = patientRequest.LastName,
-                Email = patientRequest.Email,
-                Status = 1,
-                Phonenumber = patientRequest.PhoneNumber,
-                Isurgentemailsent = new BitArray(1),
-                Createddate = DateTime.Now
-            };
-            _context.Requests.Add(request);
-            await _context.SaveChangesAsync();
-
-            var requestClient = new Requestclient()
-            {
-                Regionid = patientRequest.State,
-                Requestid = request.Requestid,
-                Firstname = patientRequest.FirstName,
-                Lastname = patientRequest.LastName,
-                Address = patientRequest.Street + " " + patientRequest.City + " " + patientRequest.State + " " + patientRequest.ZipCode,
-                Notes = patientRequest.Symptoms,
-                Email = patientRequest.Email,
-                Strmonth = patientRequest.DateOfBirth.ToString("MMMM"),
-                Intdate = patientRequest.DateOfBirth.Day,
-                Intyear = patientRequest.DateOfBirth.Year,
-                Phonenumber = patientRequest.PhoneNumber,
-                Street = patientRequest.Street,
-                City = patientRequest.City,
-                State = statename.Name,
-                Zipcode = patientRequest.ZipCode
-            };
-            _context.Requestclients.Add(requestClient);
-            await _context.SaveChangesAsync();
-
-
-            if (patientRequest.UploadFile != null)
-            {
-                string upload = FileSave.UploadDoc(patientRequest.UploadFile, request.Requestid);
-
-                var requestwisefile = new Requestwisefile
+                var statename = _context.Regions.FirstOrDefault(x => x.Regionid == patientRequest.State);
+                var isExist = _context.Users.FirstOrDefault(x => x.Email == patientRequest.Email);
+                var request = new Request()
                 {
                     Isdeleted = new BitArray(1),
-                    Requestid = request.Requestid,
-                    Filename = upload,
-                    Createddate = DateTime.Now,
+                    Requesttypeid = 2,
+                    Userid = isExist.Userid,
+                    Firstname = patientRequest.FirstName,
+                    Lastname = patientRequest.LastName,
+                    Email = patientRequest.Email,
+                    Status = 1,
+                    Phonenumber = patientRequest.PhoneNumber,
+                    Isurgentemailsent = new BitArray(1),
+                    Createddate = DateTime.Now
                 };
-                _context.Requestwisefiles.Add(requestwisefile);
-                _context.SaveChanges();
+                _context.Requests.Add(request);
+                await _context.SaveChangesAsync();
+
+                var requestClient = new Requestclient()
+                {
+                    Regionid = patientRequest.State,
+                    Requestid = request.Requestid,
+                    Firstname = patientRequest.FirstName,
+                    Lastname = patientRequest.LastName,
+                    Address = patientRequest.Street + " " + patientRequest.City + " " + patientRequest.State + " " + patientRequest.ZipCode,
+                    Notes = patientRequest.Symptoms,
+                    Email = patientRequest.Email,
+                    Strmonth = patientRequest.DateOfBirth.ToString("MMMM"),
+                    Intdate = patientRequest.DateOfBirth.Day,
+                    Intyear = patientRequest.DateOfBirth.Year,
+                    Phonenumber = patientRequest.PhoneNumber,
+                    Street = patientRequest.Street,
+                    City = patientRequest.City,
+                    State = statename.Name,
+                    Zipcode = patientRequest.ZipCode
+                };
+                _context.Requestclients.Add(requestClient);
+                await _context.SaveChangesAsync();
+
+
+                if (patientRequest.UploadFile != null)
+                {
+                    string upload = FileSave.UploadDoc(patientRequest.UploadFile, request.Requestid);
+
+                    var requestwisefile = new Requestwisefile
+                    {
+                        Isdeleted = new BitArray(1),
+                        Requestid = request.Requestid,
+                        Filename = upload,
+                        Createddate = DateTime.Now,
+                    };
+                    _context.Requestwisefiles.Add(requestwisefile);
+                    _context.SaveChanges();
+                }
+                return true;
             }
-            return true;
+            catch(Exception)
+            {
+                return false;
+            }
         }
         #endregion CreateRequestForMe
 
