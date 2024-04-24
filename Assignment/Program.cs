@@ -1,8 +1,16 @@
+using Assignment.Entity.DataContext;
+using Assignment.Repository.Repository;
+using Assignment.Repository.Repository.Interface;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ApplicationDbContext>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IEmployeeDataRepository, EmployeeDataRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

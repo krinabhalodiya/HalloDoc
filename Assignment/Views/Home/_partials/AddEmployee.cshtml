@@ -1,0 +1,142 @@
+﻿@model Assignment.Entity.Model.PaginatedViewModel;
+<div class="modal fade" id="addEmployee" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header header ">
+                <h4 class="modal-title fs-5 mt-3" id="exampleModalLabel">Employee Form</h4>
+                <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
+            </div>
+            <form asp-action="AddEmployee" asp-controller="Home" method="post" class="needs-validation" novalidate id="addemployeeform">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6 my-3">
+                            <div class="form-floating">
+                                <input id="Phonenumber_sendAgreement" asp-for="FirstName" type="text" class="form-control shadow-none inputs" placeholder="PhoneNumber" required>
+                                <label for="Phonenumber_sendAgreement">First Name</label>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 my-3">
+                            <div class="form-floating">
+                                <input id="Phonenumber_sendAgreement" asp-for="LastName" type="text" class="form-control shadow-none inputs" placeholder="PhoneNumber" required>
+                                <label for="Phonenumber_sendAgreement">Last Name</label>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 my-3">
+                            <div class="form-floating">
+                                <input id="Phonenumber_sendAgreement" asp-for="Email" type="text" class="form-control shadow-none inputs" placeholder="PhoneNumber" required>
+                                <label for="Phonenumber_sendAgreement">Email</label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 my-3">
+                            <div class="form-floating">
+                                <input id="Phonenumber_sendAgreement" asp-for="Age" type="text" class="form-control shadow-none inputs" placeholder="PhoneNumber" required>
+                                <label for="Phonenumber_sendAgreement">Age</label>
+                                <span asp-validation-for="Age" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 my-3 d-flex">
+                            <input type="hidden" asp-for="Gender" id="gender"/>
+                            <h5 class="me-3">Gender</h5>
+                            <div class="form-check me-2">
+                                @if(Model.Gender == "Male")
+                                {
+                                    <input class="form-check-input" type="radio" name="gender" id="gender1" value="Male" checked>
+                                }
+                                else
+                                {
+                                    <input class="form-check-input" type="radio" name="gender" id="gender1" value="Male" >
+                                }
+                                <label class="form-check-label" for="exampleRadios1">
+                                    Male
+                                </label>
+                            </div>
+                            <div class="form-check me-2">
+                                @if (Model.Gender == "Female")
+                                {
+                                    <input class="form-check-input" type="radio" name="gender" id="gender2" value="Female" checked>
+                                }
+                                else
+                                {
+                                    <input class="form-check-input" type="radio" name="gender" id="gender2" value="Female">
+                                }
+                                <label class="form-check-label" for="exampleRadios2">
+                                    Female
+                                </label>
+                            </div>
+                            <div class="form-check me-2">
+                                @if (Model.Gender == "Other")
+                                {
+                                    <input class="form-check-input" type="radio" name="gender" id="gender3" value="Other" checked>
+                                }
+                                else
+                                {
+                                    <input class="form-check-input" type="radio" name="gender" id="gender3" value="Other">
+                                }
+                                <label class="form-check-label" for="exampleRadios3">
+                                    Other
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-6 my-3">
+                            <div class="form-floating">
+                                <input id="Phonenumber_sendAgreement" asp-for="DeptName" type="text" class="form-control shadow-none inputs" placeholder="PhoneNumber" required>
+                                <label for="Phonenumber_sendAgreement">Department</label>
+                                <span asp-validation-for="DeptName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 my-3">
+                            <div class="form-floating">
+                                <input id="Phonenumber_sendAgreement" asp-for="Education" type="text" class="form-control shadow-none inputs" placeholder="PhoneNumber" required>
+                                <label for="Phonenumber_sendAgreement">Education</label>
+                                <span asp-validation-for="Education" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 my-3">
+                            <div class="form-floating">
+                                <input id="Phonenumber_sendAgreement" asp-for="Company" type="text" class="form-control shadow-none inputs" placeholder="PhoneNumber" required>
+                                <label for="Phonenumber_sendAgreement">Company Name</label>
+                                <span asp-validation-for="Company" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 my-3">
+                            <div class="form-floating">
+                                <input id="Phonenumber_sendAgreement" asp-for="Experience" type="text" class="form-control shadow-none inputs" placeholder="PhoneNumber" required>
+                                <label for="Phonenumber_sendAgreement">Experiance</label>
+                                <span class="ms-2 fs-7">In Years</span>
+                                <span asp-validation-for="Experience" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 my-3">
+                            <div class="form-floating">
+                                <input id="Phonenumber_sendAgreement" asp-for="Package" type="text" class="form-control shadow-none inputs" placeholder="PhoneNumber" required>
+                                <label for="Phonenumber_sendAgreement">Package</label>
+                                <span class="ms-2 fs-7">In Ruppes</span>
+                                <span asp-validation-for="Package" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 my-3">
+                            <button type="button" class="btn shadow-lg btn-light w-100" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                       
+                            <div class="col-6 my-3">
+                                <button type="submit" class="btn shadow-sm submitbtnmodaL  w-100" id="submit">Save</button>
+                            </div>
+                       
+                        
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#submit').on('click', function () {
+            let radiobtns = $("input[type='radio'][name='gender']:checked").val();
+            document.getElementById('gender').value = radiobtns;
+        });
+    });
+</script>
