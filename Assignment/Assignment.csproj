@@ -6,4 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Assignment.Entity\Assignment.Entity.csproj" />
+    <ProjectReference Include="..\Assignment.Repository\Assignment.Repository.csproj" />
+  </ItemGroup>
+
 </Project>
