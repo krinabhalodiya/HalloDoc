@@ -1,4 +1,5 @@
-﻿using HalloDoc.Entity.Models;
+﻿using HalloDoc.Entity.DataModels;
+using HalloDoc.Entity.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,13 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
 {
     public interface ISchedulingRepository
     {
+        public List<Physician> PhysicianAll();
+        public DayWiseScheduling Daywise(int regionid, DateTime currentDate);
+        public WeekWiseScheduling Weekwise(int regionid, DateTime currentDate);
+        public MonthWiseScheduling Monthwise(int regionid, DateTime currentDate);
+        public MonthWiseScheduling MonthwisePhysician(DateTime currentDate, int id);
         public void AddShift(SchedulingModel model, List<string?>? chk, string adminId);
-        public void ViewShift(int shiftdetailid);
+        public SchedulingModel ViewShift(int shiftdetailid, SchedulingModel modal);
         public void ViewShiftreturn(SchedulingModel modal);
         public bool EditShiftSave(SchedulingModel modal, string id);
         public bool ViewShiftDelete(SchedulingModel modal, string id);

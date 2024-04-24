@@ -21,11 +21,102 @@ namespace HallodocMVC.Repository.Admin.Repository
         {
             _context = context;
         }
-        #region Scheduling
+
+        #region
+        public List<Physician> PhysicianAll()
+        {
+            List<Physician> result = new List<Physician>();
+            result = _context.Physicians.ToList();
+            return result;
+        }
+        #endregion
+
+        public DayWiseScheduling Daywise(int regionid, DateTime currentDate)
+        {
+            DayWiseScheduling day = new DayWiseScheduling
+            {
+                date = currentDate,
+                physicians = _context.Physicians.Where(p => p.Isdeleted == new BitArray(new[] { false })).ToList(),
+                shiftdetails = _context.Shiftdetailregions.Include(u => u.Shiftdetail).ThenInclude(u => u.Shift).Where(u => u.Regionid == regionid && u.Isdeleted == new BitArray(new[] { false })).Select(u => u.Shiftdetail).ToList()
+            };
+            if (regionid == 0)
+            {
+                day.shiftdetails = _context.Shiftdetails.Include(u => u.Shift).Where(u => u.Isdeleted == new BitArray(new[] { false })).ToList();
+            }
+            return day;
+        }
+
+        public WeekWiseScheduling Weekwise(int regionid, DateTime currentDate)
+        {
+            WeekWiseScheduling week = new()
+            {
+                date = currentDate,
+                physicians = _context.Physicians.Where(p => p.Isdeleted == new BitArray(new[] { false })).ToList(),
+                shiftdetails = _context.Shiftdetailregions.Include(u => u.Shiftdetail).ThenInclude(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.Isdeleted == new BitArray(new[] { false })).Where(u => u.Regionid == regionid).Select(u => u.Shiftdetail).ToList()
+            };
+            if (regionid == 0)
+            {
+                week.shiftdetails = _context.Shiftdetails.Include(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.Isdeleted == new BitArray(new[] { false })).ToList();
+            }
+            return week;
+        }
+
+        public MonthWiseScheduling Monthwise(int regionid, DateTime currentDate)
+        {
+            MonthWiseScheduling month = new()
+            {
+                date = currentDate,
+                shiftdetails = _context.Shiftdetailregions
+                    .Include(u => u.Shiftdetail)
+                        .ThenInclude(u => u.Shift)
+                            .ThenInclude(u => u.Physician)
+                    .Where(u => u.Isdeleted == new BitArray(new[] { false }) && u.Regionid == regionid)
+                    .Select(u => u.Shiftdetail)
+                    .ToList()
+            };
+            if (regionid == 0)
+            {
+                month.shiftdetails = _context.Shiftdetails
+                    .Include(u => u.Shift)
+                        .ThenInclude(u => u.Physician)
+                    .Where(u => u.Isdeleted == new BitArray(new[] { false }) && u.Shift.Physician.Isdeleted == new BitArray(new[] { false }))
+                    .ToList();
+            }
+            else
+            {
+                month.shiftdetails = _context.Shiftdetailregions
+                    .Include(u => u.Shiftdetail)
+                        .ThenInclude(u => u.Shift)
+                            .ThenInclude(u => u.Physician)
+                    .Where(u => u.Isdeleted == new BitArray(new[] { false }) && u.Regionid == regionid && u.Shiftdetail.Shift.Physician.Isdeleted == new BitArray(new[] { false }))
+                    .Select(u => u.Shiftdetail)
+                    .ToList();
+            }
+            return month;
+        }
+
+        public MonthWiseScheduling MonthwisePhysician( DateTime currentDate , int id)
+        {
+            MonthWiseScheduling month = new()
+            {
+                date = currentDate,
+                shiftdetails = _context.Shiftdetailregions
+                    .Include(u => u.Shiftdetail)
+                        .ThenInclude(u => u.Shift)
+                            .ThenInclude(u => u.Physician)
+                    .Where(u => u.Isdeleted == new BitArray(new[] { false }) && u.Shiftdetail.Shift.Physicianid == id )
+                    .Select(u => u.Shiftdetail)
+                    .ToList()
+            };
+            return month;
+        }
+
+
+        #region AddShift
         public void AddShift(SchedulingModel model, List<string?>? chk, string adminId)
         {
             var shiftid = _context.Shifts.Where(u => u.Physicianid == model.physicianid).Select(u => u.Shiftid).ToList();
-            if (shiftid.Count() > 0)
+            if (shiftid.Count > 0)
             {
                 foreach (var obj in shiftid)
                 {
@@ -43,7 +134,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                     }
                 }
             }
-            Shift shift = new Shift
+            Shift shift = new()
             {
                 Physicianid = model.physicianid,
                 Startdate = DateOnly.FromDateTime(model.shiftdate),
@@ -67,16 +158,18 @@ namespace HallodocMVC.Repository.Admin.Repository
             _context.SaveChanges();
 
             DateTime curdate = model.shiftdate;
-            Shiftdetail shiftdetail = new Shiftdetail();
-            shiftdetail.Shiftid = shift.Shiftid;
-            shiftdetail.Shiftdate = curdate;
-            shiftdetail.Regionid = model.regionid;
-            shiftdetail.Starttime = model.starttime;
-            shiftdetail.Endtime = model.endtime;
-            shiftdetail.Isdeleted = new BitArray(new[] { false });
+            Shiftdetail shiftdetail = new()
+            {
+                Shiftid = shift.Shiftid,
+                Shiftdate = curdate,
+                Regionid = model.regionid,
+                Starttime = model.starttime,
+                Endtime = model.endtime,
+                Isdeleted = new BitArray(new[] { false })
+            };
             _context.Shiftdetails.Add(shiftdetail);
             _context.SaveChanges();
-            Shiftdetailregion shiftregionnews = new Shiftdetailregion
+            Shiftdetailregion shiftregionnews = new()
             {
                 Shiftdetailid = shiftdetail.Shiftdetailid,
                 Regionid = model.regionid,
@@ -138,7 +231,7 @@ namespace HallodocMVC.Repository.Admin.Repository
                     DateTime newcurdate = model.shiftdate.AddDays(x);
                     for (int i = 0; i < model.repeatcount; i++)
                     {
-                        Shiftdetail shiftdetailnew = new Shiftdetail
+                        Shiftdetail shiftdetailnew = new()
                         {
                             Shiftid = shift.Shiftid,
                             Shiftdate = newcurdate,
@@ -163,26 +256,25 @@ namespace HallodocMVC.Repository.Admin.Repository
                 }
             }
         }
-        public void ViewShift(int shiftdetailid)
+        #endregion
+
+        #region ViewShift
+        public SchedulingModel ViewShift(int shiftdetailid, SchedulingModel modal)
         {
-            SchedulingModel modal = new SchedulingModel();
             var shiftdetail = _context.Shiftdetails.FirstOrDefault(u => u.Shiftdetailid == shiftdetailid);
-            if (shiftdetail != null)
-            {
-                _context.Entry(shiftdetail)
-                    .Reference(s => s.Shift)
-                    .Query()
-                    .Include(s => s.Physician)
-                    .Load();
-            }
+            var shift = _context.Shifts.FirstOrDefault(u => u.Shiftid == shiftdetail.Shiftid);
             modal.regionid = (int)shiftdetail.Regionid;
-            modal.physicianname = shiftdetail.Shift.Physician.Firstname + " " + shiftdetail.Shift.Physician.Lastname;
+            modal.physicianname = "abc";
             modal.modaldate = shiftdetail.Shiftdate.ToString("yyyy-MM-dd");
             modal.starttime = shiftdetail.Starttime;
             modal.endtime = shiftdetail.Endtime;
             modal.shiftdetailid = shiftdetailid;
+            return modal;
         }
-        public void ViewShiftreturn(SchedulingModel modal)
+        #endregion
+
+        #region ViewShiftreturn
+        public async void ViewShiftreturn(SchedulingModel modal)
         {
             var shiftdetail = _context.Shiftdetails.FirstOrDefault(u => u.Shiftdetailid == modal.shiftdetailid);
             if (shiftdetail.Status == 0)
@@ -372,6 +464,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             }
         }
         #endregion
+
         #region UpdateStatusShift
         public async Task<bool> UpdateStatusShift(string s, string AdminID)
         {

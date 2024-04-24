@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using DocumentFormat.OpenXml.Bibliography;
 using HalloDoc.Entity.DataContext;
 using HalloDoc.Entity.DataModels;
@@ -14,14 +15,14 @@ namespace HalloDoc.Controllers.Admin
     [CheckProviderAccess("Admin,Provider", "Scheduling")]
     public class SchedulingController : Controller
     {
-        private readonly HalloDocContext _context;
         private readonly IComboboxRepository _combobox;
         private readonly ISchedulingRepository _schedulingRepository;
-        public SchedulingController(IComboboxRepository comboboxRepository, HalloDocContext context, ISchedulingRepository schedulingRepository)
+        private readonly INotyfService _notyf;
+        public SchedulingController(IComboboxRepository comboboxRepository,  ISchedulingRepository schedulingRepository, INotyfService INotyfService)
         {
             _combobox = comboboxRepository;
-            _context = context;
             _schedulingRepository = schedulingRepository;
+            _notyf = INotyfService;
         }
         public async Task<IActionResult> Index(int? region)
         {
@@ -41,54 +42,21 @@ namespace HalloDoc.Controllers.Admin
         public IActionResult LoadSchedulingPartial(string PartialName, string date, int regionid)
         {
             var currentDate = DateTime.Parse(date);
-            List<Physician> physician = _context.Physicianregions.Include(u => u.Physician).Where(u => u.Regionid == regionid).Select(u => u.Physician).ToList();
-            if (regionid == 0)
-            {
-                physician = _context.Physicians.ToList();
-            }
+            List<Physician> physician = _schedulingRepository.PhysicianAll();
 
             switch (PartialName)
             {
                 case "_DayWise":
-                    DayWiseScheduling day = new DayWiseScheduling
-                    {
-                        date = currentDate,
-                        physicians = physician,
-                        shiftdetails = _context.Shiftdetailregions.Include(u => u.Shiftdetail).ThenInclude(u => u.Shift).Where(u => u.Regionid == regionid && u.Isdeleted == new BitArray(new[] { false })).Select(u => u.Shiftdetail).ToList()
-                    };
-                    if (regionid == 0)
-                    {
-                        day.shiftdetails = _context.Shiftdetails.Include(u => u.Shift).Where(u => u.Isdeleted == new BitArray(new[] { false })).ToList();
-                    }
-                    return PartialView("../Admin/Providers/Scheduling/_DayWise", day);
+                    return PartialView("../Admin/Providers/Scheduling/_DayWise", _schedulingRepository.Daywise(regionid, currentDate));
 
                 case "_WeekWise":
-                    WeekWiseScheduling week = new WeekWiseScheduling
-                    {
-                        date = currentDate,
-                        physicians = physician,
-                        shiftdetails = _context.Shiftdetailregions.Include(u => u.Shiftdetail).ThenInclude(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.Isdeleted == new BitArray(new[] { false })).Where(u => u.Regionid == regionid).Select(u => u.Shiftdetail).ToList()
-                    };
-                    if (regionid == 0)
-                    {
-                        week.shiftdetails = _context.Shiftdetails.Include(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.Isdeleted == new BitArray(new[] { false })).ToList();
-                    }
-                    return PartialView("../Admin/Providers/Scheduling/_WeekWise", week);
+                    return PartialView("../Admin/Providers/Scheduling/_WeekWise", _schedulingRepository.Weekwise(regionid, currentDate));
 
                 case "_MonthWise":
-                    MonthWiseScheduling month = new MonthWiseScheduling
-                    {
-                        date = currentDate,
-                        shiftdetails = _context.Shiftdetailregions.Include(u => u.Shiftdetail).ThenInclude(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.Isdeleted == new BitArray(new[] { false })).Where(u => u.Regionid == regionid).Select(u => u.Shiftdetail).ToList()
-                    };
-                    if (regionid == 0)
-                    {
-                        month.shiftdetails = _context.Shiftdetails.Include(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.Isdeleted == new BitArray(new[] { false })).ToList();
-                    }
-                    return PartialView("../Admin/Providers/Scheduling/_MonthWise", month);
+                    return PartialView("../Admin/Providers/Scheduling/_MonthWise", _schedulingRepository.Monthwise(regionid, currentDate));
 
                 default:
-                    return PartialView("../Admin/Providers/Scheduling/_DayWise");
+                    return PartialView("../Admin/Providers/Scheduling/_MonthWise", _schedulingRepository.Monthwise(regionid, currentDate));
             }
         }
         #endregion
@@ -97,12 +65,7 @@ namespace HalloDoc.Controllers.Admin
         public IActionResult LoadSchedulingPartialProivder(string date)
         {
             var currentDate = DateTime.Parse(date);
-             MonthWiseScheduling month = new MonthWiseScheduling
-             {
-                date = currentDate,
-                shiftdetails = _context.Shiftdetails.Include(u => u.Shift).Where(u => u.Isdeleted == new BitArray(new[] { false }) && u.Shift.Physicianid==Int32.Parse(CV.UserID())).ToList()
-                };
-            return PartialView("../Admin/Providers/Scheduling/_MonthWise", month);
+            return PartialView("../Admin/Providers/Scheduling/_MonthWise", _schedulingRepository.MonthwisePhysician(currentDate, Int32.Parse(CV.UserID())));
         }
         #endregion
 
@@ -120,42 +83,22 @@ namespace HalloDoc.Controllers.Admin
         #region viewshift
         public SchedulingModel viewshift(int shiftdetailid)
         {
-            SchedulingModel modal = new SchedulingModel();
-            var shiftdetail = _context.Shiftdetails.FirstOrDefault(u => u.Shiftdetailid == shiftdetailid);
-
-            if (shiftdetail != null)
-            {
-                _context.Entry(shiftdetail)
-                    .Reference(s => s.Shift)
-                    .Query()
-                    .Include(s => s.Physician)
-                    .Load();
-            }
-            modal.regionid = (int)shiftdetail.Regionid;
-            modal.physicianname = shiftdetail.Shift.Physician.Firstname + " " + shiftdetail.Shift.Physician.Lastname;
-            modal.modaldate = shiftdetail.Shiftdate.ToString("yyyy-MM-dd");
-            modal.starttime = shiftdetail.Starttime;
-            modal.endtime = shiftdetail.Endtime;
-            modal.shiftdetailid = shiftdetailid;
-            return modal;
+            ViewBag.RegionCombobox = _combobox.RegionComboBox();
+            SchedulingModel model = new SchedulingModel();
+             model = _schedulingRepository.ViewShift(shiftdetailid,model);
+            return model;
         }
         #endregion
 
         #region ViewShiftreturn
         public IActionResult ViewShiftreturn(SchedulingModel modal)
         {
-            var shiftdetail = _context.Shiftdetails.FirstOrDefault(u => u.Shiftdetailid == modal.shiftdetailid);
-            if (shiftdetail.Status == 0)
+            if (modal.shiftdate.Date < DateTime.Today.Date)
             {
-                shiftdetail.Status = 1;
+                _notyf.Warning("Cant edit old shifts");
+                return RedirectToAction("Index");
             }
-            else
-            {
-                shiftdetail.Status = 0;
-            }
-            _context.Shiftdetails.Update(shiftdetail);
-            _context.SaveChanges();
-
+            _schedulingRepository.ViewShiftreturn(modal);
             return RedirectToAction("Index");
         }
         #endregion

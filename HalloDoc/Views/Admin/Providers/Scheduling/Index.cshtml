@@ -267,7 +267,7 @@
                         <input type="hidden" asp-for="physicianid" value="@CV.UserID()" />
                     }
                     <div class="form-floating mt-3">
-                        <input asp-for="shiftdate" required type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" id="shiftmodalDate" class="form-control disable" placeholder="Date" readonly>
+                        <input asp-for="modaldate" required type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" id="shiftmodalDate" class="form-control disable" placeholder="Date" readonly>
                         <label for="floatingInput">Shift Date</label>
                         <div class="invalid-feedback">
                             Please Enter Date
