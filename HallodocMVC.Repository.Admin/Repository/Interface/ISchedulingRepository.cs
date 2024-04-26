@@ -16,7 +16,7 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public MonthWiseScheduling Monthwise(int regionid, DateTime currentDate);
         public MonthWiseScheduling MonthwisePhysician(DateTime currentDate, int id);
         public void AddShift(SchedulingModel model, List<string?>? chk, string adminId);
-        public SchedulingModel ViewShift(int shiftdetailid, SchedulingModel modal);
+        public Task<SchedulingModel> ViewShift(int shiftdetailid);
         public void ViewShiftreturn(SchedulingModel modal);
         public bool EditShiftSave(SchedulingModel modal, string id);
         public bool ViewShiftDelete(SchedulingModel modal, string id);

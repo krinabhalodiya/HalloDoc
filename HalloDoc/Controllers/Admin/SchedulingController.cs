@@ -5,6 +5,7 @@ using HalloDoc.Entity.DataContext;
 using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
 using HalloDoc.Models;
+using HallodocMVC.Repository.Admin.Repository;
 using HallodocMVC.Repository.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -81,12 +82,11 @@ namespace HalloDoc.Controllers.Admin
         #endregion
 
         #region viewshift
-        public SchedulingModel viewshift(int shiftdetailid)
+        public async Task<SchedulingModel> viewshift(int shiftdetailid)
         {
-            ViewBag.RegionCombobox = _combobox.RegionComboBox();
-            SchedulingModel model = new SchedulingModel();
-             model = _schedulingRepository.ViewShift(shiftdetailid,model);
-            return model;
+            ViewBag.RegionCombobox =await _combobox.RegionComboBox();
+            SchedulingModel model = new();
+            return await _schedulingRepository.ViewShift(shiftdetailid);
         }
         #endregion
 

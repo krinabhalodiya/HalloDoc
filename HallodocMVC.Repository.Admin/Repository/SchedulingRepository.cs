@@ -259,12 +259,13 @@ namespace HallodocMVC.Repository.Admin.Repository
         #endregion
 
         #region ViewShift
-        public SchedulingModel ViewShift(int shiftdetailid, SchedulingModel modal)
+        public async Task<SchedulingModel> ViewShift(int shiftdetailid )
         {
-            var shiftdetail = _context.Shiftdetails.FirstOrDefault(u => u.Shiftdetailid == shiftdetailid);
-            var shift = _context.Shifts.FirstOrDefault(u => u.Shiftid == shiftdetail.Shiftid);
+            SchedulingModel modal = new();
+            var shiftdetail = await _context.Shiftdetails.FirstOrDefaultAsync(u => u.Shiftdetailid == shiftdetailid);
+            var shift = await _context.Shifts.FirstOrDefaultAsync(u => u.Shiftid == shiftdetail.Shiftid);
             modal.regionid = (int)shiftdetail.Regionid;
-            modal.physicianname = "abc";
+            modal.physicianname = "Abc";
             modal.modaldate = shiftdetail.Shiftdate.ToString("yyyy-MM-dd");
             modal.starttime = shiftdetail.Starttime;
             modal.endtime = shiftdetail.Endtime;
