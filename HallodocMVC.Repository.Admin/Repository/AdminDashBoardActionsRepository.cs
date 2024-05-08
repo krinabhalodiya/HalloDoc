@@ -16,6 +16,9 @@ using static HalloDoc.Entity.Models.ViewDocuments;
 using System.Runtime.Intrinsics.Arm;
 using static HalloDoc.Entity.Models.Constant;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Web.Helpers;
+using Org.BouncyCastle.Ocsp;
+using System.Reflection;
 
 namespace HallodocMVC.Repository.Admin.Repository
 {
@@ -30,6 +33,7 @@ namespace HallodocMVC.Repository.Admin.Repository
             this.httpContextAccessor = httpContextAccessor;
             _emailConfig = emailConfig;
         }
+
         #region Editcase
         public bool EditCase(ViewCaseData model)
         {
@@ -552,11 +556,11 @@ namespace HallodocMVC.Repository.Admin.Repository
         {
             return _context.Healthprofessionals.FirstOrDefault(e => e.Vendorid == VendorID);
         }
-        public bool SendOrder(ViewSendOrderData data)
+        public bool SendOrder(ViewSendOrderData data, int userid, string role)
         {
             try
             {
-                Orderdetail od = new Orderdetail
+                Orderdetail od = new()
                 {
                     Requestid = data.RequestID,
                     Vendorid = data.VendorID,
@@ -571,10 +575,35 @@ namespace HallodocMVC.Repository.Admin.Repository
                 _context.Orderdetails.Add(od);
                 _context.SaveChanges(true);
                 var req = _context.Requests.FirstOrDefault(e => e.Requestid == data.RequestID);
-                _emailConfig.SendMail(data.Email, "New Order arrived", "Prescription : " + data.Prescription + " Request name : " + req.Firstname);
+                var emailbody = "Prescription : " + data.Prescription + " Request name : " + req.Firstname;
+                _emailConfig.SendMail(data.Email, "New Order arrived", emailbody);
+                Emaillog log = new()
+                {
+                    Emailtemplate = emailbody,
+                    Subjectname = "New Order arrived",
+                    Emailid = data.Email,
+                    Roleid = 1,
+                    Createdate = DateTime.Now,
+                    Sentdate = DateTime.Now,
+                    Isemailsent = new BitArray(new[] { true }),
+                    Senttries = 1,
+                    Action = 1,
+                    Requestid = req.Requestid,
+                    Confirmationnumber = req.Confirmationnumber,
+                };
+                if (role == "Admin")
+                {
+                    log.Adminid = userid;
+                }
+                else if (role == "Provider")
+                {
+                    log.Physicianid = userid;
+                }
+                _context.Emaillogs.Add(log);
+                _context.SaveChanges();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -582,12 +611,60 @@ namespace HallodocMVC.Repository.Admin.Repository
         #endregion
 
         #region SendAgreement
-        public bool SendAgreement(int requestid)
+        public bool SendAgreement(int requestid, int userid, string role)
         {
             var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == requestid);
             var agreementUrl = "https://localhost:44306/SendAgreement/Index?RequestID=" + requestid;
-            _emailConfig.SendMail(res.Email, "Agreement for your request", $"<a href='{agreementUrl}'>Agree/Disagree</a>");
-            _emailConfig.SendSMS(res.Phonenumber, $"Agreement for your request <a href='{agreementUrl}'>Agree/Disagree</a>");
+            var emailbody = $"<a href='{agreementUrl}'>Agree/Disagree</a>";
+            _emailConfig.SendMail(res.Email, "Agreement for your request", emailbody);
+            _emailConfig.SendSMS(res.Phonenumber, emailbody);
+            Emaillog log = new()
+            {
+                Emailtemplate = emailbody,
+                Subjectname = "New Order arrived",
+                Emailid = res.Email,
+                Roleid = 1,
+                Createdate = DateTime.Now,
+                Sentdate = DateTime.Now,
+                Isemailsent = new BitArray(new[] { true }),
+                Senttries = 1,
+                Action = 4,
+                Requestid = res.Requestid,
+                Confirmationnumber = _context.Requests.FirstOrDefault(e => e.Requestid == requestid).Confirmationnumber,
+            };
+            if (role == "Admin")
+            {
+                log.Adminid = userid;
+            }
+            else if (role == "Provider")
+            {
+                log.Physicianid = userid;
+            }
+            _context.Emaillogs.Add(log);
+            _context.SaveChanges();
+            Smslog data = new()
+            {
+                Smstemplate = emailbody,
+                Mobilenumber = res.Phonenumber,
+                Roleid = 1,
+                Requestid = requestid,
+                Confirmationnumber = _context.Requests.FirstOrDefault(e => e.Requestid == requestid).Confirmationnumber,
+                Createdate = DateTime.Now,
+                Sentdate = DateTime.Now,
+                Issmssent = new BitArray(new[] { true }),
+                Senttries = 1,
+                Action = 4
+            };
+            if (role == "Admin")
+            {
+                data.Adminid = userid;
+            }
+            else if (role == "Provider")
+            {
+                data.Physicianid = userid;
+            }
+            _context.Smslogs.Add(data);
+            _context.SaveChanges();
             return true;
         }
         #endregion

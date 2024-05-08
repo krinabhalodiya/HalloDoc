@@ -9,17 +9,18 @@
 			<div class="modal-body">
 				<div class="d-flex justify-content-center">
 					<p class="text-secondary">Encounter Form Finalize successfully </p><br/>
-					<button type="button" onclick="openPdfInNewTab('@Url.Action("GeneratePdf", "AdminActions")')" class="btn bg-info text-white me-2">Download</button>
+					<button type="button" id="downloadBtn" class="btn bg-info text-white me-2">Download</button>
 				</div>
 			</div>
         </div>
     </div>
 </div>
 <script>
-	function openPdfInNewTab(url) {
-		// Open the URL in a new tab
-		var win = window.open(url, '_blank');
-		win.focus();
-		return false;
-	}
+    function openPdfWithRequestId() {
+        var baseUrl = '@Url.Action("GeneratePdf", "AdminActions")';
+		var requestId = document.getElementById('RequestID_EncounterPdf').value;
+		var urlWithRequestId = baseUrl + '?id=' + requestId;
+        window.open(urlWithRequestId, '_blank');
+    }
+    document.getElementById('downloadBtn').onclick = openPdfWithRequestId;
 </script>

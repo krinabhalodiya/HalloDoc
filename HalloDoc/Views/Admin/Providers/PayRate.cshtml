@@ -1,0 +1,56 @@
+﻿@{
+    Layout = "_Layout";
+}
+@model List<HalloDoc.Entity.Models.ProviderPayrateModel>
+<section class="container-fluid w-75 my-5">
+
+    <div class=" d-flex flex-row-reverse justify-content-between form-admin mb-3">
+        <a onclick="history.back()" class="text-decoration-none text-info ">
+            <span class="ml-5 btn btn-outline-info">
+                <i class="fa fa-solid fa-angle-left"></i> Back
+            </span>
+        </a>
+        <h3>Enter Payrate</h3>
+    </div>
+    <div class="table-responsive ">
+        <table class="table w-100">
+            <thead>
+                <tr class="table-secondary">
+                    <th>
+                        Category
+                    </th>
+                    <th>
+                        Payrate
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <form asp-action="EditPayrate" asp-controller="Providers">
+                    <tr>
+                        <td>@item.CategoryName</td>
+                        <td>
+                            <input hidden name="CategoryId" value="@item.PayrateCategoryId">
+                            <input hidden name="PhysicianId" value="@item.PhysicianId">
+                            <input hidden name="ProviderPayrateId" value="@item.PayrateId">
+                            <div class="form-floating ">
+                                <input type="number" class="form-control" id="floatingInput" name="Payrate" value="@item.Payrate" placeholder="Payrate">
+                                <label for="floatingInput">Payrate</label>
+                            </div>
+                        </td>
+                        <td>
+                            <input class="btn btn-info" type="submit">
+                        </td>
+                    </tr>
+                    </form>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</section>

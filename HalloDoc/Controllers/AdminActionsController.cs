@@ -303,7 +303,7 @@ namespace HalloDoc.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool data = _IAdminDashBoardActionsRepository.SendOrder(sm);
+                bool data = _IAdminDashBoardActionsRepository.SendOrder(sm,Int32.Parse(CV.UserID()),CV.role());
                 if (data)
                 {
                     _notyf.Success("Order Created  successfully...");
@@ -329,7 +329,7 @@ namespace HalloDoc.Controllers
         [CheckProviderAccess("Admin,Provider")]
         public async Task<IActionResult> SendAgreementmail(int requestid)
         {
-            if (_IAdminDashBoardActionsRepository.SendAgreement(requestid))
+            if (_IAdminDashBoardActionsRepository.SendAgreement(requestid,Int32.Parse(CV.UserID()),CV.role()))
             {
                 _notyf.Success("Mail Send  Successfully..!");
             }

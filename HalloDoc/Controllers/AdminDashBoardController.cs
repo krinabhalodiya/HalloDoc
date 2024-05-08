@@ -138,11 +138,11 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendLink(string Firstname, string Lastname, string Mobile, string Email)
         {
-            if (_IAdminDashBoardRepository.SendLink(Email))
+            if (_IAdminDashBoardRepository.SendLink(Email, Int32.Parse(CV.UserID()),CV.role()))
             {
                 _notyf.Success("Mail Send  Successfully..!");
             }
-            if (_IAdminDashBoardRepository.SendSMS(Mobile))
+            if (_IAdminDashBoardRepository.SendSMS(Mobile, Int32.Parse(CV.UserID()), CV.role()))
             {
                 _notyf.Success("Message Send  Successfully..!");
             }

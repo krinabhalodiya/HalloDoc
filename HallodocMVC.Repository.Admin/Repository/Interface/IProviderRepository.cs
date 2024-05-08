@@ -23,6 +23,7 @@ namespace HallodocMVC.Repository.Admin.Repository.Interface
         public Task<bool> EditProviderProfile(PhysiciansData vm, string AdminId);
         public Task<bool> EditProviderOnbording(PhysiciansData vm, string AdminId);
         public Task<bool> DeletePhysician(int PhysicianID, string AdminID);
-
+        public Task<List<ProviderPayrateModel>> GetPayrateDetails(int PhysicianId);
+        public Task<bool> EditPayrate(int ProviderPayrateId, decimal Payrate, string id);
     }
 }

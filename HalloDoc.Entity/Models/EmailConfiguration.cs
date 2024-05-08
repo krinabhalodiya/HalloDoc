@@ -119,7 +119,7 @@ namespace HalloDoc.Entity.Models
         public async Task<bool> SendSMS(string receiverPhoneNumber, string message)
         {
             string accountSid = "AC9e9ac9dd9d1ad8c559523c1de6c3214f";
-            string authToken = "dbb55a315ac9468eff4bc05d075f86a3";
+            string authToken = "f55ad3eeb23f269afd4a6ad247928c47";
             string twilioPhoneNumber = "+12513698856";
 
             TwilioClient.Init(accountSid, authToken);

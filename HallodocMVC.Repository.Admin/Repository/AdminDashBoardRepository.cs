@@ -16,6 +16,8 @@ using System.Linq.Expressions;
 using HalloDoc.Entity.Models;
 using Twilio.TwiML.Messaging;
 using Twilio.TwiML.Voice;
+using HalloDoc.Entity.DataModels;
+using System.Web.Helpers;
 
 namespace HallodocMVC.Repository.Admin.Repository
 {
@@ -262,18 +264,63 @@ namespace HallodocMVC.Repository.Admin.Repository
         }
         #endregion
         #region SendLink
-        public bool SendLink(String Email)
+        public bool SendLink(String Email, int userid , string role)
         {
             var agreementUrl = "https://localhost:44306/SubmitRequest/Index";
-            _emailConfig.SendMail(Email,"ResubmitRequest", $"<a href='{agreementUrl}'>Agree/Disagree</a>");
+            var emailbody = $"<a href='{agreementUrl}'>Agree/Disagree</a>";
+            _emailConfig.SendMail(Email,"ResubmitRequest", emailbody);
+            Emaillog data = new()
+            {
+                Emailtemplate = emailbody,
+                Subjectname = "ResubmitRequest",
+                Emailid = Email,
+                Roleid = 1,
+                Createdate = DateTime.Now,
+                Sentdate = DateTime.Now,
+                Isemailsent = new BitArray(new[] { true }),
+                Senttries = 1,
+                Action = 3
+            };
+            if (role == "Admin")
+            {
+                data.Adminid = userid;
+            }
+            else if(role == "Provider")
+            {
+                data.Physicianid = userid;
+            }
+            _context.Emaillogs.Add(data);
+            _context.SaveChanges();
             return true;
         }
         #endregion
         #region SendLink
-        public bool SendSMS(String mobile)
+        public bool SendSMS(String mobile, int userid, string role)
         {
             var agreementUrl = "https://localhost:44306/SubmitRequest/Index";
-            _emailConfig.SendSMS(mobile, $"<a href='{agreementUrl}'>Agree/Disagree</a>");
+            var smstemplate = $"<a href='{agreementUrl}'>Agree/Disagree</a>";
+            _emailConfig.SendSMS(mobile, smstemplate);
+            Smslog data = new()
+            {
+                Smstemplate = smstemplate,
+                Mobilenumber = mobile,
+                Roleid = 1,
+                Createdate = DateTime.Now,
+                Sentdate = DateTime.Now,
+                Issmssent = new BitArray(new[] { true }),
+                Senttries = 1,
+                Action = 3
+            };
+            if (role == "Admin")
+            {
+                data.Adminid = userid;
+            }
+            else if (role == "Provider")
+            {
+                data.Physicianid = userid;
+            }
+            _context.Smslogs.Add(data);
+            _context.SaveChanges();
             return true;
         }
         #endregion

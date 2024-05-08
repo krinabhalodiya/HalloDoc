@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 using HalloDoc.Entity.DataContext;
 using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
@@ -19,11 +20,13 @@ namespace HallodocMVC.Repository.Admin.Repository
     {
         #region Constructor
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly EmailConfiguration _emailConfig;
         private readonly HalloDocContext _context;
-        public LoginRepository(HalloDocContext context, IHttpContextAccessor httpContextAccessor)
+        public LoginRepository(HalloDocContext context, IHttpContextAccessor httpContextAccessor, EmailConfiguration emailConfig)
         {
             this.httpContextAccessor = httpContextAccessor;
             _context = context;
+            _emailConfig = emailConfig;
         }
         #endregion
 
@@ -228,6 +231,30 @@ namespace HallodocMVC.Repository.Admin.Repository
             {
                 return false;
             }
+        }
+        #endregion
+        #region SendAgreement
+        public bool resetpassmailsent(string Email)
+        {
+            var Subject = "Change PassWord";
+            var agreementUrl = " https://localhost:44306/Home/ResetPassWord?Datetime=" + _emailConfig.Encode(DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt")) + "&email=" + _emailConfig.Encode(Email);
+            var emailbody = "$\"<a href='{agreementUrl}'>ResetPass</a>\"";
+            _emailConfig.SendMail(Email, Subject, emailbody);
+            Emaillog log = new()
+            {
+                Emailtemplate = emailbody,
+                Subjectname = "Change PassWord",
+                Emailid = Email,
+                Roleid = 1,
+                Createdate = DateTime.Now,
+                Sentdate = DateTime.Now,
+                Isemailsent = new BitArray(new[] { true }),
+                Senttries = 1,
+                Action = 5,
+            };
+            _context.Emaillogs.Add(log);
+            _context.SaveChanges();
+            return true;
         }
         #endregion
     }

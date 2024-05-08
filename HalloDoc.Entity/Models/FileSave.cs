@@ -9,6 +9,32 @@ namespace HalloDoc.Entity.Models
 {
     public class FileSave
     {
+        #region UploadFile_TimeSheet
+        public static string UploadTimesheetDoc(IFormFile UploadFile, int TimeSheetId)
+        {
+            string newfilename = null;
+            if (UploadFile != null)
+            {
+                string FilePath = "wwwroot\\Upload\\TimeSheet\\" + TimeSheetId;
+                string path = Path.Combine(Directory.GetCurrentDirectory(), FilePath);
+
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                newfilename = $"{Path.GetFileNameWithoutExtension(UploadFile.FileName)}-{DateTime.Now.ToString("yyyyMMddhhmmss")}.{Path.GetExtension(UploadFile.FileName).Trim('.')}"; ;
+
+                string fileNameWithPath = Path.Combine(path, newfilename);
+                //upload_path = FilePath.Replace("wwwroot\\Upload\\TimeSheet\\", "/Upload/TimeSheet/") + "/" + newfilename;
+
+
+                using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                {
+                    UploadFile.CopyTo(stream);
+                }
+            }
+            return newfilename;
+        }
+        #endregion
         #region UploadFile
         public static string UploadDoc(IFormFile UploadFile, int Requestid)
         {

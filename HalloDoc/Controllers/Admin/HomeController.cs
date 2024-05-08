@@ -100,10 +100,7 @@ namespace HalloDoc.Controllers.Admin
         {
             if (await _loginRepository.CheckregisterdAsync(Email))
             {
-                var Subject = "Change PassWord";
-                var agreementUrl = " https://localhost:44306/Home/ResetPassWord?Datetime=" + _emailConfig.Encode(DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt")) + "&email=" + _emailConfig.Encode(Email);
-               
-                _emailConfig.SendMail(Email, Subject, $"<a href='{agreementUrl}'>ResetPass</a>");
+                _loginRepository.resetpassmailsent(Email);
             }
             else
             {

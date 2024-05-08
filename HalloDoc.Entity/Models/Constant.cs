@@ -56,10 +56,9 @@ namespace HalloDoc.Entity.Models
             Request,
             SendLink,
             SendAgreement,
-            Forgot,
+            ForgotPassword,
             NewRegistration,
             contact
-
         }
     }
 }

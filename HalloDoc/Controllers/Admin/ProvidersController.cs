@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.Office2010.Excel;
 using HalloDoc.Entity.DataModels;
 using HalloDoc.Entity.Models;
 using HalloDoc.Models;
+using HallodocMVC.Repository.Admin.Repository;
 using HallodocMVC.Repository.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -243,6 +244,28 @@ namespace HalloDoc.Controllers.Admin
             {
                 _notyf.Success("Physician not deleted successfully...");
                 return RedirectToAction("PhysicianAll");
+            }
+        }
+        #endregion
+        #region Payrate
+        public async Task<IActionResult> PayRate(int PhysicianId)
+        {
+
+            var data = await _IProviderRepository.GetPayrateDetails(PhysicianId);
+            return View("../Admin/Providers/PayRate", data);
+        }
+
+        public async Task<IActionResult> EditPayrate(int PhysicianId, decimal PayRate, int ProviderPayrateId)
+        {
+            if (await _IProviderRepository.EditPayrate(ProviderPayrateId, PayRate, CV.ID()))
+            {
+                _notyf.Success("Payrate updated");
+                return RedirectToAction("Payrate", new { PhysicianId });
+            }
+            else
+            {
+                _notyf.Error("Payrate not updated");
+                return RedirectToAction("Payrate", new { PhysicianId });
             }
         }
         #endregion

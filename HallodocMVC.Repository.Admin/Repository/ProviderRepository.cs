@@ -254,7 +254,20 @@ namespace HallodocMVC.Repository.Admin.Repository
                         _context.SaveChanges();
 
                     }
-                    return true;
+					List<Payratecategory> df = _context.Payratecategories.ToList();
+					foreach (var item in df)
+					{
+						var Payratebyprovider = new Payratebyprovider();
+						Payratebyprovider.Payratecategoryid = item.Payratecategoryid;
+						Payratebyprovider.Physicianid = Physician.Physicianid;
+						Payratebyprovider.Createddate = DateTime.Now;
+						Payratebyprovider.Createdby = AdminId;
+						Payratebyprovider.Payrate = 0;
+						_context.Payratebyproviders.Add(Payratebyprovider);
+						_context.SaveChanges();
+					}
+
+					return true;
                 }
                 else
                 {
@@ -271,7 +284,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         #region GetPhysicianById
         public async Task<PhysiciansData> GetPhysicianById(int id)
         {
-            PhysiciansData? pl = await (from r in _context.Physicians
+			PhysiciansData? pl = await (from r in _context.Physicians
                                    join Aspnetuser in _context.Aspnetusers
                                    on r.Aspnetuserid equals Aspnetuser.Id into aspGroup
                                    from asp in aspGroup.DefaultIfEmpty()
@@ -663,6 +676,47 @@ namespace HallodocMVC.Repository.Admin.Repository
             catch (Exception ex)
             {
                 return false;
+            }
+        }
+        #endregion
+
+        #region GetPayrate details Payrate
+        public async Task<List<ProviderPayrateModel>> GetPayrateDetails(int PhysicianId)
+        {
+            List<ProviderPayrateModel> payrateByProviders = new List<ProviderPayrateModel>();
+
+            payrateByProviders = await (from payrate in _context.Payratebyproviders
+                                  join category in _context.Payratecategories
+                                  on payrate.Payratecategoryid equals category.Payratecategoryid
+                                  where payrate.Physicianid == PhysicianId
+                                  orderby payrate.Payratecategoryid
+                                  select new ProviderPayrateModel
+                                  {
+                                      PayrateId = payrate.Payrateid,
+                                      PhysicianId = PhysicianId,
+                                      PayrateCategoryId = payrate.Payratecategoryid,
+                                      CategoryName = category.Categoryname,
+                                      Payrate = (double)payrate.Payrate
+                                  }).ToListAsync();
+
+            return payrateByProviders;
+        }
+        public async Task<bool> EditPayrate(int ProviderPayrateId, decimal Payrate, string id)
+        {
+            Payratebyprovider p = await _context.Payratebyproviders.Where(e => e.Payrateid == ProviderPayrateId).FirstOrDefaultAsync();
+
+            if (p == null)
+            {
+                return false;
+            }
+            else
+            {
+                p.Payrate = Payrate;
+                p.Modifieddate = DateTime.Now;
+                p.Modifiedby = id;
+                _context.Payratebyproviders.Update(p);
+                _context.SaveChanges();
+                return true;
             }
         }
         #endregion

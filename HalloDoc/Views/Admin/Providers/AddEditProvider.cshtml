@@ -531,6 +531,9 @@
                 @if (CV.role() == "Admin")
                 {
                     <div class="text-end mt-2 edits" >
+                        <a asp-action="PayRate" asp-controller="Providers" asp-route-PhysicianId="@Model.Physicianid" class="btn text-white btn-info btn-submit mx-2 ">
+                            Pay Rate
+                        </a>
                         <button type="submit" asp-action="EditProviderOnbording" asp-controller="Providers" id="formsave" class="btn text-white btn-info btn-submit mx-2 ">
                             save
                         </button>
