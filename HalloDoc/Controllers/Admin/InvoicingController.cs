@@ -40,7 +40,10 @@ namespace HalloDoc.Controllers.Admin
         public IActionResult IsApproveSheet(int PhysicianId, DateOnly StartDate)
         {
             var x = _invoiceRepository.GetPendingTimesheet(PhysicianId, StartDate);
-
+            if (x.Count() == 0)
+            {
+                return Json(new { x = true });
+            }
             return PartialView("../Admin/Invoicing/_PendingApprove", x);
         }
         #endregion
@@ -131,5 +134,15 @@ namespace HalloDoc.Controllers.Admin
             }
             return RedirectToAction("Index");
         }
+        #region SetToApprove
+        public async Task<IActionResult> SetToApprove(ViewTimeSheet ts)
+        {
+            if (await _invoiceRepository.SetToApprove(ts, CV.ID()))
+            {
+                _notyf.Success("Sheet Is Approve Successfully..!");
+            }
+            return RedirectToAction("IndexAdmin");
+        }
+        #endregion
     }
 }
