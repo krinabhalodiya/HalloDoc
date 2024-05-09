@@ -257,7 +257,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         /// <param name="tr"></param>
         /// <param name="PhysicianId"></param>
         /// <returns></returns>
-        public ViewTimeSheet GetTimesheetDetails(List<Timesheetdetail> td, List<Timesheetdetailreimbursement> tr, int PhysicianId)
+        public ViewTimeSheet GetTimesheetDetails(List<Timesheetdetail> td, List<ViewTimesheetdetailreimbursementsdata> tr, int PhysicianId)
         {
             try
             {
@@ -276,21 +276,26 @@ namespace HallodocMVC.Repository.Admin.Repository
                     Totalhours = e.Totalhours,
                     Timesheetid = e.Timesheetid
                 }).OrderBy(r => r.Timesheetdate).ToList();
-
-                TimeSheet.ViewTimesheetdetailreimbursements = tr.Select(e => new ViewTimesheetdetailreimbursements
+                if (tr != null)
                 {
-                    Amount = e.Amount,
-                    Timesheetdetailreimbursementid = e.Timesheetdetailreimbursementid,
-                    Isdeleted = e.Isdeleted,
-                    Itemname = e.Itemname,
-                    Bill = e.Bill,
-                    Createddate = e.Createddate,
-                    Timesheetdate = _context.Timesheetdetails.Where(r => r.Timesheetdetailid == e.Timesheetdetailid).FirstOrDefault().Timesheetdate,
-                    Timesheetid = _context.Timesheetdetails.Where(r => r.Timesheetdetailid == e.Timesheetdetailid).FirstOrDefault().Timesheetid,
-                    Modifiedby = e.Modifiedby,
-                    Timesheetdetailid = e.Timesheetdetailid,
-                }).OrderBy(r => r.Timesheetdetailid).ToList();
-
+                    TimeSheet.ViewTimesheetdetailreimbursements = tr.Select(e => new ViewTimesheetdetailreimbursementsdata
+                    {
+                        Amount = e.Amount,
+                        Timesheetdetailreimbursementid = e.Timesheetdetailreimbursementid,
+                        Isdeleted = e.Isdeleted,
+                        Itemname = e.Itemname,
+                        Bill = e.Bill,
+                        Createddate = e.Createddate,
+                        Timesheetdate =e.Timesheetdate,
+                        Timesheetid = _context.Timesheetdetails.Where(r => r.Timesheetdetailid == e.Timesheetdetailid).FirstOrDefault().Timesheetid,
+                        Modifiedby = e.Modifiedby,
+                        Timesheetdetailid = e.Timesheetdetailid,
+                    }).OrderBy(r => r.Timesheetdetailid).ToList();
+                }
+                else
+                {
+                    TimeSheet.ViewTimesheetdetailreimbursements = new List<ViewTimesheetdetailreimbursementsdata> { };
+                }
                 TimeSheet.PayrateWithProvider = _context.Payratebyproviders.Where(r => r.Physicianid == PhysicianId).ToList();
                 if (td.Count > 0)
                 {
@@ -333,24 +338,36 @@ namespace HallodocMVC.Repository.Admin.Repository
         /// </summary>
         /// <param name="TimeSheetDetails"></param>
         /// <returns>List Of TimeSheetBill</returns>
-        public async Task<List<Timesheetdetailreimbursement>> GetTimesheetBills(List<Timesheetdetail> TimeSheetDetails)
+        public async Task<List<ViewTimesheetdetailreimbursementsdata>> GetTimesheetBills(List<Timesheetdetail> TimeSheetDetails)
         {
             try
             {
-                var TimeSheetBills = await _context.Timesheetdetailreimbursements
-                                     .Where(e => TimeSheetDetails.Contains(e.Timesheetdetail) && e.Isdeleted == false)
-                                     .OrderBy(r => r.Timesheetdetailid)
-                                     .ToListAsync();
+                List<ViewTimesheetdetailreimbursementsdata> TimeSheetBills = await (
+                    from timesheetdoc in _context.Timesheetdetailreimbursements
+                    join timesheetdetail in _context.Timesheetdetails // Join with the input list
+                    on timesheetdoc.Timesheetdetailid equals timesheetdetail.Timesheetdetailid
+                    where TimeSheetDetails.Contains(timesheetdoc.Timesheetdetail) && !(timesheetdoc.Isdeleted ?? false)// Assuming IsDeleted is a property in Timesheetdetailreimbursements table
+                    select new ViewTimesheetdetailreimbursementsdata
+                    {
+                         Timesheetdetailreimbursementid = timesheetdoc.Timesheetdetailreimbursementid,
+                         Timesheetdetailid =timesheetdoc.Timesheetdetailid,
+                         Itemname = timesheetdoc.Itemname,
+                         Amount = timesheetdoc.Amount,
+                         Timesheetdate = timesheetdetail.Timesheetdate,
+                         Bill = timesheetdoc.Bill,
+
+                    }).ToListAsync();
 
                 return TimeSheetBills;
             }
             catch (Exception e)
             {
+                // Handle exceptions appropriately, logging or rethrowing as needed
                 return null;
             }
-
-
         }
+
+
         #endregion
 
         #region TimeSheet_Bill_AddEdit
@@ -360,7 +377,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         /// <param name="trb"></param>
         /// <param name="AdminId"></param>
         /// <returns> true Or false If Add Or Upadted </returns>
-        public bool TimeSheetBillAddEdit(ViewTimesheetdetailreimbursements trb, string AdminId)
+        public bool TimeSheetBillAddEdit(ViewTimesheetdetailreimbursementsdata trb, string AdminId)
         {
             Timesheetdetail data = _context.Timesheetdetails.Where(e => e.Timesheetdetailid == trb.Timesheetdetailid).FirstOrDefault();
             if (data != null && trb.Timesheetdetailreimbursementid == null)
@@ -406,7 +423,7 @@ namespace HallodocMVC.Repository.Admin.Repository
         /// <param name="trb"></param>
         /// <param name="AdminId"></param>
         /// <returns></returns>
-        public bool TimeSheetBillRemove(ViewTimesheetdetailreimbursements trb, string AdminId)
+        public bool TimeSheetBillRemove(ViewTimesheetdetailreimbursementsdata trb, string AdminId)
         {
             Timesheetdetailreimbursement data = _context.Timesheetdetailreimbursements.Where(e => e.Timesheetdetailreimbursementid == trb.Timesheetdetailreimbursementid).FirstOrDefault();
             if (data != null)

@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "_Layout";
+    Layout = null;
 }
 @model HalloDoc.Entity.Models.ViewTimeSheet
 <div class="table-responsive my-4">
@@ -43,7 +43,7 @@
 
     <h3>Timesheet Reimbursement</h3>
 
-    @if (Model.ViewTimesheetdetailreimbursements.Count > 0)
+    @if (Model.ViewTimesheetdetailreimbursements != null)
     {
         <table class="table my-4">
             <thead>

@@ -22,13 +22,13 @@ namespace HalloDoc.Controllers.Admin
 
         public IActionResult Index()
         {
-            return View();
+            return View("../Admin/Invoicing/Index");
         }
         [Route("/Admin/Invoicing")]
         public IActionResult IndexAdmin()
         {
             ViewBag.GetAllPhysicians = _invoiceRepository.GetAllPhysicians();
-            return View();
+            return View("../Admin/Invoicing/IndexAdmin");
         }
         #region IsFinalizeSheet
 
@@ -41,7 +41,7 @@ namespace HalloDoc.Controllers.Admin
         {
             var x = _invoiceRepository.GetPendingTimesheet(PhysicianId, StartDate);
 
-            return PartialView("_PendingApprove", x);
+            return PartialView("../Admin/Invoicing/_PendingApprove", x);
         }
         #endregion
 
@@ -56,10 +56,10 @@ namespace HalloDoc.Controllers.Admin
             }
             int AfterDays = StartDate.Day == 1 ? 14 : DateTime.DaysInMonth(StartDate.Year, StartDate.Month) - 14; ;
             var TimeSheetDetails = _invoiceRepository.PostTimesheetDetails(PhysicianId, StartDate, AfterDays, CV.ID());
-            List<Timesheetdetailreimbursement> h = await _invoiceRepository.GetTimesheetBills(TimeSheetDetails);
+            List<ViewTimesheetdetailreimbursementsdata> h = await _invoiceRepository.GetTimesheetBills(TimeSheetDetails);
             var Timesheet = _invoiceRepository.GetTimesheetDetails(TimeSheetDetails, h, PhysicianId);
             Timesheet.PhysicianId = PhysicianId;
-            return View("Timesheet", Timesheet);
+            return View("../Admin/Invoicing/Timesheet", Timesheet);
         }
         #endregion
 
@@ -69,24 +69,24 @@ namespace HalloDoc.Controllers.Admin
             if (StartDate == DateOnly.MinValue)
             {
                 Timesheet.ViewTimesheetdetails = new List<ViewTimesheetdetails> { };
-                Timesheet.ViewTimesheetdetailreimbursements = new List<ViewTimesheetdetailreimbursements> { };
+                Timesheet.ViewTimesheetdetailreimbursements = new List<ViewTimesheetdetailreimbursementsdata> { };
             }
             else
             {
                 List<Timesheetdetail> x = _invoiceRepository.PostTimesheetDetails(PhysicianId, StartDate, 0, CV.ID());
-                List<Timesheetdetailreimbursement> h = await _invoiceRepository.GetTimesheetBills(x);
+                List<ViewTimesheetdetailreimbursementsdata> h = await _invoiceRepository.GetTimesheetBills(x);
                 Timesheet = _invoiceRepository.GetTimesheetDetails(x, h, PhysicianId);
             }
             if (Timesheet == null)
             {
                 var Timesheets = new ViewTimeSheet();
                 Timesheets.ViewTimesheetdetails = new List<ViewTimesheetdetails> { };
-                Timesheets.ViewTimesheetdetailreimbursements = new List<ViewTimesheetdetailreimbursements> { };
-                return PartialView("_TimesheetTable", Timesheets);
+                Timesheets.ViewTimesheetdetailreimbursements = new List<ViewTimesheetdetailreimbursementsdata> { };
+                return PartialView("../Admin/Invoicing/_TimesheetTable", Timesheets);
             }
 
 
-            return PartialView("_TimesheetTable", Timesheet);
+            return PartialView("../Admin/Invoicing/_TimesheetTable", Timesheet);
         }
         public IActionResult TimeSheetDetailsEdit(ViewTimeSheet viewTimeSheet, int PhysicianId)
         {
@@ -95,11 +95,11 @@ namespace HalloDoc.Controllers.Admin
                 _notyf.Success("Edit  TimeSheet  Successfully..!");
             }
 
-            return RedirectToAction("Timesheet", new { PhysicianId = PhysicianId, StartDate = viewTimeSheet.ViewTimesheetdetails[0].Timesheetdate });
+            return RedirectToAction("Timesheet", new { PhysicianId, StartDate = viewTimeSheet.ViewTimesheetdetails[0].Timesheetdate });
         }
         public IActionResult TimeSheetBillAddEdit(int? Trid, DateOnly Timesheetdate, IFormFile file, int Timesheetdetailid, int Amount, string Item, int PhysicianId, DateOnly StartDate)
         {
-            ViewTimesheetdetailreimbursements timesheetdetailreimbursement = new ViewTimesheetdetailreimbursements();
+            ViewTimesheetdetailreimbursementsdata timesheetdetailreimbursement = new ViewTimesheetdetailreimbursementsdata();
             timesheetdetailreimbursement.Timesheetdetailid = Timesheetdetailid;
             timesheetdetailreimbursement.Timesheetdetailreimbursementid = Trid;
             timesheetdetailreimbursement.Amount = Amount;
@@ -114,7 +114,7 @@ namespace HalloDoc.Controllers.Admin
         #region TimeSheetBill_Delete
         public IActionResult TimeSheetBillRemove(int? Trid, int PhysicianId, DateOnly StartDate)
         {
-            ViewTimesheetdetailreimbursements timesheetdetailreimbursement = new ViewTimesheetdetailreimbursements();
+            ViewTimesheetdetailreimbursementsdata timesheetdetailreimbursement = new ViewTimesheetdetailreimbursementsdata();
             timesheetdetailreimbursement.Timesheetdetailreimbursementid = Trid;
             if (_invoiceRepository.TimeSheetBillRemove(timesheetdetailreimbursement, CV.ID()))
             {

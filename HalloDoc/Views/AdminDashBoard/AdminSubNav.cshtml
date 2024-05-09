@@ -70,7 +70,7 @@
                 @if (loginRepository.isAccessGranted((int)CV.RoleID(), "Invoicing"))
                 {
                     <li class="nav-item me-3">
-                        <a class="nav-link text-dark @(path.StartsWith("/ProviderLocation") ? "activesbnav" : "")" href="#">Invoicing</a>
+                        <a class="nav-link text-dark @(path.StartsWith("/ProviderLocation") ? "activesbnav" : "")" href="~/Physician/Invoicing">Invoicing</a>
                     </li>
                 }
             }

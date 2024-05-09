@@ -11,7 +11,7 @@ namespace HalloDoc.Entity.Models
     public class ViewTimeSheet
     {
         public List<ViewTimesheetdetails>? ViewTimesheetdetails { get; set; }
-        public List<ViewTimesheetdetailreimbursements>? ViewTimesheetdetailreimbursements { get; set; }
+        public List<ViewTimesheetdetailreimbursementsdata>? ViewTimesheetdetailreimbursements { get; set; }
         public List<Payratebyprovider>? PayrateWithProvider { get; set; }
         public int Timesheeid { get; set; }
         public string? Bonus { get; set; }
@@ -39,7 +39,7 @@ namespace HalloDoc.Entity.Models
 
         public DateTime? Modifieddate { get; set; }
     }
-    public class ViewTimesheetdetailreimbursements
+    public class ViewTimesheetdetailreimbursementsdata
     {
         public int? Timesheetdetailreimbursementid { get; set; } = null!;
 
